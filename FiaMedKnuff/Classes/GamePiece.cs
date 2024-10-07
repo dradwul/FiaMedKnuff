@@ -35,7 +35,8 @@ namespace FiaMedKnuff
 		}
 
 		/// <summary>
-		/// Gets or sets`number of steps taken for the game piece
+		/// Gets or sets number of steps taken for the game piece 
+		/// Starts at 0 steps, 40 when it is at the entrance of the safe zone (can still lose the piece) and 45 when it has reached its goal
 		/// </summary>
 		private int stepsTaken;
 		public int StepsTaken 
