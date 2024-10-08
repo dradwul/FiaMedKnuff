@@ -35,6 +35,8 @@ namespace FiaMedKnuff
 			set { color = value; } // TODO: Add logic to change the color of the game piece and decide the format (HEX?). Maybe this is done somewhere else in the program?
 		}
 
+		public Ellipse GamePieceShape { get; set; }
+
 		/// <summary>
 		/// Gets or sets number of steps taken for the game piece 
 		/// Starts at 0 steps, 40 when it is at the entrance of the safe zone (can still lose the piece) and 45 when it has reached its goal
@@ -51,6 +53,7 @@ namespace FiaMedKnuff
 					throw new ArgumentOutOfRangeException("A game piece can only take between 0 and 45 total steps");
 			} 
 		}
+		public Position Position { get; set; }
 
 		/// <summary>
 		/// Constructor for a game piece
@@ -58,11 +61,13 @@ namespace FiaMedKnuff
 		/// <param name="id"> ID for the game piece (1-4) </param>
 		/// <param name="color"> Color for the game piece </param>
 		/// <param name="stepsTaken"> Amount of steps taken, starts at 0 </param>
-		public GamePiece(int id, string color, int stepsTaken) 
+		public GamePiece(int id, string color, Ellipse ellipse, int stepsTaken, Position position) 
 		{ 
 			Id = id;
 			Color = color;
+			GamePieceShape = ellipse;
 			StepsTaken = stepsTaken;
+			Position = position;
 		}
 	}
 }
