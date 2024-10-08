@@ -14,8 +14,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using System.Diagnostics;
 using Windows.UI.Xaml.Shapes;
+using Windows.UI.Xaml.Input;
 
 namespace FiaMedKnuff
 {
@@ -32,7 +32,7 @@ namespace FiaMedKnuff
 
             InitializePieces(4);
             InitializeStartTiles();
-            MoveCurrentPiece();
+            //MoveCurrentPiece();
         }
 
         /// <summary>
@@ -214,7 +214,7 @@ namespace FiaMedKnuff
             }
         }
 
-        private void MoveCurrentPiece()
+        /*private void MoveCurrentPiece()
         {
             // Hämta den aktuella spelarens pjäs som ska flyttas
             var currentPiece = playerPieces[currentPlayer][currentPlayerPieceIndex];
@@ -232,12 +232,12 @@ namespace FiaMedKnuff
 
             // Växla till nästa spelare
             currentPlayer = (currentPlayer + 1) % playerPieces.Count;
-        }
+        }*/
 
         // Exempel på att flytta pjäserna när sidan klickas
         private void GameGrid_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            MoveCurrentPiece();
+            //MoveCurrentPiece();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
