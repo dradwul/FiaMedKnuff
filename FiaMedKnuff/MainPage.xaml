@@ -41,6 +41,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <!-- All the "nests" -->
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
             <Ellipse Fill="Blue" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
         </Grid>
@@ -57,6 +58,32 @@
             <Ellipse Fill="Green" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
         </Grid>
 
+        <!-- Zones where pieces will land after completing -->
+        <StackPanel x:Name="piecesInGoalZonePlayer1"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
+            <Ellipse Fill="Blue" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Blue" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Blue" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+        </StackPanel>
+        <StackPanel x:Name="piecesInGoalZonePlayer2"  Grid.Row="0" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
+            <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+        </StackPanel>
+        <StackPanel x:Name="piecesInGoalZonePlayer3"  Grid.Row="7" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
+            <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+        </StackPanel>
+        <StackPanel x:Name="piecesInGoalZonePlayer4"  Grid.Row="7" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
+            <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+        </StackPanel>
+
+        <!-- Every game tile -->
         <Ellipse Grid.Row="4" Grid.Column="1" Fill="white" Margin="5"/>
         <Ellipse Grid.Row="4" Grid.Column="2" Fill="white" Margin="5"/>
         <Ellipse Grid.Row="4" Grid.Column="3" Fill="white" Margin="5"/>
@@ -115,10 +142,11 @@
         <Ellipse Grid.Row="7" Grid.Column="6" Fill="Red" Margin="5"/>
         <Ellipse Grid.Row="6" Grid.Column="6" Fill="Red" Margin="5"/>
 
-        <Ellipse Grid.Row="5" Grid.Column="6" Fill="BurlyWood" Margin="1"/>
+        <Ellipse Grid.Row="5" Grid.Column="6" Fill="BurlyWood" Margin="2"/>
 
+        <!-- Dice zone -->
         <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Grid.Column="6" Grid.Row="11">
-            <Image x:Name="DiceImage" Height="30" Width="30" Tapped="DiceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
+            <Image x:Name="DiceImage" Height="60" Width="60" Tapped="DiceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
                 <Image.RenderTransform>
                     <CompositeTransform/>
                 </Image.RenderTransform>

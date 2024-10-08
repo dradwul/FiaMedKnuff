@@ -266,7 +266,7 @@ namespace FiaMedKnuff
         }*/
 
         // Exempel på att flytta pjäserna när sidan klickas
-        private void GameGrid_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void GameGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
             //MoveCurrentPiece();
         }
@@ -320,8 +320,8 @@ namespace FiaMedKnuff
             for (int i = 0; i <= 10; i++)
             {
                 double x = Random.Next(-20, 20); // Random X movement, change value to get bigger movements
-                double y = Random.Next(0, 40); // Random Y movement, change value to get bigger movements
-                TimeSpan keyTime = TimeSpan.FromMilliseconds(i * 30); //Increase value to get slower movement
+                double y = Random.Next(-20, 10); // Random Y movement, change value to get bigger movements
+                TimeSpan keyTime = TimeSpan.FromMilliseconds(i * 40); //Increase value to get slower movement
 
                 translateXAnimation.KeyFrames.Add(new EasingDoubleKeyFrame
                 {
