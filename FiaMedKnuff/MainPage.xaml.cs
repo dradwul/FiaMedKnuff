@@ -10,9 +10,6 @@ using Windows.Foundation.Collections;
 using Windows.Gaming.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
@@ -24,12 +21,18 @@ namespace FiaMedKnuff
 {
     public sealed partial class MainPage : Page
     {
+        // Variabler för att hålla reda på varje spelares pjäser
+        private Dictionary<int, List<Ellipse>> playerPieces;
+        private int currentPlayer = 0;
+        private int currentPlayerPieceIndex = 0;
+
         public MainPage()
         {
             this.InitializeComponent();
 
             InitializePieces(4);
             InitializeStartTiles();
+            MoveCurrentPiece();
         }
 
         /// <summary>
@@ -211,6 +214,32 @@ namespace FiaMedKnuff
             }
         }
 
+        private void MoveCurrentPiece()
+        {
+            // Hämta den aktuella spelarens pjäs som ska flyttas
+            var currentPiece = playerPieces[currentPlayer][currentPlayerPieceIndex];
+
+            // Hämta den nuvarande positionen för den spelaren
+            Position currentPosition = allOuterPositions[currentPlayerPieceIndex];
+
+            // Flytta till nästa position på brädet
+            currentPlayerPieceIndex = (currentPlayerPieceIndex + 1) % allOuterPositions.Length;
+            Position nextPosition = allOuterPositions[currentPlayerPieceIndex];
+
+            // Flytta pjäsen till den nya positionen
+            Grid.SetColumn(currentPiece, nextPosition.ColumnIndex);
+            Grid.SetRow(currentPiece, nextPosition.RowIndex);
+
+            // Växla till nästa spelare
+            currentPlayer = (currentPlayer + 1) % playerPieces.Count;
+        }
+
+        // Exempel på att flytta pjäserna när sidan klickas
+        private void GameGrid_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            MoveCurrentPiece();
+        }
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             AdjustGridSize();
@@ -292,6 +321,5 @@ namespace FiaMedKnuff
             storyboard.Begin();
             Debug.WriteLine(diceValue);
         }
-
     }
 }

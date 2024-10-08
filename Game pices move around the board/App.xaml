@@ -1,0 +1,7 @@
+﻿<Application
+    x:Class="Game_pices_move_around_the_board.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Game_pices_move_around_the_board">
+
+</Application>
