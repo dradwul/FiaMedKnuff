@@ -26,19 +26,50 @@ namespace FiaMedKnuff
         private int currentPlayer = 0;
         private int currentPlayerPieceIndex = 0;
 
+        public Player player1;
+
         public MainPage()
         {
             this.InitializeComponent();
 
-            InitializePieces(4);
-            InitializeStartTiles();
+            //InitializePieces(4);
+            //InitializeStartTiles();
             //MoveCurrentPiece();
-        }
 
-        /// <summary>
-        /// Available colors
-        /// </summary>
-        readonly SolidColorBrush[] colors = new SolidColorBrush[]
+            //Shape for the game pieces
+			Ellipse placeholderPiece01 = new Ellipse
+			{
+				//Fill = color,
+				Fill = new SolidColorBrush(Windows.UI.Colors.Black),
+				Stroke = new SolidColorBrush(Windows.UI.Colors.White),
+				StrokeThickness = 3,
+				Width = 40,
+				Height = 40
+			};
+
+            //Array for player 1 with 4 game pieces
+			GamePiece[] gamePieces = new GamePiece[]
+            { 
+                new GamePiece(1, "blue", placeholderPiece01, 0, nestPositions[0][0]),
+			    new GamePiece(2, "blue", placeholderPiece01, 0, nestPositions[0][1]),
+			    new GamePiece(3, "blue", placeholderPiece01, 0, nestPositions[0][2]),
+			    new GamePiece(4, "blue", placeholderPiece01, 0, nestPositions[0][2])
+			};
+
+            //Creates player instance
+            player1 = new Player(1, "blue", gamePieces);
+
+            //Places first game piece in starting nest
+            Grid.SetColumn(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.ColumnIndex);
+			Grid.SetRow(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.RowIndex);
+            GameGrid.Children.Add(player1.Pieces[0].GamePieceShape);
+
+		}
+
+		/// <summary>
+		/// Available colors
+		/// </summary>
+		readonly SolidColorBrush[] colors = new SolidColorBrush[]
         {
             new SolidColorBrush(Windows.UI.Colors.Blue),
             new SolidColorBrush(Windows.UI.Colors.Yellow),
@@ -320,6 +351,12 @@ namespace FiaMedKnuff
 
             storyboard.Begin();
             Debug.WriteLine(diceValue);
-        }
+
+            // Updates steps taken and moves the piece
+            player1.Pieces[0].StepsTaken += diceValue;
+			player1.Pieces[0].Position = allOuterPositions[player1.Pieces[0].StepsTaken-1];
+			Grid.SetColumn(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.ColumnIndex);
+			Grid.SetRow(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.RowIndex);
+		}
     }
 }
