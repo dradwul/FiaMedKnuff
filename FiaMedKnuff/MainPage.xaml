@@ -63,6 +63,7 @@
             <Ellipse Fill="Blue" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
             <Ellipse Fill="Blue" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
             <Ellipse Fill="Blue" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            <Ellipse Fill="Blue" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
         </StackPanel>
         <StackPanel x:Name="piecesInGoalZonePlayer2"  Grid.Row="0" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
             <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
