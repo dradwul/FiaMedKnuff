@@ -28,25 +28,6 @@ namespace FiaMedKnuff
 		public MainPage()
 		{
 			this.InitializeComponent();
-
-			//DELETE ME ----------------------------
-			GamePiece[] player1Pieces = new GamePiece[]
-			{
-				new GamePiece(1, "blue", 0),
-				new GamePiece(2, "blue", 0),
-				new GamePiece(3, "blue", 0),
-				new GamePiece(4, "blue", 0)
-			};
-
-			Player player1 = new Player(1, "blue", player1Pieces);
-
-            Debug.WriteLine("Player ID: " + player1.PlayerId);
-            Debug.WriteLine("Player color " + player1.Color);
-			foreach (GamePiece piece in player1.Pieces)
-			{
-                Debug.WriteLine("Piece ID, color and steps taken: " + piece.Id + ", " + piece.Color + ", " + piece.StepsTaken);
-			}
-			//DELETE ME ----------------------------
 		}
 	}
 }
