@@ -8,7 +8,13 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-
+    <Grid Background="Green">
+        <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="80" Background="Transparent">
+            <Image x:Name="DiceImage" Height="30" Width="30" Tapped="DiceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
+                <Image.RenderTransform>
+                    <CompositeTransform/>   
+                </Image.RenderTransform>
+            </Image>
+        </StackPanel>
     </Grid>
 </Page>
