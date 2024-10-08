@@ -10,15 +10,6 @@
     Loaded="Page_Loaded" SizeChanged="Page_SizeChanged">
 
     <Grid x:Name="GameGrid" Background="#264653">
-
-        <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="80" Background="Transparent" Grid.Column="6" Grid.Row="11">
-            <Image x:Name="DiceImage" Height="30" Width="30" Tapped="DiceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
-                <Image.RenderTransform>
-                    <CompositeTransform/>   
-                </Image.RenderTransform>
-            </Image>
-        </StackPanel>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -126,6 +117,12 @@
 
         <Ellipse Grid.Row="5" Grid.Column="6" Fill="BurlyWood" Margin="1"/>
 
-        <Border Grid.Row="11" Grid.Column="6" Margin="5" Background="White" CornerRadius="10"/>
+        <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Grid.Column="6" Grid.Row="11">
+            <Image x:Name="DiceImage" Height="30" Width="30" Tapped="DiceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
+                <Image.RenderTransform>
+                    <CompositeTransform/>
+                </Image.RenderTransform>
+            </Image>
+        </StackPanel>
     </Grid>
 </Page>
