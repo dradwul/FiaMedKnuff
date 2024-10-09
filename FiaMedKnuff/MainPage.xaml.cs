@@ -26,13 +26,9 @@ namespace FiaMedKnuff
         private int currentPlayer = 0;
         private int currentPlayerPieceIndex = 0;
 
-        //Public players
         public Player player1;
-		public Player player2;
-		public Player player3;
-		public Player player4;
 
-		public MainPage()
+        public MainPage()
         {
             this.InitializeComponent();
 
@@ -40,27 +36,40 @@ namespace FiaMedKnuff
             //InitializeStartTiles();
             //MoveCurrentPiece();
 
-
-            //Using Player constructor to make players
-            player1 = new Player(1, "blue", nestPositions[0]);
-			player2 = new Player(2, "blue", nestPositions[1]);
-			player3 = new Player(3, "blue", nestPositions[2]);
-			player4 = new Player(4, "blue", nestPositions[3]);
-
-			//Placing game pieces on the board (ID 1-4, not 0-3)
-			for (int i = 1; i <= 4; i++)
+            //Shape for the game pieces
+            Ellipse placeholderPiece01 = new Ellipse
             {
-                GameGrid.Children.Add(player1.ReturnGamePieceShape(i));
-				GameGrid.Children.Add(player2.ReturnGamePieceShape(i));
-				GameGrid.Children.Add(player3.ReturnGamePieceShape(i));
-				GameGrid.Children.Add(player4.ReturnGamePieceShape(i));
-			}
-		}
+                //Fill = color,
+                Fill = new SolidColorBrush(Windows.UI.Colors.Black),
+                Stroke = new SolidColorBrush(Windows.UI.Colors.White),
+                StrokeThickness = 3,
+                Width = 40,
+                Height = 40
+            };
 
-		/// <summary>
-		/// Available colors
-		/// </summary>
-		readonly SolidColorBrush[] colors = new SolidColorBrush[]
+            //Array for player 1 with 4 game pieces
+            GamePiece[] gamePieces = new GamePiece[]
+            {
+                new GamePiece(1, "blue", placeholderPiece01, 0, nestPositions[0][0]),
+                new GamePiece(2, "blue", placeholderPiece01, 0, nestPositions[0][1]),
+                new GamePiece(3, "blue", placeholderPiece01, 0, nestPositions[0][2]),
+                new GamePiece(4, "blue", placeholderPiece01, 0, nestPositions[0][2])
+            };
+
+            //Creates player instance
+            player1 = new Player(1, "blue", gamePieces);
+
+            //Places first game piece in starting nest
+            Grid.SetColumn(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.ColumnIndex);
+            Grid.SetRow(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.RowIndex);
+            GameGrid.Children.Add(player1.Pieces[0].GamePieceShape);
+
+        }
+
+        /// <summary>
+        /// Available colors
+        /// </summary>
+        readonly SolidColorBrush[] colors = new SolidColorBrush[]
         {
             new SolidColorBrush(Windows.UI.Colors.Blue),
             new SolidColorBrush(Windows.UI.Colors.Yellow),
@@ -82,7 +91,7 @@ namespace FiaMedKnuff
             "ms-appx:///Assets/dice5.png",
             "ms-appx:///Assets/dice6.png"
         };
-        
+
         /// <summary>
         /// All outer positions that are neutral and open for every player. 
         /// Got the property IsOccupied to mark it as taken by a game piece. 
@@ -175,11 +184,11 @@ namespace FiaMedKnuff
         /// <param name="numberOfPlayers"></param>
         private void InitializePieces(int numberOfPlayers)
         {
-            for(int i = 0; i < numberOfPlayers; i++)
+            for (int i = 0; i < numberOfPlayers; i++)
             {
                 SolidColorBrush color = colors[i];
 
-                for(int j = 0; j < 4; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     Ellipse placeholderPiece = new Ellipse
                     {
@@ -219,7 +228,7 @@ namespace FiaMedKnuff
 
         private void InitializeStartTiles()
         {
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 SolidColorBrush color = colors[i];
 
@@ -294,6 +303,7 @@ namespace FiaMedKnuff
         private void DiceImage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             int diceValue = Random.Next(1, 7);
+            //int diceValue = 1; // <---------DUMMY VALUE
             string diceImage = DiceImages[diceValue - 1];
 
             // Create a random movement animation for X-axis and Y-axis.
@@ -311,9 +321,8 @@ namespace FiaMedKnuff
             for (int i = 0; i <= 10; i++)
             {
                 double x = Random.Next(-20, 20); // Random X movement, change value to get bigger movements
-                double y = Random.Next(-20, 10); // Random Y movement, change value to get bigger movements
-                TimeSpan keyTime = TimeSpan.FromMilliseconds(i * 40); //Increase value to get slower movement
-
+                double y = Random.Next(-20, 20); // Random Y movement, change value to get bigger movements
+                var keyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(i * 0.05));
                 translateXAnimation.KeyFrames.Add(new EasingDoubleKeyFrame
                 {
                     KeyTime = keyTime,
@@ -325,7 +334,7 @@ namespace FiaMedKnuff
                     Value = y
                 });
             }
-            
+
             // Sets the target for the animations
             Storyboard.SetTarget(translateXAnimation, DiceImage);
             Storyboard.SetTargetProperty(translateXAnimation, "(UIElement.RenderTransform).(CompositeTransform.TranslateX)");
@@ -344,7 +353,32 @@ namespace FiaMedKnuff
             Debug.WriteLine(diceValue);
 
             // Updates steps taken and moves the piece
-            player1.MoveGamePiece(1, diceValue, allOuterPositions);
-		}
+            player1.Pieces[0].StepsTaken += diceValue;
+
+            // Calculate the total steps including outer and end positions
+            int totalSteps = allOuterPositions.Length + endPositions[player1.PlayerId - 1].Length;
+
+            // Ensure the steps taken do not exceed the total steps
+            if (player1.Pieces[0].StepsTaken <= allOuterPositions.Length)
+            {
+                // If the steps taken are within the outer positions, update the position accordingly
+                player1.Pieces[0].Position = allOuterPositions[player1.Pieces[0].StepsTaken - 1];
+            }
+            else if (player1.Pieces[0].StepsTaken <= totalSteps)
+            {
+                // If the steps taken exceed the outer positions but are within the total steps, update the position to the end positions
+                int endPositionIndex = player1.Pieces[0].StepsTaken - allOuterPositions.Length - 1;
+                player1.Pieces[0].Position = endPositions[player1.PlayerId - 1][endPositionIndex];
+            }
+            else
+            {
+                // Handle the case where the game piece has reached the goal
+                player1.Pieces[0].Position = goalPosition;
+            }
+
+            // Update the visual position of the game piece on the grid
+            Grid.SetColumn(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.ColumnIndex);
+            Grid.SetRow(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.RowIndex);
+        }
     }
 }
