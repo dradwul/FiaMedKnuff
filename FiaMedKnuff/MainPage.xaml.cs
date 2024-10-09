@@ -40,7 +40,6 @@ namespace FiaMedKnuff
             //InitializeStartTiles();
             //MoveCurrentPiece();
 
-
             //Using Player constructor to make players
             player1 = new Player(1, "blue", nestPositions[0]);
 			player2 = new Player(2, "blue", nestPositions[1]);
@@ -57,10 +56,10 @@ namespace FiaMedKnuff
 			}
 		}
 
-		/// <summary>
-		/// Available colors
-		/// </summary>
-		readonly SolidColorBrush[] colors = new SolidColorBrush[]
+        /// <summary>
+        /// Available colors
+        /// </summary>
+        readonly SolidColorBrush[] colors = new SolidColorBrush[]
         {
             new SolidColorBrush(Windows.UI.Colors.Blue),
             new SolidColorBrush(Windows.UI.Colors.Yellow),
@@ -82,7 +81,7 @@ namespace FiaMedKnuff
             "ms-appx:///Assets/dice5.png",
             "ms-appx:///Assets/dice6.png"
         };
-        
+
         /// <summary>
         /// All outer positions that are neutral and open for every player. 
         /// Got the property IsOccupied to mark it as taken by a game piece. 
@@ -175,11 +174,11 @@ namespace FiaMedKnuff
         /// <param name="numberOfPlayers"></param>
         private void InitializePieces(int numberOfPlayers)
         {
-            for(int i = 0; i < numberOfPlayers; i++)
+            for (int i = 0; i < numberOfPlayers; i++)
             {
                 SolidColorBrush color = colors[i];
 
-                for(int j = 0; j < 4; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     Ellipse placeholderPiece = new Ellipse
                     {
@@ -219,7 +218,7 @@ namespace FiaMedKnuff
 
         private void InitializeStartTiles()
         {
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 SolidColorBrush color = colors[i];
 
@@ -294,6 +293,7 @@ namespace FiaMedKnuff
         private void DiceImage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             int diceValue = Random.Next(1, 7);
+            //int diceValue = 1; // <---------DUMMY VALUE
             string diceImage = DiceImages[diceValue - 1];
 
             // Create a random movement animation for X-axis and Y-axis.
@@ -311,9 +311,8 @@ namespace FiaMedKnuff
             for (int i = 0; i <= 10; i++)
             {
                 double x = Random.Next(-20, 20); // Random X movement, change value to get bigger movements
-                double y = Random.Next(-20, 10); // Random Y movement, change value to get bigger movements
-                TimeSpan keyTime = TimeSpan.FromMilliseconds(i * 40); //Increase value to get slower movement
-
+                double y = Random.Next(-20, 20); // Random Y movement, change value to get bigger movements
+                var keyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(i * 0.05));
                 translateXAnimation.KeyFrames.Add(new EasingDoubleKeyFrame
                 {
                     KeyTime = keyTime,
@@ -325,7 +324,7 @@ namespace FiaMedKnuff
                     Value = y
                 });
             }
-            
+
             // Sets the target for the animations
             Storyboard.SetTarget(translateXAnimation, DiceImage);
             Storyboard.SetTargetProperty(translateXAnimation, "(UIElement.RenderTransform).(CompositeTransform.TranslateX)");
@@ -345,6 +344,6 @@ namespace FiaMedKnuff
 
             // Updates steps taken and moves the piece
             player1.MoveGamePiece(1, diceValue, allOuterPositions);
-		}
+        }
     }
 }
