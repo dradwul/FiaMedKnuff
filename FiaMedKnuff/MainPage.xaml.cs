@@ -30,52 +30,35 @@ namespace FiaMedKnuff
 
         //Public players
         public Player player1;
+        public Player player2;
+        public Player player3;
+        public Player player4;
 
         public MainPage()
         {
             this.InitializeComponent();
 
-			//InitializePieces(4);
-			//InitializeStartTiles();
-			//MoveCurrentPiece();
-			
+            //InitializePieces(4);
+            //InitializeStartTiles();
+            //MoveCurrentPiece();
+
             //Route for player 1
             p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
 
-			//Using Player constructor to make players
-			player1 = new Player(1, "blue", nestPositions[0]);
-			player2 = new Player(2, "blue", nestPositions[1]);
-			player3 = new Player(3, "blue", nestPositions[2]);
-			player4 = new Player(4, "blue", nestPositions[3]);
+            //Using Player constructor to make players
+            player1 = new Player(1, "blue", nestPositions[0]);
+            player2 = new Player(2, "blue", nestPositions[1]);
+            player3 = new Player(3, "blue", nestPositions[2]);
+            player4 = new Player(4, "blue", nestPositions[3]);
 
-			//Placing game pieces on the board (ID 1-4, not 0-3)
-			for (int i = 1; i <= 4; i++)
+            //Placing game pieces on the board (ID 1-4, not 0-3)
+            for (int i = 1; i <= 4; i++)
             {
-                //Fill = color,
-                Fill = new SolidColorBrush(Windows.UI.Colors.Black),
-                Stroke = new SolidColorBrush(Windows.UI.Colors.White),
-                StrokeThickness = 3,
-                Width = 40,
-                Height = 40
-            };
-
-            //Array for player 1 with 4 game pieces
-            GamePiece[] gamePieces = new GamePiece[]
-            {
-                new GamePiece(1, "blue", placeholderPiece01, 0, nestPositions[0][0]),
-                new GamePiece(2, "blue", placeholderPiece01, 0, nestPositions[0][1]),
-                new GamePiece(3, "blue", placeholderPiece01, 0, nestPositions[0][2]),
-                new GamePiece(4, "blue", placeholderPiece01, 0, nestPositions[0][2])
-            };
-
-            //Creates player instance
-            player1 = new Player(1, "blue", gamePieces);
-
-            //Places first game piece in starting nest
-            Grid.SetColumn(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.ColumnIndex);
-            Grid.SetRow(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.RowIndex);
-            GameGrid.Children.Add(player1.Pieces[0].GamePieceShape);
-
+                GameGrid.Children.Add(player1.ReturnGamePieceShape(i));
+                GameGrid.Children.Add(player2.ReturnGamePieceShape(i));
+                GameGrid.Children.Add(player3.ReturnGamePieceShape(i));
+                GameGrid.Children.Add(player4.ReturnGamePieceShape(i));
+            }
         }
 
         /// <summary>
@@ -315,7 +298,6 @@ namespace FiaMedKnuff
         private void DiceImage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             int diceValue = Random.Next(1, 7);
-            //int diceValue = 1; // <---------DUMMY VALUE
             string diceImage = DiceImages[diceValue - 1];
 
             // Create a random movement animation for X-axis and Y-axis.
@@ -333,8 +315,9 @@ namespace FiaMedKnuff
             for (int i = 0; i <= 10; i++)
             {
                 double x = Random.Next(-20, 20); // Random X movement, change value to get bigger movements
-                double y = Random.Next(-20, 20); // Random Y movement, change value to get bigger movements
-                var keyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(i * 0.05));
+                double y = Random.Next(-20, 10); // Random Y movement, change value to get bigger movements
+                TimeSpan keyTime = TimeSpan.FromMilliseconds(i * 40); //Increase value to get slower movement
+
                 translateXAnimation.KeyFrames.Add(new EasingDoubleKeyFrame
                 {
                     KeyTime = keyTime,
@@ -365,7 +348,7 @@ namespace FiaMedKnuff
             Debug.WriteLine(diceValue);
 
             // Updates steps taken and moves the piece
-			player1.MoveGamePiece(1, diceValue, p1);
-		}
+            player1.MoveGamePiece(1, diceValue, p1);
+        }
     }
 }
