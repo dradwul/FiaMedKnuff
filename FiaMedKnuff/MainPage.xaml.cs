@@ -26,6 +26,9 @@ namespace FiaMedKnuff
         private int currentPlayer = 0;
         private int currentPlayerPieceIndex = 0;
 
+        public Position[] p1 = new Position[] { };
+
+        //Public players
         public Player player1;
         public Player player2;
         public Player player3;
@@ -38,6 +41,9 @@ namespace FiaMedKnuff
             //InitializePieces(4);
             //InitializeStartTiles();
             //MoveCurrentPiece();
+
+            //Route for player 1
+            p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
 
             //Using Player constructor to make players
             player1 = new Player(1, "blue", nestPositions[0]);
@@ -55,16 +61,16 @@ namespace FiaMedKnuff
             }
         }
 
-            /// <summary>
-            /// Available colors
-            /// </summary>
-            readonly SolidColorBrush[] colors = new SolidColorBrush[]
-            {
-                new SolidColorBrush(Windows.UI.Colors.Blue),
-                new SolidColorBrush(Windows.UI.Colors.Yellow),
-                new SolidColorBrush(Windows.UI.Colors.Green),
-                new SolidColorBrush(Windows.UI.Colors.Red)
-            };
+        /// <summary>
+        /// Available colors
+        /// </summary>
+        readonly SolidColorBrush[] colors = new SolidColorBrush[]
+        {
+            new SolidColorBrush(Windows.UI.Colors.Blue),
+            new SolidColorBrush(Windows.UI.Colors.Yellow),
+            new SolidColorBrush(Windows.UI.Colors.Green),
+            new SolidColorBrush(Windows.UI.Colors.Red)
+        };
 
         /// <summary>
         /// Creates a random number generator.
@@ -154,16 +160,16 @@ namespace FiaMedKnuff
         /// </summary>
         public Position[][] endPositions = new Position[][]
         {
-            new Position[] { new Position(5,2), new Position(5,3), new Position(5,4), new Position(5,5) },
-            new Position[] { new Position(1,6), new Position(2,6), new Position(3,6), new Position(4,6) },
-            new Position[] { new Position(5,10), new Position(5,9), new Position(5,8), new Position(5,7) },
-            new Position[] { new Position(9,6), new Position(8,6), new Position(7,6), new Position(6,6) }
+            new Position[] { new Position(5,2), new Position(5,3), new Position(5,4), new Position(5,5), new Position(5,6) },
+            new Position[] { new Position(1,6), new Position(2,6), new Position(3,6), new Position(4,6), new Position(5,6)},
+            new Position[] { new Position(5,10), new Position(5,9), new Position(5,8), new Position(5,7) , new Position(5, 6) },
+            new Position[] { new Position(9,6), new Position(8,6), new Position(7,6), new Position(6,6) , new Position(5, 6) }
         };
 
         /// <summary>
         /// The goal position for everyone
         /// </summary>
-        public Position goalPosition = new Position(5, 6);
+        //public Position goalPosition = new Position(5, 6);
 
 
         /// <summary>
@@ -292,7 +298,6 @@ namespace FiaMedKnuff
         private void DiceImage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             int diceValue = Random.Next(1, 7);
-            //int diceValue = 1; // <---------DUMMY VALUE
             string diceImage = DiceImages[diceValue - 1];
 
             // Create a random movement animation for X-axis and Y-axis.
@@ -310,8 +315,9 @@ namespace FiaMedKnuff
             for (int i = 0; i <= 10; i++)
             {
                 double x = Random.Next(-20, 20); // Random X movement, change value to get bigger movements
-                double y = Random.Next(-20, 20); // Random Y movement, change value to get bigger movements
-                var keyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(i * 0.05));
+                double y = Random.Next(-20, 10); // Random Y movement, change value to get bigger movements
+                TimeSpan keyTime = TimeSpan.FromMilliseconds(i * 40); //Increase value to get slower movement
+
                 translateXAnimation.KeyFrames.Add(new EasingDoubleKeyFrame
                 {
                     KeyTime = keyTime,
@@ -342,7 +348,7 @@ namespace FiaMedKnuff
             Debug.WriteLine(diceValue);
 
             // Updates steps taken and moves the piece
-            player1.MoveGamePiece(1, diceValue, allOuterPositions);
+            player1.MoveGamePiece(1, diceValue, p1);
         }
     }
 }
