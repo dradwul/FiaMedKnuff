@@ -25,22 +25,16 @@ namespace FiaMedKnuff
 			}
 		}
 
-        /// <summary>
-        /// Gets or sets the color for the game piece
-        /// </summary>
-        private string color;
-        public string Color
-        {
-            get { return color; }
-            set { color = value; } // TODO: Add logic to change the color of the game piece and decide the format (HEX?). Maybe this is done somewhere else in the program?
-        }
-        public Ellipse GamePieceShape { get; set; }
+		/// <summary>
+		/// This is the shape for the game piece
+		/// </summary>
+		public Ellipse GamePieceShape { get; set; }
 
 		/// <summary>
 		/// Gets or sets number of steps taken for the game piece 
 		/// Starts at 0 steps, 40 when it is at the entrance of the safe zone (can still lose the piece) and 45 when it has reached its goal
 		/// </summary>
-		private int stepsTaken;
+		private int stepsTaken = 0;
 		public int StepsTaken 
 		{ 
 			get { return stepsTaken; }
@@ -53,21 +47,22 @@ namespace FiaMedKnuff
 			} 
 		}
 
+		/// <summary>
+		/// This is the current position of the game piece
+		/// </summary>
 		public Position Position { get; set; }
 
-        /// <summary>
-        /// Constructor for a game piece
-        /// </summary>
-        /// <param name="id"> ID for the game piece (1-4) </param>
-        /// <param name="color"> Color for the game piece </param>
-        /// <param name="stepsTaken"> Amount of steps taken, starts at 0 </param>
-        public GamePiece(int id, string color, Ellipse ellipse, int stepsTaken, Position position)
-        { 
+		/// <summary>
+		/// Constructor for a game piece
+		/// </summary>
+		/// <param name="id"> ID for a game piece (1-4) </param>
+		/// <param name="ellipse"> This is the shape for the game piece </param>
+		/// <param name="position"> Game piece position on the game board </param>
+		public GamePiece(int id, Ellipse ellipse, Position position) 
+		{ 
 			Id = id;
-            Color = color;
-            GamePieceShape = ellipse;
-            StepsTaken = stepsTaken;
-            Position = position;
+			GamePieceShape = ellipse;
+			Position = position;
 		}
 	}
 }
