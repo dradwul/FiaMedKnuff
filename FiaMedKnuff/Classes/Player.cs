@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
@@ -102,16 +104,32 @@ namespace FiaMedKnuff
         /// <param name="id"> ID for specified gamepiece </param>
         /// <param name="diceRoll"> Dice roll from 1-6 </param>
         /// <param name="position"> Position array of possible "tiles" </param>
-        public void MoveGamePiece(int id, int diceRoll, Position[] position)
+        /// <param name="goalZone"> Zone where pieces will land after goal" </param>
+        /// <param name="gameGrid"> Passing the entire grid as a parameter to get access to remove element" </param>
+        public void MoveGamePiece(int id, int diceRoll, Position[] position, StackPanel goalZone, Grid gameGrid)
         {
             foreach (GamePiece piece in pieces)
             {
                 if (piece.Id == id)
                 {
                     piece.StepsTaken += diceRoll;
-                    piece.Position = position[piece.StepsTaken - 1];
-                    Grid.SetRow(piece.GamePieceShape, piece.Position.RowIndex);
-                    Grid.SetColumn(piece.GamePieceShape, piece.Position.ColumnIndex);
+
+                    if (piece.StepsTaken >= position.Length)
+                    {
+                        //Remove piece from gameGrid and add to goalZone
+                        gameGrid.Children.Remove(piece.GamePieceShape);
+                        goalZone.Children.Add(piece.GamePieceShape);
+
+                        piece.GamePieceShape.Width = 30;
+                        piece.GamePieceShape.Height = 30;
+                        piece.GamePieceShape.Margin = new Thickness(5);
+                    }
+                    else
+                    {
+                        piece.Position = position[piece.StepsTaken - 1];
+                        Grid.SetRow(piece.GamePieceShape, piece.Position.RowIndex);
+                        Grid.SetColumn(piece.GamePieceShape, piece.Position.ColumnIndex);
+                    }
                 }
             }
         }

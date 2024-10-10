@@ -39,8 +39,7 @@ namespace FiaMedKnuff
             this.InitializeComponent();
 
             //InitializePieces(4);
-            //InitializeStartTiles();
-            //MoveCurrentPiece();
+            InitializeStartTiles();
 
             //Route for player 1
             p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
@@ -348,7 +347,8 @@ namespace FiaMedKnuff
             Debug.WriteLine(diceValue);
 
             // Updates steps taken and moves the piece
-            player1.MoveGamePiece(1, diceValue, p1);
+            //player1.MoveGamePiece(1, diceValue, p1, piecesInGoalZonePlayer1, GameGrid); // ORIGINAL BASED ON DICE VALUE
+            player1.MoveGamePiece(1, 9, p1, piecesInGoalZonePlayer1, GameGrid); // <--- DUMMY VALUE FROM START TO FINISH IN 5 THROWS (WILL LAND ON END TILE)
         }
     }
 }
