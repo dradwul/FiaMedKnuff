@@ -22,9 +22,9 @@ namespace FiaMedKnuff
     public sealed partial class MainPage : Page
     {
         // Variabler för att hålla reda på varje spelares pjäser
-        private Dictionary<int, List<Ellipse>> playerPieces;
-        private int currentPlayer = 0;
-        private int currentPlayerPieceIndex = 0;
+        private Dictionary<int, List<Ellipse>> playerPieces; // Remove?
+        private int currentPlayer = 0; // Remove?
+        private int currentPlayerPieceIndex = 0; // Remove?
 
         public Position[] p1 = new Position[] { };
 
@@ -38,9 +38,9 @@ namespace FiaMedKnuff
         {
             this.InitializeComponent();
 
-            //InitializePieces(4);
-            //InitializeStartTiles();
-            //MoveCurrentPiece();
+            //InitializePieces(4); // Remove?
+            //InitializeStartTiles(); // Remove?
+            //MoveCurrentPiece(); // Remove?
 
             //Route for player 1
             p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
@@ -77,7 +77,7 @@ namespace FiaMedKnuff
         /// Creates an array of dice images.
         /// </summary>
         private static readonly Random Random = new Random();
-        private static readonly string[] DiceImages =
+        private static readonly string[] diceImages =
         {
             "ms-appx:///Assets/dice1.png",
             "ms-appx:///Assets/dice2.png",
@@ -169,7 +169,7 @@ namespace FiaMedKnuff
         /// <summary>
         /// The goal position for everyone
         /// </summary>
-        //public Position goalPosition = new Position(5, 6);
+        //public Position goalPosition = new Position(5, 6); // Remove?
 
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace FiaMedKnuff
             }
         }
 
-        /*private void MoveCurrentPiece()
+        /*private void MoveCurrentPiece() // Remove whole method?
         {
             // Hämta den aktuella spelarens pjäs som ska flyttas
             var currentPiece = playerPieces[currentPlayer][currentPlayerPieceIndex];
@@ -260,10 +260,10 @@ namespace FiaMedKnuff
             currentPlayer = (currentPlayer + 1) % playerPieces.Count;
         }*/
 
-        // Exempel på att flytta pjäserna när sidan klickas
-        private void GameGrid_Tapped(object sender, TappedRoutedEventArgs e)
+        // Exempel på att flytta pjäserna när sidan klickas  
+        private void GameGrid_Tapped(object sender, TappedRoutedEventArgs e) // Remove?
         {
-            //MoveCurrentPiece();
+            //MoveCurrentPiece(); // Remove?
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -295,10 +295,10 @@ namespace FiaMedKnuff
         /// Handles the Tapped event of the DiceImage control.
         /// Generates a random dice value, animates the correct dice image and creates a random movement animation.
         /// </summary>
-        private void DiceImage_Tapped(object sender, TappedRoutedEventArgs e)
+        private void diceImage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             int diceValue = Random.Next(1, 7);
-            string diceImage = DiceImages[diceValue - 1];
+            string diceImager = diceImages[diceValue - 1];
 
             // Create a random movement animation for X-axis and Y-axis.
             var storyboard = new Storyboard();
@@ -331,9 +331,9 @@ namespace FiaMedKnuff
             }
 
             // Sets the target for the animations
-            Storyboard.SetTarget(translateXAnimation, DiceImage);
+            Storyboard.SetTarget(translateXAnimation, diceImage);
             Storyboard.SetTargetProperty(translateXAnimation, "(UIElement.RenderTransform).(CompositeTransform.TranslateX)");
-            Storyboard.SetTarget(translateYAnimation, DiceImage);
+            Storyboard.SetTarget(translateYAnimation, diceImage);
             Storyboard.SetTargetProperty(translateYAnimation, "(UIElement.RenderTransform).(CompositeTransform.TranslateY)");
 
             storyboard.Children.Add(translateXAnimation);
@@ -341,7 +341,7 @@ namespace FiaMedKnuff
             // Update the dice image source once the animation is completed
             storyboard.Completed += (s, a) =>
             {
-                DiceImage.Source = new BitmapImage(new Uri(diceImage));
+                diceImage.Source = new BitmapImage(new Uri(diceImager));
             };
 
             storyboard.Begin();
