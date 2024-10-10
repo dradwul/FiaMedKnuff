@@ -106,7 +106,8 @@ namespace FiaMedKnuff
         {
             foreach (GamePiece piece in pieces)
             {
-                if (piece.Id == id)
+                //Find the correct game piece and check that it does not move more than 45 steps
+                if (piece.Id == id && piece.StepsTaken + diceRoll <= 45)
                 {
                     piece.StepsTaken += diceRoll;
                     piece.Position = position[piece.StepsTaken - 1];
