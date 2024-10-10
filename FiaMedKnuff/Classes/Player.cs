@@ -108,11 +108,9 @@ namespace FiaMedKnuff
 			{
 				if (piece.Id == id)
 				{
-					piece.StepsTaken += diceRoll;
 					piece.Position = position[piece.StepsTaken-1];
 					Grid.SetRow(piece.GamePieceShape, piece.Position.RowIndex);
 					Grid.SetColumn(piece.GamePieceShape, piece.Position.ColumnIndex);
-				}
 			}
 		}
 	}

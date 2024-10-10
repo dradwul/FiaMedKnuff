@@ -26,6 +26,8 @@ namespace FiaMedKnuff
         private int currentPlayer = 0;
         private int currentPlayerPieceIndex = 0;
 
+        public Position[] p1 = new Position[] { };
+
         //Public players
         public Player player1;
 		public Player player2;
@@ -41,7 +43,7 @@ namespace FiaMedKnuff
 			//MoveCurrentPiece();
 			
             //Route for player 1
-            Position[] p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
+            p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
 
 			//Using Player constructor to make players
 			player1 = new Player(1, "blue", nestPositions[0]);
