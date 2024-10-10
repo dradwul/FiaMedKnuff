@@ -26,18 +26,30 @@ namespace FiaMedKnuff
         private int currentPlayer = 0;
         private int currentPlayerPieceIndex = 0;
 
+        public Position[] p1 = new Position[] { };
+
+        //Public players
         public Player player1;
 
         public MainPage()
         {
             this.InitializeComponent();
 
-            //InitializePieces(4);
-            //InitializeStartTiles();
-            //MoveCurrentPiece();
+			//InitializePieces(4);
+			//InitializeStartTiles();
+			//MoveCurrentPiece();
+			
+            //Route for player 1
+            p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
 
-            //Shape for the game pieces
-            Ellipse placeholderPiece01 = new Ellipse
+			//Using Player constructor to make players
+			player1 = new Player(1, "blue", nestPositions[0]);
+			player2 = new Player(2, "blue", nestPositions[1]);
+			player3 = new Player(3, "blue", nestPositions[2]);
+			player4 = new Player(4, "blue", nestPositions[3]);
+
+			//Placing game pieces on the board (ID 1-4, not 0-3)
+			for (int i = 1; i <= 4; i++)
             {
                 //Fill = color,
                 Fill = new SolidColorBrush(Windows.UI.Colors.Black),
@@ -165,16 +177,16 @@ namespace FiaMedKnuff
         /// </summary>
         public Position[][] endPositions = new Position[][]
         {
-            new Position[] { new Position(5,2), new Position(5,3), new Position(5,4), new Position(5,5) },
-            new Position[] { new Position(1,6), new Position(2,6), new Position(3,6), new Position(4,6) },
-            new Position[] { new Position(5,10), new Position(5,9), new Position(5,8), new Position(5,7) },
-            new Position[] { new Position(9,6), new Position(8,6), new Position(7,6), new Position(6,6) }
+            new Position[] { new Position(5,2), new Position(5,3), new Position(5,4), new Position(5,5), new Position(5,6) },
+            new Position[] { new Position(1,6), new Position(2,6), new Position(3,6), new Position(4,6), new Position(5,6)},
+            new Position[] { new Position(5,10), new Position(5,9), new Position(5,8), new Position(5,7) , new Position(5, 6) },
+            new Position[] { new Position(9,6), new Position(8,6), new Position(7,6), new Position(6,6) , new Position(5, 6) }
         };
 
         /// <summary>
         /// The goal position for everyone
         /// </summary>
-        public Position goalPosition = new Position(5, 6);
+        //public Position goalPosition = new Position(5, 6);
 
 
         /// <summary>
@@ -353,32 +365,7 @@ namespace FiaMedKnuff
             Debug.WriteLine(diceValue);
 
             // Updates steps taken and moves the piece
-            player1.Pieces[0].StepsTaken += diceValue;
-
-            // Calculate the total steps including outer and end positions
-            int totalSteps = allOuterPositions.Length + endPositions[player1.PlayerId - 1].Length;
-
-            // Ensure the steps taken do not exceed the total steps
-            if (player1.Pieces[0].StepsTaken <= allOuterPositions.Length)
-            {
-                // If the steps taken are within the outer positions, update the position accordingly
-                player1.Pieces[0].Position = allOuterPositions[player1.Pieces[0].StepsTaken - 1];
-            }
-            else if (player1.Pieces[0].StepsTaken <= totalSteps)
-            {
-                // If the steps taken exceed the outer positions but are within the total steps, update the position to the end positions
-                int endPositionIndex = player1.Pieces[0].StepsTaken - allOuterPositions.Length - 1;
-                player1.Pieces[0].Position = endPositions[player1.PlayerId - 1][endPositionIndex];
-            }
-            else
-            {
-                // Handle the case where the game piece has reached the goal
-                player1.Pieces[0].Position = goalPosition;
-            }
-
-            // Update the visual position of the game piece on the grid
-            Grid.SetColumn(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.ColumnIndex);
-            Grid.SetRow(player1.Pieces[0].GamePieceShape, player1.Pieces[0].Position.RowIndex);
-        }
+			player1.MoveGamePiece(1, diceValue, p1);
+		}
     }
 }
