@@ -147,7 +147,7 @@
 
         <!-- Dice zone -->
         <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Grid.Column="6" Grid.Row="11">
-            <Image x:Name="DiceImage" Height="60" Width="60" Tapped="DiceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
+            <Image x:Name="diceImage" Height="60" Width="60" Tapped="diceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
                 <Image.RenderTransform>
                     <CompositeTransform/>
                 </Image.RenderTransform>
