@@ -21,11 +21,6 @@ namespace FiaMedKnuff
 {
     public sealed partial class MainPage : Page
     {
-        // Variabler för att hålla reda på varje spelares pjäser
-        private Dictionary<int, List<Ellipse>> playerPieces; // Remove?
-        private int currentPlayer = 0; // Remove?
-        private int currentPlayerPieceIndex = 0; // Remove?
-
         public Position[] p1 = new Position[] { };
 
         //Public players
@@ -37,10 +32,6 @@ namespace FiaMedKnuff
         public MainPage()
         {
             this.InitializeComponent();
-
-            //InitializePieces(4); // Remove?
-            //InitializeStartTiles(); // Remove?
-            //MoveCurrentPiece(); // Remove?
 
             //Route for player 1
             p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
@@ -167,12 +158,6 @@ namespace FiaMedKnuff
         };
 
         /// <summary>
-        /// The goal position for everyone
-        /// </summary>
-        //public Position goalPosition = new Position(5, 6); // Remove?
-
-
-        /// <summary>
         /// Initializing the pieces in the nests. 
         /// PlaceholderPiece is for development. Will get changed to a gamepiece object.
         /// </summary>
@@ -238,32 +223,6 @@ namespace FiaMedKnuff
 
                 GameGrid.Children.Add(startCircle);
             }
-        }
-
-        /*private void MoveCurrentPiece() // Remove whole method?
-        {
-            // Hämta den aktuella spelarens pjäs som ska flyttas
-            var currentPiece = playerPieces[currentPlayer][currentPlayerPieceIndex];
-
-            // Hämta den nuvarande positionen för den spelaren
-            Position currentPosition = allOuterPositions[currentPlayerPieceIndex];
-
-            // Flytta till nästa position på brädet
-            currentPlayerPieceIndex = (currentPlayerPieceIndex + 1) % allOuterPositions.Length;
-            Position nextPosition = allOuterPositions[currentPlayerPieceIndex];
-
-            // Flytta pjäsen till den nya positionen
-            Grid.SetColumn(currentPiece, nextPosition.ColumnIndex);
-            Grid.SetRow(currentPiece, nextPosition.RowIndex);
-
-            // Växla till nästa spelare
-            currentPlayer = (currentPlayer + 1) % playerPieces.Count;
-        }*/
-
-        // Exempel på att flytta pjäserna när sidan klickas  
-        private void GameGrid_Tapped(object sender, TappedRoutedEventArgs e) // Remove?
-        {
-            //MoveCurrentPiece(); // Remove?
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
