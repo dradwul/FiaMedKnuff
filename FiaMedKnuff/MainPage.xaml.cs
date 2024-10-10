@@ -307,7 +307,7 @@ namespace FiaMedKnuff
             Debug.WriteLine(diceValue);
 
             // Updates steps taken and moves the piece
-            player1.MoveGamePiece(1, diceValue, p1);
+            player1.MoveGamePiece(1, diceValue, p1, piecesInGoalZonePlayer1, GameGrid);
         }
     }
 }
