@@ -36,13 +36,15 @@ namespace FiaMedKnuff
         {
             this.InitializeComponent();
 
-            //InitializePieces(4);
-            //InitializeStartTiles();
-            //MoveCurrentPiece();
+			//InitializePieces(4);
+			//InitializeStartTiles();
+			//MoveCurrentPiece();
+			
+            //Route for player 1
+            Position[] p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
 
-
-            //Using Player constructor to make players
-            player1 = new Player(1, "blue", nestPositions[0]);
+			//Using Player constructor to make players
+			player1 = new Player(1, "blue", nestPositions[0]);
 			player2 = new Player(2, "blue", nestPositions[1]);
 			player3 = new Player(3, "blue", nestPositions[2]);
 			player4 = new Player(4, "blue", nestPositions[3]);
@@ -156,16 +158,16 @@ namespace FiaMedKnuff
         /// </summary>
         public Position[][] endPositions = new Position[][]
         {
-            new Position[] { new Position(5,2), new Position(5,3), new Position(5,4), new Position(5,5) },
-            new Position[] { new Position(1,6), new Position(2,6), new Position(3,6), new Position(4,6) },
-            new Position[] { new Position(5,10), new Position(5,9), new Position(5,8), new Position(5,7) },
-            new Position[] { new Position(9,6), new Position(8,6), new Position(7,6), new Position(6,6) }
+            new Position[] { new Position(5,2), new Position(5,3), new Position(5,4), new Position(5,5), new Position(5,6) },
+            new Position[] { new Position(1,6), new Position(2,6), new Position(3,6), new Position(4,6), new Position(5,6)},
+            new Position[] { new Position(5,10), new Position(5,9), new Position(5,8), new Position(5,7) , new Position(5, 6) },
+            new Position[] { new Position(9,6), new Position(8,6), new Position(7,6), new Position(6,6) , new Position(5, 6) }
         };
 
         /// <summary>
         /// The goal position for everyone
         /// </summary>
-        public Position goalPosition = new Position(5, 6);
+        //public Position goalPosition = new Position(5, 6);
 
 
         /// <summary>
@@ -325,7 +327,7 @@ namespace FiaMedKnuff
                     Value = y
                 });
             }
-            
+
             // Sets the target for the animations
             Storyboard.SetTarget(translateXAnimation, DiceImage);
             Storyboard.SetTargetProperty(translateXAnimation, "(UIElement.RenderTransform).(CompositeTransform.TranslateX)");
@@ -344,7 +346,7 @@ namespace FiaMedKnuff
             Debug.WriteLine(diceValue);
 
             // Updates steps taken and moves the piece
-            player1.MoveGamePiece(1, diceValue, allOuterPositions);
+			player1.MoveGamePiece(1, diceValue, p1);
 		}
     }
 }
