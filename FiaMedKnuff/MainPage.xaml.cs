@@ -309,5 +309,25 @@ namespace FiaMedKnuff
             // Updates steps taken and moves the piece
             player1.MoveGamePiece(1, diceValue, p1, piecesInGoalZonePlayer1, GameGrid);
         }
+
+        private void startButton_Click(object sender, RoutedEventArgs e)
+        {
+            startMenu.Visibility = Visibility.Collapsed;
+        }
+
+        private void rulesButton_Click(object sender, RoutedEventArgs e)
+        {
+            rulesMenu.Visibility = Visibility.Visible;
+        }
+
+        private void exitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Exit();
+        }
+
+        private void exitRules_Click(object sender, RoutedEventArgs e)
+        {
+            rulesMenu.Visibility = Visibility.Collapsed;
+        }
     }
 }

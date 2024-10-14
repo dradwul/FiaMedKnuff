@@ -9,6 +9,8 @@
     Background="#333"
     Loaded="Page_Loaded" SizeChanged="Page_SizeChanged">
 
+
+
     <Grid x:Name="GameGrid" Background="#264653">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -40,6 +42,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
+
 
         <!-- All the "nests" -->
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
@@ -150,5 +154,40 @@
                 </Image.RenderTransform>
             </Image>
         </StackPanel>
+
+        <!-- Start Menu View -->
+        <Grid x:Name="startMenu" Visibility="Visible" Background="#333333" Opacity="0.8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Grid.RowSpan="13" Grid.ColumnSpan="13">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image Margin="170,20,0,0">
+                    <Image.Source>
+                        <SvgImageSource UriSource="ms-appx:///Assets/StartFrame.svg"/>
+                    </Image.Source>
+                </Image>
+                <Button x:Name="startButton" Height="51" Width="208" Background="#506B76" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="10"
+                        FontSize="20" FontWeight="SemiBold" Margin="5" Click="startButton_Click">Start Game</Button>
+                <Button x:Name="rulesButton" Height="51" Width="208" Background="#506B76" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="10"
+                        FontSize="20" FontWeight="SemiBold" Margin="5" Click="rulesButton_Click">Rules</Button>
+                <Button x:Name="exitButton" Height="51" Width="208" Background="#F86161" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="10"
+                        FontSize="20" FontWeight="SemiBold" Margin="0,50,0,0" Click="exitButton_Click">Exit Game</Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Rules Menu View -->
+        <Grid x:Name="rulesMenu" Visibility="Collapsed" Background="#506B76" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Grid.Row="2" Grid.Column="3" Grid.RowSpan="8" Grid.ColumnSpan="7" CornerRadius="10">
+            <StackPanel Height="485" Width="415" Background="#506B76">
+                <Button x:Name="exitRules" Height="40" Width="40" Background="#F86161" Foreground="#FFFFFF" HorizontalAlignment="Right" Margin="0,-5,10,0" CornerRadius="10" Click="exitRules_Click">X</Button>
+                <Rectangle Height="15" Width="120" Fill="#658795" HorizontalAlignment="Left" Margin="-5,0,0,0"></Rectangle>
+                <TextBlock Foreground="#ECECEC" FontSize="32" FontWeight="Bold" FontStyle="Italic" Margin="40,-35,0,0">Rules</TextBlock>
+                <StackPanel Height="295" Width="345" Background="#658795" CornerRadius="5" Margin="0,30,0,0">
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">1. All players begin with rolling the dice, highest number will start the game.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">2. To leave your nest, you must roll a 1 or a 6. If you roll 1, you'll be able to move one game piece to the start position. If you roll 6, you can move two game pieces to start position. Or take one game piece and move it six steps forward.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">3. If you manage to roll a 6, it's your turn again.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">4. If you land on the same spot as your opponent, you will knock them of the board, back to their nest.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">5. </TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>
