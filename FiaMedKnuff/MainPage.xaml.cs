@@ -249,6 +249,48 @@ namespace FiaMedKnuff
             GameGrid.Width = gridSize;
             GameGrid.Height = gridSize;
         }
+        private void HandleDiceRoll(int diceValue, Player player)
+        {
+            // Get the number of pieces the player has in their nest
+            int piecesInNest = player.PiecesInNest();
+
+            // If the dice rolls a 1 and the player has pieces in the nest
+            if (diceValue == 1 && piecesInNest > 0)
+            {
+                // Get the starting position for the player based on their ID
+                Position startPos = startPositions[player.PlayerID - 1];
+
+                // Move one piece from the nest to the start position
+                player.MovePieceFromNestToStart(startPos, GameGrid);
+            }
+            // If the dice rolls a 6
+            else if (diceValue == 6)
+            {
+                // If the player has two or more pieces in the nest, move two pieces to the start position
+                if (piecesInNest >= 2)
+                {
+                    Position startPos1 = startPositions[player.PlayerID - 1];
+                    Position startPos2 = startPositions[player.PlayerID - 1];
+
+                    player.MovePieceFromNestToStart(startPos1, GameGrid);
+                    player.MovePieceFromNestToStart(startPos2, GameGrid);
+                }
+                // If the player has one piece in the nest, move that piece to the start, and move another piece 6 steps
+                else if (piecesInNest == 1)
+                {
+                    Position startPos = startPositions[player.PlayerID - 1];
+                    player.MovePieceFromNestToStart(startPos, GameGrid);
+
+                    player.MoveGamePiece(1, 6, p1, piecesInGoalZonePlayer1, GameGrid);
+                }
+                // If no pieces are in the nest, move a piece 6 steps on the board
+                else
+                {
+                    player.MoveGamePiece(1, 6, p1, piecesInGoalZonePlayer1, GameGrid);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Handles the Tapped event of the DiceImage control.

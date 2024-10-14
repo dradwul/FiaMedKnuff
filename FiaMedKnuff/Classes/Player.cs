@@ -39,6 +39,8 @@ namespace FiaMedKnuff
             set { color = value; } // TODO: Add logic to change player color and decide the format (HEX?). Maybe this is done somewhere else in the program?
         }
 
+        public int PlayerID { get; internal set; }
+
         /// <summary>
         /// Array for the player pieces, this is created when the constructor is used
         /// </summary>
@@ -129,6 +131,16 @@ namespace FiaMedKnuff
                     }
                 }
             }
+        }
+
+        internal void MovePieceFromNestToStart(Position startPos1, Grid gameGrid)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal int PiecesInNest()
+        {
+            throw new NotImplementedException();
         }
     }
 }

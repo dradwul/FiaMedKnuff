@@ -125,6 +125,8 @@
     </Compile>
     <Compile Include="Classes\Player.cs" />
     <Compile Include="Classes\Position.cs" />
+    <Compile Include="player.cs" />
+    <Compile Include="position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
