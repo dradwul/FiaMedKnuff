@@ -309,22 +309,38 @@ namespace FiaMedKnuff
             // Updates steps taken and moves the piece
             player1.MoveGamePiece(1, diceValue, p1, piecesInGoalZonePlayer1, GameGrid);
         }
-
+        /// <summary>
+        /// Hides the start menu when the start button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
             startMenu.Visibility = Visibility.Collapsed;
         }
-
+        /// <summary>
+        /// Shows the rules, when rules button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void rulesButton_Click(object sender, RoutedEventArgs e)
         {
             rulesMenu.Visibility = Visibility.Visible;
         }
-
+        /// <summary>
+        /// Exits the program when the exit button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void exitButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Exit();
         }
-
+        /// <summary>
+        /// Exits the rules menu when the exit button is clicked. Brings the user back to the start menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void exitRules_Click(object sender, RoutedEventArgs e)
         {
             rulesMenu.Visibility = Visibility.Collapsed;
