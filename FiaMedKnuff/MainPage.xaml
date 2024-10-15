@@ -9,7 +9,40 @@
     Background="#333"
     Loaded="Page_Loaded" SizeChanged="Page_SizeChanged">
 
-
+    <!-- A control for changing the look for the buttons -->
+    <Page.Resources>
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Width" Value="210"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="Gray" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed"/>
+                                    <VisualState x:Name="Disabled"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
 
     <Grid x:Name="GameGrid" Background="#264653">
         <Grid.RowDefinitions>
@@ -158,19 +191,24 @@
         <!-- Start Menu View -->
         <Grid x:Name="startMenu" Visibility="Visible" Background="#333333" Opacity="0.8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
               Grid.RowSpan="13" Grid.ColumnSpan="13">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Image Margin="170,20,0,0">
+
+        </Grid>
+
+
+        
+        <!-- Start menu Buttons View -->
+        <Grid x:Name="startMenuButtons" Background="Transparent" Grid.RowSpan="13" Grid.ColumnSpan="13">
+            <StackPanel >
+                <Image Margin="170,190,0,0">
                     <Image.Source>
                         <SvgImageSource UriSource="ms-appx:///Assets/StartFrame.svg"/>
                     </Image.Source>
                 </Image>
-                <Button x:Name="startButton" Height="51" Width="208" Background="#506B76" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="10"
-                        FontSize="20" FontWeight="SemiBold" Margin="5" Click="startButton_Click">Start Game</Button>
-                <Button x:Name="rulesButton" Height="51" Width="208" Background="#506B76" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="10"
-                        FontSize="20" FontWeight="SemiBold" Margin="5" Click="rulesButton_Click">Rules</Button>
-                <Button x:Name="exitButton" Height="51" Width="208" Background="#F86161" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="10"
-                        FontSize="20" FontWeight="SemiBold" Margin="0,50,0,0" Click="exitButton_Click">Exit Game</Button>
+                <Button x:Name="startButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-50,0,10" Background="#506B76"  Click="startButton_Click">Start Game</Button>
+                <Button x:Name="rulesButton" Style="{StaticResource CustomButtonStyle}" Background="#506B76" Click="rulesButton_Click">Rules</Button>
+                <Button x:Name="exitButton" Style="{StaticResource CustomButtonStyle}" Margin="0,100,0,0" Background="#F86161" Click="exitButton_Click">Exit Game</Button>
             </StackPanel>
+            
         </Grid>
 
         <!-- Rules Menu View -->
@@ -180,12 +218,16 @@
                 <Button x:Name="exitRules" Height="40" Width="40" Background="#F86161" Foreground="#FFFFFF" HorizontalAlignment="Right" Margin="0,-5,10,0" CornerRadius="10" Click="exitRules_Click">X</Button>
                 <Rectangle Height="15" Width="120" Fill="#658795" HorizontalAlignment="Left" Margin="-5,0,0,0"></Rectangle>
                 <TextBlock Foreground="#ECECEC" FontSize="32" FontWeight="Bold" FontStyle="Italic" Margin="40,-35,0,0">Rules</TextBlock>
-                <StackPanel Height="295" Width="345" Background="#658795" CornerRadius="5" Margin="0,30,0,0">
-                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">1. All players begin with rolling the dice, highest number will start the game.</TextBlock>
-                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">2. To leave your nest, you must roll a 1 or a 6. If you roll 1, you'll be able to move one game piece to the start position. If you roll 6, you can move two game pieces to start position. Or take one game piece and move it six steps forward.</TextBlock>
-                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">3. If you manage to roll a 6, it's your turn again.</TextBlock>
-                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">4. If you land on the same spot as your opponent, you will knock them of the board, back to their nest.</TextBlock>
-                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">5. </TextBlock>
+                <StackPanel Height="355" Width="345" Background="#658795" CornerRadius="5" Margin="0,30,0,0">
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">Before the game starts, all players have to roll the dice. This will decide which players will start the game, and then it'll go in clockwise order.
+                    To leave your nest, you need to roll the dice and get either 1 or 6. If you roll 1, you are allowed to move one game piece out of the nest to the start position. And if you roll a 6, you can choose between moving 2 pieces to start position.
+                    Or you can move one game piece 6 steps forward. </TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">During the game you continue to roll the dice and move your game piece around the
+                    outer line. When you arrive to the position just before your own starting poisition. The piece will turn in towards the middle. Here you have to roll the exact amout or
+                    less to move forward, and evenutally you will enter the goal. First player to move all four game pieces into the goal, wins the game.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">You are able and allowed to knock your opponent of the board. To do this, you have to 
+                    roll the dice and land on the exact same position as your opponent, they will get knocked of, and their game piece is being placed in their own nest.</TextBlock>
+
                 </StackPanel>
             </StackPanel>
         </Grid>

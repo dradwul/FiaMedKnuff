@@ -317,6 +317,7 @@ namespace FiaMedKnuff
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
             startMenu.Visibility = Visibility.Collapsed;
+            startMenuButtons.Visibility = Visibility.Collapsed;
         }
         /// <summary>
         /// Shows the rules, when rules button is clicked
@@ -326,6 +327,7 @@ namespace FiaMedKnuff
         private void rulesButton_Click(object sender, RoutedEventArgs e)
         {
             rulesMenu.Visibility = Visibility.Visible;
+            startMenuButtons.Visibility = Visibility.Collapsed;
         }
         /// <summary>
         /// Exits the program when the exit button is clicked
@@ -344,6 +346,7 @@ namespace FiaMedKnuff
         private void exitRules_Click(object sender, RoutedEventArgs e)
         {
             rulesMenu.Visibility = Visibility.Collapsed;
+            startMenuButtons.Visibility = Visibility.Visible;
         }
     }
 }
