@@ -113,8 +113,6 @@ namespace FiaMedKnuff
                     piece.StepsTaken += diceRoll;
                     if (piece.StepsTaken >= position.Length)
                     {
-                        piece.Position = position[position.Length - 1];
-
                         //Remove piece from gameGrid and add to goalZone
                         gameGrid.Children.Remove(piece.GamePieceShape);
                         goalZone.Children.Add(piece.GamePieceShape);
