@@ -195,5 +195,38 @@
                 </Image>
             </StackPanel>
         </Grid>
+
+        <!-- Decide who will start view -->
+        <Grid Name="decideStartingPlayerView" Visibility="Collapsed">
+            <Canvas Background="#111" Opacity="0.95"/>
+
+            <TextBlock Text="DECIDE START PLAYER BY ROLLING DICE" HorizontalAlignment="Center" FontSize="40" FontWeight="Bold" Margin="0,150,0,0"/>
+
+            <Button Name="decideWhoWillStartButton" Content="Roll For All" Click="RollForAll_Click" Width="150" Height="45" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" CornerRadius="5" Margin="0,250,0,0"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Name="sPanelP1" Width="200" Height="150" Margin="0,0,0,0">
+                    <TextBlock Text="Player1" TextAlignment="Center" FontSize="20"/>
+                    <TextBlock Name="sPanelP1Roll" Text="0" TextAlignment="Center" FontSize="40"/>
+                    <!--<Button Content="Roll" FontSize="20" HorizontalAlignment="Center" CornerRadius="5" Click="ThrowDiceToDecideStartPlayer_Click"/>-->
+                </StackPanel>
+                <StackPanel Name="sPanelP2" Width="200" Height="150">
+                    <TextBlock Text="Player2" TextAlignment="Center" FontSize="20"/>
+                    <TextBlock Name="sPanelP2Roll" Text="0" TextAlignment="Center" FontSize="40"/>
+                </StackPanel>
+                <StackPanel Name="sPanelP3" Width="200" Height="150" Margin="0,0,0,0" Visibility="Collapsed">
+                    <TextBlock Text="Player3" TextAlignment="Center" FontSize="20"/>
+                    <TextBlock Name="sPanelP3Roll" Text="0" TextAlignment="Center" FontSize="40"/>
+                </StackPanel>
+                <StackPanel Name="sPanelP4" Width="200" Height="150" Visibility="Collapsed">
+                    <TextBlock Text="Player4" TextAlignment="Center" FontSize="20"/>
+                    <TextBlock Name="sPanelP4Roll" Text="0" TextAlignment="Center" FontSize="40"/>
+                </StackPanel>
+            </StackPanel>
+            <Grid Name="playerToStartGrid" Background="#333" Visibility="Collapsed">
+                <TextBlock Name="playerToStartTextBox" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontWeight="Bold"/>
+            </Grid>
+        </Grid>
+
     </Grid>
 </Page>

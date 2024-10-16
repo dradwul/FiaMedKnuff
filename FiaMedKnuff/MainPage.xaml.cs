@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Input;
+using System.Threading.Tasks;
 
 namespace FiaMedKnuff
 {
@@ -25,10 +26,12 @@ namespace FiaMedKnuff
 
         //List of players in current game
         public List<Player> playerList = new List<Player>();
+        private Player startingPlayer;
 
         public MainPage()
         {
             this.InitializeComponent();
+            InitializeStartTiles();
 
             //Route for player 1
             p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
@@ -188,6 +191,10 @@ namespace FiaMedKnuff
             }
         }
 
+        /// <summary>
+        /// This method will initialize a start tiles for each player
+        /// It will appear with the same border color as the players nest/pieces
+        /// </summary>
         private void InitializeStartTiles()
         {
             for (int i = 0; i < 4; i++)
@@ -323,7 +330,92 @@ namespace FiaMedKnuff
 			}
 
 			playerSelectView.Visibility = Visibility.Collapsed;
-			GameGrid.Visibility = Visibility.Visible;
-		}
-	}
+            GameGrid.Visibility = Visibility.Visible;
+            
+
+            // Luddes tillägg
+            decideStartingPlayerView.Visibility = Visibility.Visible;
+
+            if(playerList.Count == 3)
+            {
+                sPanelP3.Visibility = Visibility.Visible;
+            }
+            if(playerList.Count == 4)
+            {
+                sPanelP3.Visibility = Visibility.Visible;
+                sPanelP4.Visibility = Visibility.Visible;
+            }
+        }
+
+
+        private async void RollForAll_Click(object sender, RoutedEventArgs e)
+        {
+            Dictionary<Player, int> playersAndRolls = new Dictionary<Player, int>();
+            Dictionary<Player, int> playersWithHighestRolls = new Dictionary<Player, int>();
+
+            int highestRoll;
+
+            // 1 kast med 1s delay mellan varje spelares automatiserade kast
+            for (int i = 1; i < playerList.Count+1; i++)
+            {
+                int roll = Random.Next(1, 7);
+                playersAndRolls.Add(playerList[i-1], roll);
+
+                string playerRollTextName = $"sPanelP{i}Roll";
+                var playerRollTextBlock = this.FindName(playerRollTextName) as TextBlock;
+
+                if(playerRollTextBlock != null )
+                {
+                    playerRollTextBlock.Text = roll.ToString();
+                }
+
+                await Task.Delay(1000);
+            }
+
+            highestRoll = playersAndRolls.Values.Max();
+
+            // Lägg till den/de spelare i dictionary som fick högst tal
+            foreach(var player in playersAndRolls)
+            {
+                if (player.Value == highestRoll)
+                {
+                    playersWithHighestRolls.Add(player.Key, player.Value);
+                }
+            }
+
+            if(playersWithHighestRolls.Count != 1)
+            {
+                // kast igen osv
+                decideWhoWillStartButton.Content = "ReRoll!";
+
+                //Går igenom listan med alla spelare och om spelaren inte finns i playersWithHighestRolls så döljer den elementet
+                foreach (var player in playersAndRolls)
+                {
+                    if (playersWithHighestRolls.ContainsKey(player.Key))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        string elementName = $"sPanelP{player.Key.PlayerId}";
+                        var elementToHide = this.FindName(elementName) as StackPanel;
+                        elementToHide.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
+            else
+            {
+                playerToStartGrid.Visibility = Visibility.Visible;
+                playerToStartTextBox.Text = $"Player {playersWithHighestRolls.First().Key.PlayerId} rolled highest and will start the game!";
+
+                startingPlayer = playersWithHighestRolls.First().Key;
+
+                await Task.Delay(2000);
+                playerToStartGrid.Visibility = Visibility.Collapsed;
+                decideStartingPlayerView.Visibility = Visibility.Collapsed;
+
+                Debug.WriteLine($"Player {startingPlayer.PlayerId} is the starting player");
+            }
+        }
+    }
 }
