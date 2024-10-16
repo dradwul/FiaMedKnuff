@@ -318,6 +318,7 @@ namespace FiaMedKnuff
         {
             startMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Collapsed;
+            // playerSelect.Visibility = Visibility.Visible; Jag tänker att man lägger playerselect som collapsed i XAML fil. När man trycker på START, då blir main menu collapsed och playerselect visas.
         }
         /// <summary>
         /// Shows the rules, when rules button is clicked
