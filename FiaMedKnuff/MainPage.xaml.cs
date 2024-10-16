@@ -23,11 +23,8 @@ namespace FiaMedKnuff
     {
         public Position[] p1 = new Position[] { };
 
-        //Public players
-        public Player player1;
-        public Player player2;
-        public Player player3;
-        public Player player4;
+        //List of players in current game
+        public List<Player> playerList = new List<Player>();
 
         public MainPage()
         {
@@ -35,21 +32,6 @@ namespace FiaMedKnuff
 
             //Route for player 1
             p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
-
-            //Using Player constructor to make players
-            player1 = new Player(1, "blue", nestPositions[0]);
-            player2 = new Player(2, "blue", nestPositions[1]);
-            player3 = new Player(3, "blue", nestPositions[2]);
-            player4 = new Player(4, "blue", nestPositions[3]);
-
-            //Placing game pieces on the board (ID 1-4, not 0-3)
-            for (int i = 1; i <= 4; i++)
-            {
-                GameGrid.Children.Add(player1.ReturnGamePieceShape(i));
-                GameGrid.Children.Add(player2.ReturnGamePieceShape(i));
-                GameGrid.Children.Add(player3.ReturnGamePieceShape(i));
-                GameGrid.Children.Add(player4.ReturnGamePieceShape(i));
-            }
         }
 
         /// <summary>
@@ -307,6 +289,43 @@ namespace FiaMedKnuff
             Debug.WriteLine(diceValue);
 
             // Updates steps taken and moves the piece
+            playerList[0].MoveGamePiece(1, diceValue, p1, piecesInGoalZonePlayer1, GameGrid);
+        }
+
+		private void PlayersSelected(object sender, RoutedEventArgs e)
+		{
+			//Casts sender to a button to access its content (number between 2-4)
+			Button clickedButton = sender as Button;
+            int numberOfPlayers = int.Parse(clickedButton.Content.ToString());
+
+            GeneratePlayers(numberOfPlayers);
+		}
+
+        /// <summary>
+        /// Generates players depending on input (2-4 players)
+        /// </summary>
+        /// <param name="amountOfPlayers"></param>
+        private void GeneratePlayers(int amountOfPlayers)
+        {
+            //Populate the player list with players using Player constructor
+            for (int i = 0; i < amountOfPlayers; i++)
+            {
+                playerList.Add(new Player(i+1, "blue", nestPositions[i]));
+            }
+
+            foreach (Player player in playerList)
+            {
+				//Placing game pieces on the board (ID 1-4, not 0-3)
+				for (int i = 1; i <= 4; i++)
+				{
+                    GameGrid.Children.Add(player.ReturnGamePieceShape(i));
+				}
+			}
+
+			playerSelectView.Visibility = Visibility.Collapsed;
+			GameGrid.Visibility = Visibility.Visible;
+		}
+	}
             player1.MoveGamePiece(1, diceValue, p1, piecesInGoalZonePlayer1, GameGrid);
         }
         /// <summary>

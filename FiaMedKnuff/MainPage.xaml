@@ -9,6 +9,65 @@
     Background="#333"
     Loaded="Page_Loaded" SizeChanged="Page_SizeChanged">
 
+    <Grid>
+        <!--View to select amount of players-->
+        <Grid x:Name="playerSelectView" Background="#333333">
+            <Grid Width="320" Height="120" 
+                  Background="#506B76" CornerRadius="10">
+                <TextBlock 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Margin="0,0,0,80"
+                    Text="Number of players:"
+                    Foreground="White"
+                    FontSize="24"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" HorizontalAlignment="Center" 
+                            Width="50" Height="50" Margin="20,20,0,0"
+                            Background="#D9D9D9"
+                            CornerRadius="5"
+                            Content="2"
+                            FontSize="20"
+                            FontWeight="Bold" Click="PlayersSelected"/>
+                    <Button Grid.Column="1" HorizontalAlignment="Center"
+                            Width="50" Height="50" Margin="0,20,0,0"
+                            Background="#D9D9D9"
+                            CornerRadius="5"
+                            Content="3"
+                            FontSize="20"
+                            FontWeight="Bold" Click="PlayersSelected"/>
+                    <Button Grid.Column="2" HorizontalAlignment="Center" 
+                            Width="50" Height="50" Margin="0,20,20,0"
+                            Background="#D9D9D9"
+                            CornerRadius="5"
+                            Content="4"
+                            FontSize="20"
+                            FontWeight="Bold" Click="PlayersSelected"/>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="GameGrid" Visibility="Collapsed" Background="#264653">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
     <!-- A control for changing the look for the buttons -->
     <Page.Resources>
         <Style x:Key="CustomButtonStyle" TargetType="Button">
@@ -60,21 +119,22 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
 
 
 
@@ -83,111 +143,113 @@
             <Ellipse Fill="Blue" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
         </Grid>
 
-        <Grid Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
-            <Ellipse Fill="Yellow" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
-        </Grid>
+            <Grid Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
+                <Ellipse Fill="Yellow" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
+            </Grid>
 
-        <Grid Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
-            <Ellipse Fill="Red" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
+            <Grid Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
+                <Ellipse Fill="Red" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
+            </Grid>
+
+            <Grid Grid.Row="7" Grid.Column="8" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
+                <Ellipse Fill="Green" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
+            </Grid>
+
+            <!-- Zones where pieces will land after completing -->
+            <StackPanel x:Name="piecesInGoalZonePlayer1"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
+
+            </StackPanel>
+            <StackPanel x:Name="piecesInGoalZonePlayer2"  Grid.Row="0" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
+                <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+                <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+                <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+                <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            </StackPanel>
+            <StackPanel x:Name="piecesInGoalZonePlayer3"  Grid.Row="7" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
+                <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+                <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+                <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+                <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            </StackPanel>
+            <StackPanel x:Name="piecesInGoalZonePlayer4"  Grid.Row="7" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
+                <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+                <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+                <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+                <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
+            </StackPanel>
+
+            <!-- Every game tile -->
+            <Ellipse Grid.Row="4" Grid.Column="1" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="2" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="3" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="4" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="3" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="2" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="1" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="0" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="0" Grid.Column="6" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="0" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="1" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="2" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="3" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="8" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="9" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="10" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="11" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="11" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="11" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="10" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="9" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="8" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="7" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="8" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="9" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="10" Grid.Column="7" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="10" Grid.Column="6" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="10" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="9" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="8" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="7" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="5" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="4" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="3" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="2" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="1" Fill="white" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="1" Fill="white" Margin="5"/>
+
+            <Ellipse Grid.Row="5" Grid.Column="2" Fill="Blue" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="3" Fill="Blue" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="4" Fill="Blue" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="5" Fill="Blue" Margin="5"/>
+            <Ellipse Grid.Row="1" Grid.Column="6" Fill="Yellow" Margin="5"/>
+            <Ellipse Grid.Row="2" Grid.Column="6" Fill="Yellow" Margin="5"/>
+            <Ellipse Grid.Row="3" Grid.Column="6" Fill="Yellow" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="6" Fill="Yellow" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="10" Fill="Green" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="9" Fill="Green" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="8" Fill="Green" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="7" Fill="Green" Margin="5"/>
+            <Ellipse Grid.Row="9" Grid.Column="6" Fill="Red" Margin="5"/>
+            <Ellipse Grid.Row="8" Grid.Column="6" Fill="Red" Margin="5"/>
+            <Ellipse Grid.Row="7" Grid.Column="6" Fill="Red" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="6" Fill="Red" Margin="5"/>
+
+            <Ellipse Grid.Row="5" Grid.Column="6" Fill="BurlyWood" Margin="2"/>
+
+            <!-- Dice zone -->
+            <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Grid.Column="6" Grid.Row="11">
+                <Image x:Name="diceImage" Height="60" Width="60" Tapped="diceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
+                    <Image.RenderTransform>
+                        <CompositeTransform/>
+                    </Image.RenderTransform>
+                </Image>
+            </StackPanel>
         </Grid>
+    </Grid>
         
-        <Grid Grid.Row="7" Grid.Column="8" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
-            <Ellipse Fill="Green" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
-        </Grid>
-
-        <!-- Zones where pieces will land after completing -->
-        <StackPanel x:Name="piecesInGoalZonePlayer1"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
-            
-        </StackPanel>
-        <StackPanel x:Name="piecesInGoalZonePlayer2"  Grid.Row="0" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
-            <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-            <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-            <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-            <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-        </StackPanel>
-        <StackPanel x:Name="piecesInGoalZonePlayer3"  Grid.Row="7" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
-            <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-            <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-            <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-            <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-        </StackPanel>
-        <StackPanel x:Name="piecesInGoalZonePlayer4"  Grid.Row="7" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
-            <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-            <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-            <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-            <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-        </StackPanel>
-
-        <!-- Every game tile -->
-        <Ellipse Grid.Row="4" Grid.Column="1" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="2" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="3" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="4" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="3" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="2" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="1" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="0" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="0" Grid.Column="6" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="0" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="1" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="2" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="3" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="8" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="9" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="10" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="11" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="5" Grid.Column="11" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="11" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="10" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="9" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="8" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="7" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="8" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="9" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="10" Grid.Column="7" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="10" Grid.Column="6" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="10" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="9" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="8" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="7" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="5" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="4" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="3" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="2" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="1" Fill="white" Margin="5"/>
-        <Ellipse Grid.Row="5" Grid.Column="1" Fill="white" Margin="5"/>
-
-        <Ellipse Grid.Row="5" Grid.Column="2" Fill="Blue" Margin="5"/>
-        <Ellipse Grid.Row="5" Grid.Column="3" Fill="Blue" Margin="5"/>
-        <Ellipse Grid.Row="5" Grid.Column="4" Fill="Blue" Margin="5"/>
-        <Ellipse Grid.Row="5" Grid.Column="5" Fill="Blue" Margin="5"/>
-        <Ellipse Grid.Row="1" Grid.Column="6" Fill="Yellow" Margin="5"/>
-        <Ellipse Grid.Row="2" Grid.Column="6" Fill="Yellow" Margin="5"/>
-        <Ellipse Grid.Row="3" Grid.Column="6" Fill="Yellow" Margin="5"/>
-        <Ellipse Grid.Row="4" Grid.Column="6" Fill="Yellow" Margin="5"/>
-        <Ellipse Grid.Row="5" Grid.Column="10" Fill="Green" Margin="5"/>
-        <Ellipse Grid.Row="5" Grid.Column="9" Fill="Green" Margin="5"/>
-        <Ellipse Grid.Row="5" Grid.Column="8" Fill="Green" Margin="5"/>
-        <Ellipse Grid.Row="5" Grid.Column="7" Fill="Green" Margin="5"/>
-        <Ellipse Grid.Row="9" Grid.Column="6" Fill="Red" Margin="5"/>
-        <Ellipse Grid.Row="8" Grid.Column="6" Fill="Red" Margin="5"/>
-        <Ellipse Grid.Row="7" Grid.Column="6" Fill="Red" Margin="5"/>
-        <Ellipse Grid.Row="6" Grid.Column="6" Fill="Red" Margin="5"/>
-
-        <Ellipse Grid.Row="5" Grid.Column="6" Fill="BurlyWood" Margin="2"/>
-
-        <!-- Dice zone -->
-        <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Grid.Column="6" Grid.Row="11">
-            <Image x:Name="diceImage" Height="60" Width="60" Tapped="diceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
-                <Image.RenderTransform>
-                    <CompositeTransform/>
-                </Image.RenderTransform>
-            </Image>
-        </StackPanel>
-
         <!-- Start Menu View -->
         <Grid x:Name="startMenu" Visibility="Visible" Background="#333333" Opacity="0.8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
               Grid.RowSpan="13" Grid.ColumnSpan="13">
