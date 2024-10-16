@@ -299,7 +299,10 @@ namespace FiaMedKnuff
             int numberOfPlayers = int.Parse(clickedButton.Content.ToString());
 
             GeneratePlayers(numberOfPlayers);
-		}
+            startMenu.Visibility = Visibility.Collapsed;
+            startMenuButtons.Visibility = Visibility.Collapsed;
+            playerSelectButtons.Visibility = Visibility.Collapsed;
+        }
 
         /// <summary>
         /// Generates players depending on input (2-4 players)
@@ -322,12 +325,9 @@ namespace FiaMedKnuff
 				}
 			}
 
-			playerSelectView.Visibility = Visibility.Collapsed;
+			//playerSelectView.Visibility = Visibility.Collapsed;
 			GameGrid.Visibility = Visibility.Visible;
 		}
-	}
-            player1.MoveGamePiece(1, diceValue, p1, piecesInGoalZonePlayer1, GameGrid);
-        }
         /// <summary>
         /// Hides the start menu when the start button is clicked
         /// </summary>
@@ -335,9 +335,9 @@ namespace FiaMedKnuff
         /// <param name="e"></param>
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
-            startMenu.Visibility = Visibility.Collapsed;
+            //startMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Collapsed;
-            // playerSelect.Visibility = Visibility.Visible; Jag tänker att man lägger playerselect som collapsed i XAML fil. När man trycker på START, då blir main menu collapsed och playerselect visas.
+            playerSelectButtons.Visibility = Visibility.Visible;
         }
         /// <summary>
         /// Shows the rules, when rules button is clicked
@@ -368,5 +368,10 @@ namespace FiaMedKnuff
             rulesMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Visible;
         }
+
     }
+           
+        
+       
+    
 }
