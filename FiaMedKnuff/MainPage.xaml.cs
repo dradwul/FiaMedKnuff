@@ -345,7 +345,7 @@ namespace FiaMedKnuff
                 if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
                 {
                     //Moves the piece and checks if it has reached its goal
-                    playerList[currentPlayersTurn-1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1]); //TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
+                    playerList[currentPlayersTurn-1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1]); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
                     playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
 
                     //Disables the pieces from being clicked and enables the dice
