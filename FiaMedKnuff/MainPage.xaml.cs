@@ -21,23 +21,54 @@ namespace FiaMedKnuff
 {
     public sealed partial class MainPage : Page
     {
-        public Position[] p1 = new Position[] { };
+        //Routes for all players
+        private Position[][] playerRoutes = new Position[4][];
 
-        //List of players in current game
-        public List<Player> playerList = new List<Player>();
+        //This is where the pieces move when they reach their goal
+        private StackPanel[] goalReachedContainer = new StackPanel[4];
+
+		//List of players in current game
+		private List<Player> playerList = new List<Player>();
+
+        //Variable for the dice value (1-6)
+        private int currentDiceValue;
+
+        //Variable to store curreny players turn (1-4)
+        private int currentPlayersTurn;
 
         public MainPage()
         {
             this.InitializeComponent();
 
-            //Route for player 1
-            p1 = allOuterPositions.Concat(endPositions[0]).ToArray();
-        }
+            //Creates the routes for all players
+            playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
+            playerRoutes[1] = ShiftArray(allOuterPositions, 10).Concat(endPositions[1]).ToArray();
+            playerRoutes[2] = ShiftArray(allOuterPositions, 20).Concat(endPositions[2]).ToArray();
+            playerRoutes[3] = ShiftArray(allOuterPositions, 30).Concat(endPositions[3]).ToArray();
+
+            //Initilizes the zone for each player where the pieces go when they reach the goal
+            goalReachedContainer[0] = piecesInGoalZonePlayer1;
+			goalReachedContainer[1] = piecesInGoalZonePlayer2;
+			goalReachedContainer[2] = piecesInGoalZonePlayer3;
+			goalReachedContainer[3] = piecesInGoalZonePlayer4;
+		}
 
         /// <summary>
-        /// Available colors
+        /// Shifts an array to the left
+        /// Example where we shift an array 1 step to the left: [2,5,3] -> [5,3,2]
         /// </summary>
-        readonly SolidColorBrush[] colors = new SolidColorBrush[]
+        /// <param name="array"> Input array to shift </param>
+        /// <param name="steps"> Amount of steps to shift </param>
+        /// <returns> Returns the array that has been shifted </returns>
+		private Position[] ShiftArray(Position[] array, int steps)
+		{
+			return array.Skip(steps).Concat(array.Take(steps)).ToArray();
+		}
+
+		/// <summary>
+		/// Available colors
+		/// </summary>
+		readonly SolidColorBrush[] colors = new SolidColorBrush[]
         {
             new SolidColorBrush(Windows.UI.Colors.Blue),
             new SolidColorBrush(Windows.UI.Colors.Yellow),
@@ -288,9 +319,48 @@ namespace FiaMedKnuff
             storyboard.Begin();
             Debug.WriteLine(diceValue);
 
-            // Updates steps taken and moves the piece
-            playerList[0].MoveGamePiece(1, diceValue, p1, piecesInGoalZonePlayer1, GameGrid);
-        }
+            //Stores the value of the dice to a global variable and disables the dice
+            currentDiceValue = diceValue;
+            diceImage.IsTapEnabled = false;
+
+            Debug.WriteLine("Current players turn: " + currentPlayersTurn);
+
+            //Enables the pieces so they can be moved
+            playerList[currentPlayersTurn - 1].enableGamePieces();
+		}
+
+		/// <summary>
+		/// Checks which game piece was clicked and moves it according the current value of the dice
+		/// </summary>
+		/// <param name="sender"> The shape of the game piece that was clicked, an ellipse</param>
+		/// <param name="e"></param>
+		private void GamePieceClicked(object sender, TappedRoutedEventArgs e)
+		{
+            //Casts sender as an ellipse to be able to identify which ellipse was clicked
+			Ellipse clickedEllipse = sender as Ellipse;
+
+			//Finds the clicked ellipse in the class instance and moves it
+			for (int i = 1; i <= 4; i++)
+            {
+                if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
+                {
+                    //Moves the piece and checks if it has reached its goal
+                    playerList[currentPlayersTurn-1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1]); //TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
+                    playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
+
+                    //Disables the pieces from being clicked and enables the dice
+                    playerList[currentPlayersTurn-1].disableGamePieces();
+                    diceImage.IsTapEnabled = true;
+                }
+			}
+            //Checks if player can go again if a 6 was rolled
+            if(currentDiceValue != 6)
+			    currentPlayersTurn++;
+
+            //Reset back to player 1 when last player has played
+			if (currentPlayersTurn > playerList.Count)
+				currentPlayersTurn = 1;
+		}
 
 		private void PlayersSelected(object sender, RoutedEventArgs e)
 		{
@@ -310,7 +380,7 @@ namespace FiaMedKnuff
             //Populate the player list with players using Player constructor
             for (int i = 0; i < amountOfPlayers; i++)
             {
-                playerList.Add(new Player(i+1, "blue", nestPositions[i]));
+                playerList.Add(new Player(i+1, "blue", nestPositions[i], GamePieceClicked));
             }
 
             foreach (Player player in playerList)
@@ -321,6 +391,10 @@ namespace FiaMedKnuff
                     GameGrid.Children.Add(player.ReturnGamePieceShape(i));
 				}
 			}
+
+            //PLACEHOLDER FOR STORY 2.4
+            currentPlayersTurn = Random.Next(1, playerList.Count+1);
+            Debug.WriteLine("First player: " + currentPlayersTurn);
 
 			playerSelectView.Visibility = Visibility.Collapsed;
 			GameGrid.Visibility = Visibility.Visible;

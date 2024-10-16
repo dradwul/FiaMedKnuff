@@ -104,25 +104,15 @@
 
             <!-- Zones where pieces will land after completing -->
             <StackPanel x:Name="piecesInGoalZonePlayer1"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
+            </StackPanel>
 
-            </StackPanel>
             <StackPanel x:Name="piecesInGoalZonePlayer2"  Grid.Row="0" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
-                <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-                <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-                <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-                <Ellipse Fill="Yellow" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
             </StackPanel>
+            
             <StackPanel x:Name="piecesInGoalZonePlayer3"  Grid.Row="7" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
-                <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-                <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-                <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-                <Ellipse Fill="Red" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
             </StackPanel>
+            
             <StackPanel x:Name="piecesInGoalZonePlayer4"  Grid.Row="7" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
-                <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-                <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-                <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
-                <Ellipse Fill="Green" Width="35" Height="35" StrokeThickness="3" Stroke="white"/>
             </StackPanel>
 
             <!-- Every game tile -->
