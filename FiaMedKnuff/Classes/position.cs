@@ -36,10 +36,15 @@ namespace FiaMedKnuff
                 Position = position;
                 PlayerId = playerId;
             }
+            /// <summary>
+            ///  Makes sure that IsOccupied is set on FALSE when the gamepiece leaves it 
+            /// </summary>
+            /// <param name="newPosition"></param>
 
             public void KnockOff(Position newPosition)
             {
                 Position = newPosition;
+                newPosition.IsOccupied = false;
             }
         }
 
