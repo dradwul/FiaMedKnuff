@@ -24,6 +24,10 @@ namespace FiaMedKnuff
     {
         public Position[] p1 = new Position[] { };
 
+        private Dictionary<Player, int> playersAndRolls = new Dictionary<Player, int>();
+        private Dictionary<Player, int> playersWithHighestRolls = new Dictionary<Player, int>();
+        private int startingPlayerId;
+
         //List of players in current game
         public List<Player> playerList = new List<Player>();
         private Player startingPlayer;
@@ -332,8 +336,6 @@ namespace FiaMedKnuff
 			playerSelectView.Visibility = Visibility.Collapsed;
             GameGrid.Visibility = Visibility.Visible;
             
-
-            // Luddes tillägg
             decideStartingPlayerView.Visibility = Visibility.Visible;
 
             if(playerList.Count == 3)
@@ -347,35 +349,59 @@ namespace FiaMedKnuff
             }
         }
 
-
+        /// <summary>
+        /// Event method for rolling to decide who will start the game.
+        /// Includes logic and ui updates
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void RollForAll_Click(object sender, RoutedEventArgs e)
         {
-            Dictionary<Player, int> playersAndRolls = new Dictionary<Player, int>();
-            Dictionary<Player, int> playersWithHighestRolls = new Dictionary<Player, int>();
-
-            int highestRoll;
-
-            // 1 kast med 1s delay mellan varje spelares automatiserade kast
-            for (int i = 1; i < playerList.Count+1; i++)
+            if(playersAndRolls.Count == 0)
             {
-                int roll = Random.Next(1, 7);
-                playersAndRolls.Add(playerList[i-1], roll);
-
-                string playerRollTextName = $"sPanelP{i}Roll";
-                var playerRollTextBlock = this.FindName(playerRollTextName) as TextBlock;
-
-                if(playerRollTextBlock != null )
+                foreach (var player in playerList)
                 {
-                    playerRollTextBlock.Text = roll.ToString();
-                }
+                    int roll = Random.Next(1, 7);
+                    playersAndRolls[player] = roll;
 
-                await Task.Delay(1000);
+                    string playerRollTextName = $"sPanelP{player.PlayerId}Roll";
+                    TextBlock playerRollTextBlock = this.FindName(playerRollTextName) as TextBlock;
+
+
+                    if (playerRollTextBlock != null)
+                    {
+                        playerRollTextBlock.Text = roll.ToString();
+                    }
+
+                    await Task.Delay(700);
+                }
+            }
+            else if(playersAndRolls.Count > 0)
+            {
+                playersAndRolls.Clear();
+                foreach(var player in playersWithHighestRolls)
+                {
+                    int roll = Random.Next(1, 7);
+                    playersAndRolls[player.Key] = roll;
+
+                    string playerRollTextName = $"sPanelP{player.Key.PlayerId}Roll";
+                    TextBlock playerRollTextBlock = this.FindName(playerRollTextName) as TextBlock;
+
+
+                    if (playerRollTextBlock != null)
+                    {
+                        playerRollTextBlock.Text = roll.ToString();
+                    }
+
+                    await Task.Delay(700);
+                }
+                playersWithHighestRolls.Clear();
             }
 
-            highestRoll = playersAndRolls.Values.Max();
+             int highestRoll = playersAndRolls.Values.Max();
 
             // Lägg till den/de spelare i dictionary som fick högst tal
-            foreach(var player in playersAndRolls)
+            foreach (var player in playersAndRolls)
             {
                 if (player.Value == highestRoll)
                 {
@@ -414,7 +440,8 @@ namespace FiaMedKnuff
                 playerToStartGrid.Visibility = Visibility.Collapsed;
                 decideStartingPlayerView.Visibility = Visibility.Collapsed;
 
-                Debug.WriteLine($"Player {startingPlayer.PlayerId} is the starting player");
+                startingPlayerId = startingPlayer.PlayerId;
+                Debug.WriteLine($"Player {startingPlayerId} is the starting player");
             }
         }
     }

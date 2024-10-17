@@ -17,6 +17,7 @@ namespace FiaMedKnuff
         /// Gets or sets the player ID which must be a number between 1 and 4
         /// </summary>
         private int playerId;
+        // PlayerId changed to public instead of private to get access in startingPlayer method
         public int PlayerId
         {
             get { return playerId; }
