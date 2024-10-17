@@ -32,16 +32,6 @@ namespace FiaMedKnuff
         }
 
         /// <summary>
-        /// Gets or sets the player color
-        /// </summary>
-        private string color;
-        private string Color
-        {
-            get { return color; }
-            set { color = value; } // TODO: Add logic to change player color and decide the format (HEX?). Maybe this is done somewhere else in the program?
-        }
-
-        /// <summary>
         /// Array for the player pieces, this is created when the constructor is used
         /// </summary>
         private readonly GamePiece[] pieces = new GamePiece[4];
@@ -57,7 +47,7 @@ namespace FiaMedKnuff
         public Player(int playerId, string color, Position[] startingPositions, TappedEventHandler gamePieceClicked)
         {
             PlayerId = playerId;
-            Color = color;
+            Windows.UI.Color pieceColor = GeneratePieceColor(color);
 
             if (startingPositions.Length != 4)
                 throw new ArgumentException("A player needs 4 starting positions for his game pieces");
@@ -68,8 +58,8 @@ namespace FiaMedKnuff
                 Ellipse placeholderPiece01 = new Ellipse
                 {
                     //Fill = color,
-                    Fill = new SolidColorBrush(Windows.UI.Colors.Black),
-                    Stroke = new SolidColorBrush(Windows.UI.Colors.White),
+                    Fill = new SolidColorBrush(pieceColor),
+                    Stroke = new SolidColorBrush(Windows.UI.Colors.Black),
                     StrokeThickness = 3,
                     Width = 40,
                     Height = 40,
@@ -148,21 +138,92 @@ namespace FiaMedKnuff
         }
 
         /// <summary>
-        /// One method disables the pieces from getting clicked and the other one enables them instead
+        /// Enables the game pieces that have legal moves and highlights them
         /// </summary>
-        public void enableGamePieces()
+        public void EnableGamePieces(int diceRoll)
         {
             foreach (GamePiece piece in pieces)
             {
-                piece.GamePieceShape.IsTapEnabled = true;
-            }
+                //Enable piece in nest if dice roll is 1 or 6
+                if ((diceRoll == 1 || diceRoll == 6) && piece.StepsTaken == 0)
+                {
+                    piece.GamePieceShape.IsTapEnabled = true;
+                    piece.GamePieceShape.Stroke = new SolidColorBrush(Windows.UI.Colors.Lime);
+
+				}
+                //Enable piece if it has a legal move
+                else if(piece.StepsTaken + diceRoll <= 45 && piece.StepsTaken != 0)
+                {
+                    piece.GamePieceShape.IsTapEnabled = true;
+					piece.GamePieceShape.Stroke = new SolidColorBrush(Windows.UI.Colors.Lime);
+				}
+			}
         }
-		public void disableGamePieces()
+
+        /// <summary>
+        /// Disables the game pieces and removes any highlights
+        /// </summary>
+		public void DisableGamePieces()
 		{
 			foreach (GamePiece piece in pieces)
 			{
 				piece.GamePieceShape.IsTapEnabled = false;
+                piece.GamePieceShape.Stroke = new SolidColorBrush(Windows.UI.Colors.Black);
+
 			}
+		}
+
+        /// <summary>
+        /// Checks if the player has any legal moves
+        /// </summary>
+        /// <param name="diceRoll"> Has value of the current dice roll </param>
+        /// <returns> Returns a boolean, true if there are legal moves and false if there are no legal moves </returns>
+        public bool CheckIfPlayerHasLegalMoves(int diceRoll)
+        {
+			foreach (GamePiece piece in pieces)
+			{
+				//Checks if player can move a piece out of the nest
+				if ((diceRoll == 1 || diceRoll == 6) && piece.StepsTaken == 0)
+				{
+					return true;
+				}
+				//Checks if there are other legal moves for the player
+				else if (piece.StepsTaken + diceRoll <= 45 && piece.StepsTaken != 0)
+				{
+					return true;
+				}
+			}
+            return false;
+		}
+
+        /// <summary>
+        /// Helper method, generates a window UI color for the game pieces
+        /// </summary>
+        /// <param name="color"> This is the desired color for the game piece </param>
+        /// <returns> The game piece color in window UI format </returns>
+        private Windows.UI.Color GeneratePieceColor(string color)
+        {
+            Windows.UI.Color pieceColor;
+
+			switch (color.ToLower())
+			{
+				case "red":
+					pieceColor = Windows.UI.Colors.Red;
+					break;
+				case "blue":
+					pieceColor = Windows.UI.Colors.Blue;
+					break;
+				case "green":
+					pieceColor = Windows.UI.Colors.Green;
+					break;
+				case "yellow":
+					pieceColor = Windows.UI.Colors.Yellow;
+					break;
+				default:
+					pieceColor = Windows.UI.Colors.Black;
+					break;
+			}
+            return pieceColor;
 		}
 	}
 }

@@ -36,6 +36,8 @@ namespace FiaMedKnuff
         //Variable to store curreny players turn (1-4)
         private int currentPlayersTurn;
 
+        //Temporary colors for the players
+        string[] playerColors = new string[4];
         public MainPage()
         {
             this.InitializeComponent();
@@ -51,6 +53,12 @@ namespace FiaMedKnuff
 			goalReachedContainer[1] = piecesInGoalZonePlayer2;
 			goalReachedContainer[2] = piecesInGoalZonePlayer3;
 			goalReachedContainer[3] = piecesInGoalZonePlayer4;
+
+            //Temporary colors
+            playerColors[0] = "blue";
+			playerColors[1] = "yellow";
+			playerColors[2] = "green";
+			playerColors[3] = "red";
 		}
 
         /// <summary>
@@ -319,15 +327,25 @@ namespace FiaMedKnuff
             storyboard.Begin();
             Debug.WriteLine(diceValue);
 
-            //Stores the value of the dice to a global variable and disables the dice
+            //Stores the value of the dice to a global
             currentDiceValue = diceValue;
-            diceImage.IsTapEnabled = false;
 
             Debug.WriteLine("Current players turn: " + currentPlayersTurn);
 
-            //Enables the pieces so they can be moved
-            playerList[currentPlayersTurn - 1].enableGamePieces();
-		}
+            //Checks if the player has a legal move and disables the dice
+            if (playerList[currentPlayersTurn - 1].CheckIfPlayerHasLegalMoves(currentDiceValue))
+            {
+				diceImage.IsTapEnabled = false;
+				playerList[currentPlayersTurn - 1].EnableGamePieces(currentDiceValue);
+            }
+            //If player has no legal moves go to next player
+            else
+            {
+                currentPlayersTurn++;
+                if (currentPlayersTurn > playerList.Count)
+                    currentPlayersTurn = 1;
+            }
+        }
 
 		/// <summary>
 		/// Checks which game piece was clicked and moves it according the current value of the dice
@@ -349,7 +367,7 @@ namespace FiaMedKnuff
                     playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
 
                     //Disables the pieces from being clicked and enables the dice
-                    playerList[currentPlayersTurn-1].disableGamePieces();
+                    playerList[currentPlayersTurn-1].DisableGamePieces();
                     diceImage.IsTapEnabled = true;
                 }
 			}
@@ -380,7 +398,7 @@ namespace FiaMedKnuff
             //Populate the player list with players using Player constructor
             for (int i = 0; i < amountOfPlayers; i++)
             {
-                playerList.Add(new Player(i+1, "blue", nestPositions[i], GamePieceClicked));
+                playerList.Add(new Player(i+1, playerColors[i], nestPositions[i], GamePieceClicked));
             }
 
             foreach (Player player in playerList)
