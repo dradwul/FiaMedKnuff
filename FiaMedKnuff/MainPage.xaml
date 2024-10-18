@@ -9,51 +9,43 @@
     Background="#333"
     Loaded="Page_Loaded" SizeChanged="Page_SizeChanged">
 
+    <!-- A control for changing the look for the buttons -->
+    <Page.Resources>
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Width" Value="210"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="Gray" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed"/>
+                                    <VisualState x:Name="Disabled"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
     <Grid>
-        <!--View to select amount of players-->
-        <Grid x:Name="playerSelectView" Background="#333333">
-            <Grid Width="320" Height="120" 
-                  Background="#506B76" CornerRadius="10">
-                <TextBlock 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Margin="0,0,0,80"
-                    Text="Number of players:"
-                    Foreground="White"
-                    FontSize="24"/>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" HorizontalAlignment="Center" 
-                            Width="50" Height="50" Margin="20,20,0,0"
-                            Background="#D9D9D9"
-                            CornerRadius="5"
-                            Content="2"
-                            FontSize="20"
-                            FontWeight="Bold" Click="PlayersSelected"/>
-                    <Button Grid.Column="1" HorizontalAlignment="Center"
-                            Width="50" Height="50" Margin="0,20,0,0"
-                            Background="#D9D9D9"
-                            CornerRadius="5"
-                            Content="3"
-                            FontSize="20"
-                            FontWeight="Bold" Click="PlayersSelected"/>
-                    <Button Grid.Column="2" HorizontalAlignment="Center" 
-                            Width="50" Height="50" Margin="0,20,20,0"
-                            Background="#D9D9D9"
-                            CornerRadius="5"
-                            Content="4"
-                            FontSize="20"
-                            FontWeight="Bold" Click="PlayersSelected"/>
-                </Grid>
-            </Grid>
-        </Grid>
-
-        <Grid x:Name="GameGrid" Visibility="Collapsed" Background="#264653">
+        <Grid x:Name="GameGrid" Background="#264653">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -214,6 +206,90 @@
             </StackPanel>
             <Grid Name="playerToStartGrid" Background="#333" Visibility="Collapsed">
                 <TextBlock Name="playerToStartTextBox" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontWeight="Bold"/>
+        <!-- Start Menu View -->
+        <Grid x:Name="startMenu" Visibility="Visible" Background="#333333" Opacity="0.8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Grid.RowSpan="13" Grid.ColumnSpan="13">
+        </Grid>
+
+        <!-- Start menu Buttons View -->
+        <Grid x:Name="startMenuButtons" Background="Transparent" Grid.RowSpan="13" Grid.ColumnSpan="13">
+            <StackPanel>
+                <Image Margin="310,180,0,0">
+                    <Image.Source>
+                        <SvgImageSource UriSource="ms-appx:///Assets/StartFrame.svg"/>
+                    </Image.Source>
+                </Image>
+                <Button x:Name="startButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-150,0,10" Background="#506B76"  Click="startButton_Click">Start Game</Button>
+                <Button x:Name="rulesButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-45,0,0" Background="#506B76" Click="rulesButton_Click">Rules</Button>
+                <Button x:Name="exitButton" Style="{StaticResource CustomButtonStyle}" Margin="0,100,0,0" Background="#F86161" Click="exitButton_Click">Exit Game</Button>
+            </StackPanel>
+
+        </Grid>
+
+        <!-- Rules Menu View -->
+        <Grid x:Name="rulesMenu" Visibility="Collapsed" Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Grid.Row="2" Grid.Column="3" Grid.RowSpan="8" Grid.ColumnSpan="7" CornerRadius="10">
+            <StackPanel Height="485" Width="415" Background="#506B76">
+                <Button x:Name="exitRules" Height="40" Width="40" Background="#F86161" Foreground="#FFFFFF" HorizontalAlignment="Right" Margin="0,5,15,0" CornerRadius="10" Click="exitRules_Click">X</Button>
+                <Rectangle Height="15" Width="120" Fill="#658795" HorizontalAlignment="Left" Margin="0,0,0,0"></Rectangle>
+                <TextBlock Foreground="#ECECEC" FontSize="32" FontWeight="Bold" FontStyle="Italic" Margin="40,-35,0,0">Rules</TextBlock>
+                <StackPanel Height="355" Width="345" Background="#658795" CornerRadius="5" Margin="0,30,0,0">
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">Before the game starts, all players have to roll the dice. This will decide which players will start the game, and then it'll go in clockwise order.
+                    To leave your nest, you need to roll the dice and get either 1 or 6. If you roll 1, you are allowed to move one game piece out of the nest to the start position. And if you roll a 6, you can choose between moving 2 pieces to start position.
+                    Or you can move one game piece 6 steps forward.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">During the game you continue to roll the dice and move your game piece around the
+                    outer line. When you arrive to the position just before your own starting poisition. The piece will turn in towards the middle. Here you have to roll the exact amout or
+                    less to move forward, and evenutally you will enter the goal. First player to move all four game pieces into the goal, wins the game.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">You are able and allowed to knock your opponent of the board. To do this, you have to 
+                    roll the dice and land on the exact same position as your opponent, they will get knocked of, and their game piece is being placed in their own nest.</TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!--View to select amount of players-->
+        <Grid x:Name="playerSelectView" Visibility="Collapsed" Background="#333333" Opacity="0.8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Grid.RowSpan="13" Grid.ColumnSpan="13">
+            
+        </Grid>
+
+        <!-- Controller for the player selection buttons -->
+        <Grid x:Name="playerSelectButtons" Visibility="Collapsed" Width="320" Height="120"
+            Background="#506B76" CornerRadius="10">
+            <TextBlock 
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Center"
+              Margin="0,0,0,80"
+              Text="Number of players:"
+              Foreground="White"
+              FontSize="24"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" HorizontalAlignment="Center" 
+                  Width="50" Height="50" Margin="20,20,0,0"
+                  Background="#D9D9D9"
+                  CornerRadius="5"
+                  Content="2"
+                  FontSize="20"
+                  FontWeight="Bold" Click="PlayersSelected"/>
+                <Button Grid.Column="1" HorizontalAlignment="Center"
+                  Width="50" Height="50" Margin="0,20,0,0"
+                  Background="#D9D9D9"
+                  CornerRadius="5"
+                  Content="3"
+                  FontSize="20"
+                  FontWeight="Bold" Click="PlayersSelected"/>
+                <Button Grid.Column="2" HorizontalAlignment="Center" 
+                  Width="50" Height="50" Margin="0,20,20,0"
+                  Background="#D9D9D9"
+                  CornerRadius="5"
+                  Content="4"
+                  FontSize="20"
+                  FontWeight="Bold" Click="PlayersSelected"/>
             </Grid>
         </Grid>
 

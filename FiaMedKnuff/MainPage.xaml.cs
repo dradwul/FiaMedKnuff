@@ -400,7 +400,10 @@ namespace FiaMedKnuff
             int numberOfPlayers = int.Parse(clickedButton.Content.ToString());
 
             GeneratePlayers(numberOfPlayers);
-		}
+            startMenu.Visibility = Visibility.Collapsed;
+            startMenuButtons.Visibility = Visibility.Collapsed;
+            playerSelectButtons.Visibility = Visibility.Collapsed;
+        }
 
         /// <summary>
         /// Generates players depending on input (2-4 players)
@@ -539,4 +542,53 @@ namespace FiaMedKnuff
             }
         }
     }
+			//playerSelectView.Visibility = Visibility.Collapsed;
+			GameGrid.Visibility = Visibility.Visible;
+		}
+        /// <summary>
+        /// Hides the start menu when the start button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void startButton_Click(object sender, RoutedEventArgs e)
+        {
+            //startMenu.Visibility = Visibility.Collapsed;
+            startMenuButtons.Visibility = Visibility.Collapsed;
+            playerSelectButtons.Visibility = Visibility.Visible;
+        }
+        /// <summary>
+        /// Shows the rules, when rules button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rulesButton_Click(object sender, RoutedEventArgs e)
+        {
+            rulesMenu.Visibility = Visibility.Visible;
+            startMenuButtons.Visibility = Visibility.Collapsed;
+        }
+        /// <summary>
+        /// Exits the program when the exit button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void exitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Exit();
+        }
+        /// <summary>
+        /// Exits the rules menu when the exit button is clicked. Brings the user back to the start menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void exitRules_Click(object sender, RoutedEventArgs e)
+        {
+            rulesMenu.Visibility = Visibility.Collapsed;
+            startMenuButtons.Visibility = Visibility.Visible;
+        }
+
+    }
+           
+        
+       
+    
 }
