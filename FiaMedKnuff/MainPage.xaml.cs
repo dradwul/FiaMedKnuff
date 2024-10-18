@@ -541,10 +541,7 @@ namespace FiaMedKnuff
                 Debug.WriteLine($"Player {startingPlayerId} is the starting player");
             }
         }
-    }
-			//playerSelectView.Visibility = Visibility.Collapsed;
-			GameGrid.Visibility = Visibility.Visible;
-		}
+
         /// <summary>
         /// Hides the start menu when the start button is clicked
         /// </summary>
@@ -585,10 +582,5 @@ namespace FiaMedKnuff
             rulesMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Visible;
         }
-
     }
-           
-        
-       
-    
 }

@@ -100,10 +100,10 @@
 
             <StackPanel x:Name="piecesInGoalZonePlayer2"  Grid.Row="0" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
             </StackPanel>
-            
+
             <StackPanel x:Name="piecesInGoalZonePlayer3"  Grid.Row="7" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
             </StackPanel>
-            
+
             <StackPanel x:Name="piecesInGoalZonePlayer4"  Grid.Row="7" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
             </StackPanel>
 
@@ -206,6 +206,8 @@
             </StackPanel>
             <Grid Name="playerToStartGrid" Background="#333" Visibility="Collapsed">
                 <TextBlock Name="playerToStartTextBox" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontWeight="Bold"/>
+            </Grid>
+        </Grid>
         <!-- Start Menu View -->
         <Grid x:Name="startMenu" Visibility="Visible" Background="#333333" Opacity="0.8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
               Grid.RowSpan="13" Grid.ColumnSpan="13">
@@ -223,7 +225,6 @@
                 <Button x:Name="rulesButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-45,0,0" Background="#506B76" Click="rulesButton_Click">Rules</Button>
                 <Button x:Name="exitButton" Style="{StaticResource CustomButtonStyle}" Margin="0,100,0,0" Background="#F86161" Click="exitButton_Click">Exit Game</Button>
             </StackPanel>
-
         </Grid>
 
         <!-- Rules Menu View -->
@@ -249,7 +250,7 @@
         <!--View to select amount of players-->
         <Grid x:Name="playerSelectView" Visibility="Collapsed" Background="#333333" Opacity="0.8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
               Grid.RowSpan="13" Grid.ColumnSpan="13">
-            
+
         </Grid>
 
         <!-- Controller for the player selection buttons -->
@@ -292,6 +293,5 @@
                   FontWeight="Bold" Click="PlayersSelected"/>
             </Grid>
         </Grid>
-
     </Grid>
 </Page>
