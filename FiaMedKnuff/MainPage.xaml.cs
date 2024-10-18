@@ -38,9 +38,6 @@ namespace FiaMedKnuff
         public List<Player> playerList = new List<Player>();
         private Player startingPlayer;
 
-		//List of players in current game
-		private List<Player> playerList = new List<Player>();
-
         //Variable for the dice value (1-6)
         private int currentDiceValue;
 
