@@ -288,7 +288,7 @@ namespace FiaMedKnuff
         /// Handles the Tapped event of the DiceImage control.
         /// Generates a random dice value, animates the correct dice image and creates a random movement animation.
         /// </summary>
-        private void diceImage_Tapped(object sender, TappedRoutedEventArgs e)
+        private void DiceImage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             int diceValue = Random.Next(1, 7);
             string diceImager = diceImages[diceValue - 1];
@@ -426,10 +426,6 @@ namespace FiaMedKnuff
 				}
 			}
 
-            //PLACEHOLDER FOR STORY 2.4
-            currentPlayersTurn = Random.Next(1, playerList.Count+1);
-            Debug.WriteLine("First player: " + currentPlayersTurn);
-
 			playerSelectView.Visibility = Visibility.Collapsed;
             GameGrid.Visibility = Visibility.Visible;
             
@@ -497,7 +493,7 @@ namespace FiaMedKnuff
 
              int highestRoll = playersAndRolls.Values.Max();
 
-            // Lägg till den/de spelare i dictionary som fick högst tal
+            // Add players with the highest roll/rolls to list
             foreach (var player in playersAndRolls)
             {
                 if (player.Value == highestRoll)
@@ -508,10 +504,9 @@ namespace FiaMedKnuff
 
             if(playersWithHighestRolls.Count != 1)
             {
-                // kast igen osv
                 decideWhoWillStartButton.Content = "ReRoll!";
 
-                //Går igenom listan med alla spelare och om spelaren inte finns i playersWithHighestRolls så döljer den elementet
+                // Iterate through the list with all players and hide player element if the player don't appear in playersWithHighestRoll
                 foreach (var player in playersAndRolls)
                 {
                     if (playersWithHighestRolls.ContainsKey(player.Key))
@@ -537,8 +532,8 @@ namespace FiaMedKnuff
                 playerToStartGrid.Visibility = Visibility.Collapsed;
                 decideStartingPlayerView.Visibility = Visibility.Collapsed;
 
-                startingPlayerId = startingPlayer.PlayerId;
-                Debug.WriteLine($"Player {startingPlayerId} is the starting player");
+                currentPlayersTurn = startingPlayer.PlayerId;
+                Debug.WriteLine($"Player {currentPlayersTurn} is the starting player");
             }
         }
 
@@ -547,7 +542,7 @@ namespace FiaMedKnuff
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void startButton_Click(object sender, RoutedEventArgs e)
+        private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             //startMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Collapsed;
@@ -558,7 +553,7 @@ namespace FiaMedKnuff
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void rulesButton_Click(object sender, RoutedEventArgs e)
+        private void RulesButton_Click(object sender, RoutedEventArgs e)
         {
             rulesMenu.Visibility = Visibility.Visible;
             startMenuButtons.Visibility = Visibility.Collapsed;
@@ -568,7 +563,7 @@ namespace FiaMedKnuff
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void exitButton_Click(object sender, RoutedEventArgs e)
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Exit();
         }
@@ -577,7 +572,7 @@ namespace FiaMedKnuff
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void exitRules_Click(object sender, RoutedEventArgs e)
+        private void ExitRules_Click(object sender, RoutedEventArgs e)
         {
             rulesMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Visible;

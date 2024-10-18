@@ -170,7 +170,7 @@
 
             <!-- Dice zone -->
             <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Grid.Column="6" Grid.Row="11">
-                <Image x:Name="diceImage" Height="60" Width="60" Tapped="diceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
+                <Image x:Name="diceImage" Height="60" Width="60" Tapped="DiceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
                     <Image.RenderTransform>
                         <CompositeTransform/>
                     </Image.RenderTransform>
@@ -221,9 +221,9 @@
                         <SvgImageSource UriSource="ms-appx:///Assets/StartFrame.svg"/>
                     </Image.Source>
                 </Image>
-                <Button x:Name="startButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-150,0,10" Background="#506B76"  Click="startButton_Click">Start Game</Button>
-                <Button x:Name="rulesButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-45,0,0" Background="#506B76" Click="rulesButton_Click">Rules</Button>
-                <Button x:Name="exitButton" Style="{StaticResource CustomButtonStyle}" Margin="0,100,0,0" Background="#F86161" Click="exitButton_Click">Exit Game</Button>
+                <Button x:Name="startButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-150,0,10" Background="#506B76"  Click="StartButton_Click">Start Game</Button>
+                <Button x:Name="rulesButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-45,0,0" Background="#506B76" Click="RulesButton_Click">Rules</Button>
+                <Button x:Name="exitButton" Style="{StaticResource CustomButtonStyle}" Margin="0,100,0,0" Background="#F86161" Click="ExitButton_Click">Exit Game</Button>
             </StackPanel>
         </Grid>
 
@@ -231,7 +231,7 @@
         <Grid x:Name="rulesMenu" Visibility="Collapsed" Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
               Grid.Row="2" Grid.Column="3" Grid.RowSpan="8" Grid.ColumnSpan="7" CornerRadius="10">
             <StackPanel Height="485" Width="415" Background="#506B76">
-                <Button x:Name="exitRules" Height="40" Width="40" Background="#F86161" Foreground="#FFFFFF" HorizontalAlignment="Right" Margin="0,5,15,0" CornerRadius="10" Click="exitRules_Click">X</Button>
+                <Button x:Name="exitRules" Height="40" Width="40" Background="#F86161" Foreground="#FFFFFF" HorizontalAlignment="Right" Margin="0,5,15,0" CornerRadius="10" Click="ExitRules_Click">X</Button>
                 <Rectangle Height="15" Width="120" Fill="#658795" HorizontalAlignment="Left" Margin="0,0,0,0"></Rectangle>
                 <TextBlock Foreground="#ECECEC" FontSize="32" FontWeight="Bold" FontStyle="Italic" Margin="40,-35,0,0">Rules</TextBlock>
                 <StackPanel Height="355" Width="345" Background="#658795" CornerRadius="5" Margin="0,30,0,0">
