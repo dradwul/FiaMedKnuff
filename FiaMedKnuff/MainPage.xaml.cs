@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Input;
+using System.Threading.Tasks;
 
 namespace FiaMedKnuff
 {
@@ -24,8 +25,18 @@ namespace FiaMedKnuff
         //Routes for all players
         private Position[][] playerRoutes = new Position[4][];
 
+
         //This is where the pieces move when they reach their goal
         private StackPanel[] goalReachedContainer = new StackPanel[4];
+
+        //Fields for deciding starting player
+        private Dictionary<Player, int> playersAndRolls = new Dictionary<Player, int>();
+        private Dictionary<Player, int> playersWithHighestRolls = new Dictionary<Player, int>();
+        private int startingPlayerId;
+
+        //List of players in current game
+        public List<Player> playerList = new List<Player>();
+        private Player startingPlayer;
 
 		//List of players in current game
 		private List<Player> playerList = new List<Player>();
@@ -41,6 +52,7 @@ namespace FiaMedKnuff
         public MainPage()
         {
             this.InitializeComponent();
+            InitializeStartTiles();
 
             //Creates the routes for all players
             playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
@@ -227,6 +239,10 @@ namespace FiaMedKnuff
             }
         }
 
+        /// <summary>
+        /// This method will initialize a start tiles for each player
+        /// It will appear with the same border color as the players nest/pieces
+        /// </summary>
         private void InitializeStartTiles()
         {
             for (int i = 0; i < 4; i++)
@@ -415,7 +431,115 @@ namespace FiaMedKnuff
             Debug.WriteLine("First player: " + currentPlayersTurn);
 
 			playerSelectView.Visibility = Visibility.Collapsed;
-			GameGrid.Visibility = Visibility.Visible;
-		}
-	}
+            GameGrid.Visibility = Visibility.Visible;
+            
+            decideStartingPlayerView.Visibility = Visibility.Visible;
+
+            if(playerList.Count == 3)
+            {
+                sPanelP3.Visibility = Visibility.Visible;
+            }
+            if(playerList.Count == 4)
+            {
+                sPanelP3.Visibility = Visibility.Visible;
+                sPanelP4.Visibility = Visibility.Visible;
+            }
+        }
+
+        /// <summary>
+        /// Event method for rolling to decide who will start the game.
+        /// Includes logic and ui updates
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void RollForAll_Click(object sender, RoutedEventArgs e)
+        {
+            if(playersAndRolls.Count == 0)
+            {
+                foreach (var player in playerList)
+                {
+                    int roll = Random.Next(1, 7);
+                    playersAndRolls[player] = roll;
+
+                    string playerRollTextName = $"sPanelP{player.PlayerId}Roll";
+                    TextBlock playerRollTextBlock = this.FindName(playerRollTextName) as TextBlock;
+
+
+                    if (playerRollTextBlock != null)
+                    {
+                        playerRollTextBlock.Text = roll.ToString();
+                    }
+
+                    await Task.Delay(700);
+                }
+            }
+            else if(playersAndRolls.Count > 0)
+            {
+                playersAndRolls.Clear();
+                foreach(var player in playersWithHighestRolls)
+                {
+                    int roll = Random.Next(1, 7);
+                    playersAndRolls[player.Key] = roll;
+
+                    string playerRollTextName = $"sPanelP{player.Key.PlayerId}Roll";
+                    TextBlock playerRollTextBlock = this.FindName(playerRollTextName) as TextBlock;
+
+
+                    if (playerRollTextBlock != null)
+                    {
+                        playerRollTextBlock.Text = roll.ToString();
+                    }
+
+                    await Task.Delay(700);
+                }
+                playersWithHighestRolls.Clear();
+            }
+
+             int highestRoll = playersAndRolls.Values.Max();
+
+            // Lägg till den/de spelare i dictionary som fick högst tal
+            foreach (var player in playersAndRolls)
+            {
+                if (player.Value == highestRoll)
+                {
+                    playersWithHighestRolls.Add(player.Key, player.Value);
+                }
+            }
+
+            if(playersWithHighestRolls.Count != 1)
+            {
+                // kast igen osv
+                decideWhoWillStartButton.Content = "ReRoll!";
+
+                //Går igenom listan med alla spelare och om spelaren inte finns i playersWithHighestRolls så döljer den elementet
+                foreach (var player in playersAndRolls)
+                {
+                    if (playersWithHighestRolls.ContainsKey(player.Key))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        string elementName = $"sPanelP{player.Key.PlayerId}";
+                        var elementToHide = this.FindName(elementName) as StackPanel;
+                        elementToHide.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
+            else
+            {
+                playerToStartGrid.Visibility = Visibility.Visible;
+                playerToStartTextBox.Text = $"Player {playersWithHighestRolls.First().Key.PlayerId} rolled highest and will start the game!";
+
+                startingPlayer = playersWithHighestRolls.First().Key;
+
+                await Task.Delay(2000);
+                playerToStartGrid.Visibility = Visibility.Collapsed;
+                decideStartingPlayerView.Visibility = Visibility.Collapsed;
+
+                startingPlayerId = startingPlayer.PlayerId;
+                Debug.WriteLine($"Player {startingPlayerId} is the starting player");
+            }
+        }
+    }
 }
