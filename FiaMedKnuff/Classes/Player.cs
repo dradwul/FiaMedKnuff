@@ -99,15 +99,34 @@ namespace FiaMedKnuff
         /// <param name="id"> ID for specified game piece </param>
         /// <param name="diceRoll"> Dice roll from 1-6 </param>
         /// <param name="position"> Position array of possible "tiles" </param>
-        public void MoveGamePiece(int id, int diceRoll, Position[] position)
+        public void MoveGamePiece(int id, int diceRoll, Position[] positions)
         {
             foreach (GamePiece piece in pieces)
             {
-                //Find the correct game piece and check that it does not move more than 45 steps
+                // Find the correct game piece and check that it does not move more than 45 steps
                 if (piece.Id == id && piece.StepsTaken + diceRoll <= 45)
                 {
+                    // Determine the target position based on dice roll
+                    Position targetPosition = positions[piece.StepsTaken + diceRoll - 1];
+
+                    // Check if the target position is occupied
+                    if (targetPosition.IsOccupied)
+                    {
+                        // Knock off the occupying piece
+                        targetPosition.KnockOffPiece();
+                    }
+
+                    // Before moving, mark the current position as not occupied
+                    piece.Position.IsOccupied = false;
+                    piece.Position.OccupyingPiece = null;
+
+                    // Move the current piece to the target position
                     piece.StepsTaken += diceRoll;
-                    piece.Position = position[piece.StepsTaken - 1];
+                    piece.Position = targetPosition;
+                    targetPosition.IsOccupied = true;
+                    targetPosition.OccupyingPiece = piece;
+
+                    // Update UI to reflect the new position of the game piece
                     Grid.SetRow(piece.GamePieceShape, piece.Position.RowIndex);
                     Grid.SetColumn(piece.GamePieceShape, piece.Position.ColumnIndex);
                 }
@@ -226,5 +245,6 @@ namespace FiaMedKnuff
 			}
             return pieceColor;
 		}
+
 	}
 }

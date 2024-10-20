@@ -51,6 +51,10 @@ namespace FiaMedKnuff
         /// This is the current position of the game piece
         /// </summary>
         public Position Position { get; set; }
+        /// <summary>
+        ///  New property for starting position
+        /// </summary>
+        public Position StartPosition { get; set; }
 
         /// <summary>
         /// Constructor for a game piece
@@ -63,6 +67,7 @@ namespace FiaMedKnuff
             Id = id;
             GamePieceShape = ellipse;
             Position = position;
+            StartPosition = position; //Set the starting position during initialization
         }
     }
 }
