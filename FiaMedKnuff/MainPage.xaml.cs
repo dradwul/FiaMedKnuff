@@ -455,7 +455,9 @@ namespace FiaMedKnuff
         /// <param name="e"></param>
         private async void RollForAll_Click(object sender, RoutedEventArgs e)
         {
-            if(playersAndRolls.Count == 0)
+            decideWhoWillStartButton.IsEnabled = false;
+
+            if (playersAndRolls.Count == 0)
             {
                 foreach (var player in playerList)
                 {
@@ -496,7 +498,8 @@ namespace FiaMedKnuff
                 playersWithHighestRolls.Clear();
             }
 
-             int highestRoll = playersAndRolls.Values.Max();
+
+            int highestRoll = playersAndRolls.Values.Max();
 
             // Add players with the highest roll/rolls to list
             foreach (var player in playersAndRolls)
@@ -542,6 +545,8 @@ namespace FiaMedKnuff
 
                 UpdatePlayerNestUI(currentPlayersTurn);
             }
+
+            decideWhoWillStartButton.IsEnabled = true;
         }
 
 
