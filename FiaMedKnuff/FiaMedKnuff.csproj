@@ -133,6 +133,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\MegaCoolLogo.png" />
     <Content Include="Assets\dice1.png" />
     <Content Include="Assets\dice2.png" />
     <Content Include="Assets\dice3.png" />
