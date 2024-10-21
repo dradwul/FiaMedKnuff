@@ -45,29 +45,55 @@ namespace FiaMedKnuff
         private int currentPlayersTurn;
 
         //Temporary colors for the players
-        string[] playerColors = new string[4];
+        private string[] playerColors = new string[4];
         public MainPage()
         {
             this.InitializeComponent();
             InitializeStartTiles();
+            InitializeGame();
+		}
 
-            //Creates the routes for all players
-            playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
-            playerRoutes[1] = ShiftArray(allOuterPositions, 10).Concat(endPositions[1]).ToArray();
-            playerRoutes[2] = ShiftArray(allOuterPositions, 20).Concat(endPositions[2]).ToArray();
-            playerRoutes[3] = ShiftArray(allOuterPositions, 30).Concat(endPositions[3]).ToArray();
+        /// <summary>
+        /// Function to initilize the game
+        /// </summary>
+        private void InitializeGame()
+        {
+			//Creates the routes for all players
+			playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
+			playerRoutes[1] = ShiftArray(allOuterPositions, 10).Concat(endPositions[1]).ToArray();
+			playerRoutes[2] = ShiftArray(allOuterPositions, 20).Concat(endPositions[2]).ToArray();
+			playerRoutes[3] = ShiftArray(allOuterPositions, 30).Concat(endPositions[3]).ToArray();
 
-            //Initilizes the zone for each player where the pieces go when they reach the goal
-            goalReachedContainer[0] = piecesInGoalZonePlayer1;
+			//Initilizes the zone for each player where the pieces go when they reach the goal
+			goalReachedContainer[0] = piecesInGoalZonePlayer1;
 			goalReachedContainer[1] = piecesInGoalZonePlayer2;
-			goalReachedContainer[2] = piecesInGoalZonePlayer3;
-			goalReachedContainer[3] = piecesInGoalZonePlayer4;
+			goalReachedContainer[2] = piecesInGoalZonePlayer4;
+			goalReachedContainer[3] = piecesInGoalZonePlayer3;
 
-            //Temporary colors
-            playerColors[0] = "blue";
+			//Temporary colors
+			playerColors[0] = "blue";
 			playerColors[1] = "yellow";
 			playerColors[2] = "green";
 			playerColors[3] = "red";
+		}
+
+        /// <summary>
+        /// Function to clear the game to be able to restart
+        /// </summary>
+        private void ClearGame()
+        {
+			foreach (Player player in playerList)
+			{
+				for (int i = 1; i <= 4; i++)
+				{
+					GameGrid.Children.Remove(player.ReturnGamePieceShape(i));
+				}
+			}
+            for (int i = 0; i < 4; i++)
+            {
+                goalReachedContainer[i].Children.Clear();
+            }
+			playerList.Clear();
 		}
 
         /// <summary>
@@ -376,11 +402,18 @@ namespace FiaMedKnuff
                 if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
                 {
                     //Moves the piece and checks if it has reached its goal
-                    playerList[currentPlayersTurn-1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1]); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
+                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1]); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
                     playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
 
-                    //Disables the pieces from being clicked and enables the dice
-                    playerList[currentPlayersTurn-1].DisableGamePieces();
+                    //Check if the player has won and enable victory screen
+                    if(playerList[currentPlayersTurn - 1].VictoryCheck())
+					{ 
+                        victoryScreen.Visibility = Visibility.Visible;
+                        winnerTextBlock.Text = "Player " + playerList[currentPlayersTurn - 1].PlayerId + " Wins!";
+				    }
+
+				    //Disables the pieces from being clicked and enables the dice
+				    playerList[currentPlayersTurn-1].DisableGamePieces();
                     diceImage.IsTapEnabled = true;
                 }
 			}
@@ -422,7 +455,7 @@ namespace FiaMedKnuff
 				//Placing game pieces on the board (ID 1-4, not 0-3)
 				for (int i = 1; i <= 4; i++)
 				{
-                    GameGrid.Children.Add(player.ReturnGamePieceShape(i));
+					GameGrid.Children.Add(player.ReturnGamePieceShape(i));
 				}
 			}
 
@@ -430,8 +463,16 @@ namespace FiaMedKnuff
             GameGrid.Visibility = Visibility.Visible;
             
             decideStartingPlayerView.Visibility = Visibility.Visible;
+            
+            //Resets the turn order function for when playing a new game
+            playersWithHighestRolls.Clear();
+            playersAndRolls.Clear();
+            sPanelP1.Visibility = Visibility.Visible;
+			sPanelP2.Visibility = Visibility.Visible;
+			sPanelP3.Visibility = Visibility.Collapsed;
+			sPanelP4.Visibility = Visibility.Collapsed;
 
-            if(playerList.Count == 3)
+			if (playerList.Count == 3)
             {
                 sPanelP3.Visibility = Visibility.Visible;
             }
@@ -577,5 +618,31 @@ namespace FiaMedKnuff
             rulesMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Visible;
         }
-    }
+
+        /// <summary>
+        /// Play again button takes the player through the player select process
+        /// and turn order to start a new game. 
+        /// It also resets the board (button only available when a player has won)
+        /// </summary>
+		private void PlayAgain(object sender, RoutedEventArgs e)
+		{
+            ClearGame();
+            InitializeGame();
+			playerSelectButtons.Visibility= Visibility.Visible;
+			startMenu.Visibility = Visibility.Visible;
+			victoryScreen.Visibility = Visibility.Collapsed;
+		}
+
+        /// <summary>
+        /// Resets the board and returns to menu (button only available when a player has won)
+        /// </summary>
+		private void ReturnToMenu(object sender, RoutedEventArgs e)
+		{
+            ClearGame();
+            InitializeGame();
+			startMenu.Visibility = Visibility.Visible;
+            startMenuButtons.Visibility = Visibility.Visible;
+            victoryScreen.Visibility = Visibility.Collapsed;
+		}
+	}
 }

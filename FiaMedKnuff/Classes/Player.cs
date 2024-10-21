@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -123,11 +124,16 @@ namespace FiaMedKnuff
                     // Move the current piece to the target position
                     piece.StepsTaken += diceRoll;
                     piece.Position = targetPosition;
-                    targetPosition.IsOccupied = true;
-                    targetPosition.OccupyingPiece = piece;
 
-                    // Update UI to reflect the new position of the game piece
-                    Grid.SetRow(piece.GamePieceShape, piece.Position.RowIndex);
+                    //Makes sure the piece doesn't occupy the middle position
+                    if(piece.StepsTaken != 45)
+                    { 
+                        targetPosition.IsOccupied = true;
+                        targetPosition.OccupyingPiece = piece;
+					}
+
+					// Update UI to reflect the new position of the game piece
+					Grid.SetRow(piece.GamePieceShape, piece.Position.RowIndex);
                     Grid.SetColumn(piece.GamePieceShape, piece.Position.ColumnIndex);
                 }
             }
@@ -158,6 +164,22 @@ namespace FiaMedKnuff
         }
 
         /// <summary>
+        /// Checks if the player has achieved victory
+        /// </summary>
+        /// <returns> True if player has won and false if not </returns>
+        public bool VictoryCheck()
+        {
+            int gamePiecesInSafeZone = 0;
+            foreach (GamePiece piece in pieces)
+            {
+                if(piece.StepsTaken == 45)
+                    gamePiecesInSafeZone++;
+            }
+
+            return gamePiecesInSafeZone == 4;
+        }
+
+        /// <summary>
         /// Enables the game pieces that have legal moves and highlights them
         /// </summary>
         public void EnableGamePieces(int diceRoll)
@@ -169,10 +191,9 @@ namespace FiaMedKnuff
                 {
                     piece.GamePieceShape.IsTapEnabled = true;
                     piece.GamePieceShape.Stroke = new SolidColorBrush(Windows.UI.Colors.Lime);
-
 				}
                 //Enable piece if it has a legal move
-                else if(piece.StepsTaken + diceRoll <= 45 && piece.StepsTaken != 0)
+                else if(piece.StepsTaken + diceRoll <= 45 && piece.StepsTaken != 0 && piece.StepsTaken != 45)
                 {
                     piece.GamePieceShape.IsTapEnabled = true;
 					piece.GamePieceShape.Stroke = new SolidColorBrush(Windows.UI.Colors.Lime);
@@ -208,7 +229,7 @@ namespace FiaMedKnuff
 					return true;
 				}
 				//Checks if there are other legal moves for the player
-				else if (piece.StepsTaken + diceRoll <= 45 && piece.StepsTaken != 0)
+				else if (piece.StepsTaken + diceRoll <= 45 && piece.StepsTaken != 0 && piece.StepsTaken != 45)
 				{
 					return true;
 				}

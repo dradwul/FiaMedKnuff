@@ -293,5 +293,33 @@
                   FontWeight="Bold" Click="PlayersSelected"/>
             </Grid>
         </Grid>
+
+        <!-- Victory Screen -->
+        <Grid x:Name="victoryScreen" Visibility="Collapsed">
+            <Rectangle Fill="#333333" Opacity="0.8"/>
+            
+            <Grid Width="500" Height="260">
+                <Rectangle Width="500" Height="260" Fill="#506B76" RadiusX="15" RadiusY="15"/>
+                <Rectangle Width="400" Height="120" Fill="#658795" Margin="0,30,0,0"/>
+                <TextBlock x:Name="winnerTextBlock" 
+                           Foreground="#ECECEC" FontSize="32" 
+                           FontWeight="Bold" FontStyle="Italic"
+                           HorizontalAlignment="Center"
+                           Margin="20"
+                           Text="Player X Wins!"/>
+                <Button Style="{StaticResource CustomButtonStyle}"
+                        Width="160"
+                        Background="#506B76"
+                        Margin="0,30,180,0"
+                        Content="Play Again" 
+                        Click="PlayAgain"/>
+                <Button Style="{StaticResource CustomButtonStyle}"
+                        Width="160"
+                        Background="#F86161"
+                        Margin="180,30,0,0"
+                        Content="Return To Menu" 
+                        Click="ReturnToMenu"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>
