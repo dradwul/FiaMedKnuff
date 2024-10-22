@@ -58,7 +58,7 @@ namespace FiaMedKnuff
 
             //Initialize MediaPlayer
              mediaPlayer = new MediaPlayer();
-            mediaPlayer.Volume = 1.0; // Set volume to max
+            mediaPlayer.Volume = 0.2; // Set volume
             mediaPlayer.AudioCategory = MediaPlayerAudioCategory.GameMedia; // Ensure it's treated as game media
             PlayMenuMusic();
            
