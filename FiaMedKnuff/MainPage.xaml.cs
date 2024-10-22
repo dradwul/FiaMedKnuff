@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Input;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace FiaMedKnuff
 {
@@ -384,6 +385,8 @@ namespace FiaMedKnuff
                 if (currentPlayersTurn > playerList.Count)
                     currentPlayersTurn = 1;
             }
+
+            UpdatePlayerNestUI(currentPlayersTurn);
         }
 
 		/// <summary>
@@ -424,7 +427,9 @@ namespace FiaMedKnuff
             //Reset back to player 1 when last player has played
 			if (currentPlayersTurn > playerList.Count)
 				currentPlayersTurn = 1;
-		}
+
+            UpdatePlayerNestUI(currentPlayersTurn);
+        }
 
 		private void PlayersSelected(object sender, RoutedEventArgs e)
 		{
@@ -491,7 +496,9 @@ namespace FiaMedKnuff
         /// <param name="e"></param>
         private async void RollForAll_Click(object sender, RoutedEventArgs e)
         {
-            if(playersAndRolls.Count == 0)
+            decideWhoWillStartButton.IsEnabled = false;
+
+            if (playersAndRolls.Count == 0)
             {
                 foreach (var player in playerList)
                 {
@@ -532,7 +539,8 @@ namespace FiaMedKnuff
                 playersWithHighestRolls.Clear();
             }
 
-             int highestRoll = playersAndRolls.Values.Max();
+
+            int highestRoll = playersAndRolls.Values.Max();
 
             // Add players with the highest roll/rolls to list
             foreach (var player in playersAndRolls)
@@ -575,8 +583,42 @@ namespace FiaMedKnuff
 
                 currentPlayersTurn = startingPlayer.PlayerId;
                 Debug.WriteLine($"Player {currentPlayersTurn} is the starting player");
+
+                UpdatePlayerNestUI(currentPlayersTurn);
             }
+
+            decideWhoWillStartButton.IsEnabled = true;
         }
+
+
+        private async void UpdatePlayerNestUI(int currentPlayer)
+        {
+            await Task.Delay(1000);
+
+            string previousPlayerHighlight;
+            string currentPlayerHighlight;
+            
+            // Remove border from previous player's nest
+            if (currentPlayer == 1)
+            {
+                previousPlayerHighlight = $"borderNest{playerList.Count}";
+            }
+            else
+            {
+                previousPlayerHighlight = $"borderNest{currentPlayer - 1}";
+            }
+            var oldPlayerHighlightBorder = this.FindName(previousPlayerHighlight) as Border;
+            if(oldPlayerHighlightBorder != null)
+            {
+                oldPlayerHighlightBorder.BorderThickness = new Thickness(0);
+            }
+            
+            // Enable border for current player's nest
+            currentPlayerHighlight = $"borderNest{currentPlayer}";
+            var newPlayerHighlightBorder = this.FindName(currentPlayerHighlight) as Border;
+            newPlayerHighlightBorder.BorderThickness = new Thickness(10);
+        }
+
 
         /// <summary>
         /// Hides the start menu when the start button is clicked
