@@ -18,6 +18,8 @@ using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Input;
 using System.Threading.Tasks;
 using System.Threading;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 
 namespace FiaMedKnuff
 {
@@ -46,7 +48,10 @@ namespace FiaMedKnuff
         private int currentPlayersTurn;
 
         //Temporary colors for the players
-        private string[] playerColors = new string[4];
+        string[] playerColors = new string[4];
+
+        //MediaPlayer instance for background music
+        private MediaPlayer mediaPlayer;
         public MainPage()
         {
             this.InitializeComponent();
@@ -59,11 +64,17 @@ namespace FiaMedKnuff
         /// </summary>
         private void InitializeGame()
         {
-			//Creates the routes for all players
-			playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
-			playerRoutes[1] = ShiftArray(allOuterPositions, 10).Concat(endPositions[1]).ToArray();
-			playerRoutes[2] = ShiftArray(allOuterPositions, 20).Concat(endPositions[2]).ToArray();
-			playerRoutes[3] = ShiftArray(allOuterPositions, 30).Concat(endPositions[3]).ToArray();
+            //Initialize MediaPlayer
+             mediaPlayer = new MediaPlayer();
+            mediaPlayer.Volume = 0.2; // Set volume
+            mediaPlayer.AudioCategory = MediaPlayerAudioCategory.GameMedia; // Ensure it's treated as game media
+            PlayMenuMusic();
+           
+            //Creates the routes for all players
+            playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
+            playerRoutes[1] = ShiftArray(allOuterPositions, 10).Concat(endPositions[1]).ToArray();
+            playerRoutes[2] = ShiftArray(allOuterPositions, 20).Concat(endPositions[2]).ToArray();
+            playerRoutes[3] = ShiftArray(allOuterPositions, 30).Concat(endPositions[3]).ToArray();
 
 			//Initilizes the zone for each player where the pieces go when they reach the goal
 			goalReachedContainer[0] = piecesInGoalZonePlayer1;
@@ -77,6 +88,65 @@ namespace FiaMedKnuff
 			playerColors[2] = "green";
 			playerColors[3] = "red";
 		}
+        private async void PlayMenuMusic()
+        {
+            mediaPlayer.IsLoopingEnabled = true;
+            mediaPlayer.Pause(); // Stop current playback
+            mediaPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset playback position
+            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Menu.mp3"));
+            await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
+            mediaPlayer.Play();
+        }
+
+        private async void PlayGameplayMusic()
+        {
+            mediaPlayer.IsLoopingEnabled= true;
+            mediaPlayer.Pause(); // Stop current playback
+            mediaPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset playback position
+            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Play.mp3"));
+            await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
+            mediaPlayer.Play();
+        }
+
+        private async void PlayWinMusic()
+        {
+            mediaPlayer.Pause(); // Stop current playback
+            mediaPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset playback position
+            mediaPlayer.IsLoopingEnabled = false; // Disable looping for win music
+            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Win.mp3"));
+            await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
+            mediaPlayer.Play();
+        }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Hide start menu and show player select
+            startMenuButtons.Visibility = Visibility.Collapsed;
+            playerSelectButtons.Visibility = Visibility.Visible;
+        }
+
+        private void PlayersSelected(object sender, RoutedEventArgs e)
+        {
+            // Cast sender to a button to access its content (number between 2-4)
+            Button clickedButton = sender as Button;
+            int numberOfPlayers = int.Parse(clickedButton.Content.ToString());
+
+            GeneratePlayers(numberOfPlayers);
+            startMenu.Visibility = Visibility.Collapsed;
+            startMenuButtons.Visibility = Visibility.Collapsed;
+            playerSelectButtons.Visibility = Visibility.Collapsed;
+
+            // Start gameplay music after player selection is done and gameboard is visible
+            PlayGameplayMusic();
+        }
+
+        private void OnPlayerWin()
+        {
+            // Stop gameplay music and play win music
+            PlayWinMusic();
+            // Additional win logic goes here
+        }
+
 
         /// <summary>
         /// Function to clear the game to be able to restart
@@ -431,7 +501,7 @@ namespace FiaMedKnuff
             UpdatePlayerNestUI(currentPlayersTurn);
         }
 
-		private void PlayersSelected(object sender, RoutedEventArgs e)
+		private void PlayersSelectedHandler(object sender, RoutedEventArgs e)
 		{
 			//Casts sender to a button to access its content (number between 2-4)
 			Button clickedButton = sender as Button;
@@ -625,7 +695,7 @@ namespace FiaMedKnuff
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void StartButton_Click(object sender, RoutedEventArgs e)
+        private void StartGameButton_Click(object sender, RoutedEventArgs e)
         {
             //startMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Collapsed;

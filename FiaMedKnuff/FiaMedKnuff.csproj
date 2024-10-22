@@ -140,6 +140,15 @@
     <Content Include="Assets\dice4.png" />
     <Content Include="Assets\dice5.png" />
     <Content Include="Assets\dice6.png" />
+    <Content Include="Assets\FIA - Menu.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\FIA - Play.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\FIA - Win.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\StartFrame.svg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
