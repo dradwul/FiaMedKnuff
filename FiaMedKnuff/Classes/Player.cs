@@ -100,7 +100,7 @@ namespace FiaMedKnuff
         /// <param name="id"> ID for specified game piece </param>
         /// <param name="diceRoll"> Dice roll from 1-6 </param>
         /// <param name="position"> Position array of possible "tiles" </param>
-        public void MoveGamePiece(int id, int diceRoll, Position[] positions)
+        public async void MoveGamePiece(int id, int diceRoll, Position[] positions)
         {
             foreach (GamePiece piece in pieces)
             {
@@ -109,6 +109,8 @@ namespace FiaMedKnuff
                 {
                     // Determine the target position based on dice roll
                     Position targetPosition = positions[piece.StepsTaken + diceRoll - 1];
+
+                    await AnimateGamePiece(piece, diceRoll, positions, piece.StepsTaken);
 
                     // Check if the target position is occupied
                     if (targetPosition.IsOccupied)
@@ -138,6 +140,59 @@ namespace FiaMedKnuff
                 }
             }
         }
+
+        public async Task AnimateGamePiece(GamePiece piece,int diceRoll, Position[] path, int currentStep)
+        {
+            // Använd TranslateTransform för att flytta spelpjäsen
+            TranslateTransform translateTransform = new TranslateTransform();
+            piece.GamePieceShape.RenderTransform = translateTransform;
+
+            // Sätt initialpositionen för spelpjäsen
+            Grid.SetRow(piece.GamePieceShape, path[currentStep].RowIndex);
+            Grid.SetColumn(piece.GamePieceShape, path[currentStep].ColumnIndex);
+
+            // Loopar genom positionerna i rutten
+            for (int i = currentStep; i < currentStep + diceRoll; i++) // Startar från 0 och går till näst sista positionen
+            {
+                Position startPosition = path[i]; // Nuvarande position
+                Position endPosition = path[i + 1]; // Nästa position
+
+                // Beräkna hur mycket spelpjäsen ska flyttas
+                double deltaX = endPosition.ColumnIndex - startPosition.ColumnIndex;
+                double deltaY = endPosition.RowIndex - startPosition.RowIndex;
+
+                // Definiera animationens varaktighet och hastighet
+                double duration = 300; // Total tid för animationen i millisekunder - TODO: SYNKA DENNA MED NEST-CHANGE
+                double steps = 10; // Antal steg i animationen
+                double stepDuration = duration / steps; // Tid för varje steg
+
+                // Animerar rörelsen
+                for (int step = 0; step < steps; step++)
+                {
+                    // Beräkna nuvarande progress av animationen
+                    double linearProgress = (double)step / steps;
+                    double easedProgress = EaseInOutQuad(linearProgress); // Använd easing-funktionen
+
+                    // Uppdatera TranslateTransform baserat på eased progress
+                    translateTransform.X = deltaX * easedProgress;
+                    translateTransform.Y = deltaY * easedProgress;
+
+                    // Vänta en kort stund innan nästa steg
+                    await Task.Delay((int)stepDuration);
+                }
+
+                // Sätt spelpjäsen till den faktiska rutpositionen för att förhindra att den "hoppar"
+                Grid.SetRow(piece.GamePieceShape, endPosition.RowIndex);
+                Grid.SetColumn(piece.GamePieceShape, endPosition.ColumnIndex);
+            }
+        }
+
+        public double EaseInOutQuad(double progress)
+        {
+            return progress < 0.5 ? 2 * progress * progress : 1 - Math.Pow(-2 * progress + 2, 2) / 2;
+        }
+
+
 
         /// <summary>
         /// Used after moving a piece to check if it has reached its goal so that it can be moved to the goal zone
