@@ -285,55 +285,6 @@ namespace FiaMedKnuff
         };
 
         /// <summary>
-        /// Initializing the pieces in the nests. 
-        /// PlaceholderPiece is for development. Will get changed to a gamepiece object.
-        /// </summary>
-        /// <param name="numberOfPlayers"></param>
-        private void InitializePieces(int numberOfPlayers)
-        {
-            for (int i = 0; i < numberOfPlayers; i++)
-            {
-                SolidColorBrush color = colors[i];
-
-                for (int j = 0; j < 4; j++)
-                {
-                    Ellipse placeholderPiece = new Ellipse
-                    {
-                        //Fill = color,
-                        Fill = new SolidColorBrush(Windows.UI.Colors.Black),
-                        Stroke = new SolidColorBrush(Windows.UI.Colors.White),
-                        StrokeThickness = 3,
-                        Width = 40,
-                        Height = 40
-                    };
-                    Grid.SetColumn(placeholderPiece, nestPositions[i][j].ColumnIndex);
-                    Grid.SetRow(placeholderPiece, nestPositions[i][j].RowIndex);
-
-
-                    if (nestPositions[i][j].ColumnIndex == 2 || nestPositions[i][j].ColumnIndex == 9)
-                    {
-                        placeholderPiece.HorizontalAlignment = HorizontalAlignment.Right;
-                    }
-                    else if (nestPositions[i][j].ColumnIndex == 3 || nestPositions[i][j].ColumnIndex == 10)
-                    {
-                        placeholderPiece.HorizontalAlignment = HorizontalAlignment.Left;
-                    }
-
-                    if (nestPositions[i][j].RowIndex == 1 || nestPositions[i][j].RowIndex == 8)
-                    {
-                        placeholderPiece.VerticalAlignment = VerticalAlignment.Bottom;
-                    }
-                    else if (nestPositions[i][j].RowIndex == 2 || nestPositions[i][j].RowIndex == 9)
-                    {
-                        placeholderPiece.VerticalAlignment = VerticalAlignment.Top;
-                    }
-
-                    GameGrid.Children.Add(placeholderPiece);
-                }
-            }
-        }
-
-        /// <summary>
         /// This method will initialize a start tiles for each player
         /// It will appear with the same border color as the players nest/pieces
         /// </summary>
