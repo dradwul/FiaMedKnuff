@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="#333">
+    Background="#333"
+    Loaded="Page_Loaded" SizeChanged="Page_SizeChanged">
 
     <!-- A control for changing the look for the buttons -->
     <Page.Resources>
