@@ -19,10 +19,14 @@ using Windows.UI.Xaml.Input;
 using System.Threading.Tasks;
 using System.Threading;
 
+
+
+
 namespace FiaMedKnuff
 {
     public sealed partial class MainPage : Page
     {
+        private DispatcherTimer gameTimer;
         //Routes for all players
         private Position[][] playerRoutes = new Position[4][];
 
@@ -50,7 +54,10 @@ namespace FiaMedKnuff
         public MainPage()
         {
             this.InitializeComponent();
+
             InitializeStartTiles();
+            InitializeGameTimer();
+
 
             //Creates the routes for all players
             playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
@@ -70,6 +77,35 @@ namespace FiaMedKnuff
 			playerColors[2] = "green";
 			playerColors[3] = "red";
 		}
+
+        private void InitializeGameTimer()
+        {
+            gameTimer = new DispatcherTimer();
+            gameTimer.Interval = TimeSpan.FromSeconds(1); // Adjust as needed
+            gameTimer.Tick += GameTimer_Tick;
+            gameTimer.Start();
+        }
+
+        private void GameTimer_Tick(object sender, object e)
+        {
+            // Your logic for each tick of the game timer
+        }
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            gameTimer.Stop(); // Assuming gameTimer is your timer for the game
+            ResumeButton.Visibility = Visibility.Visible; // Show resume button
+            PauseButton.Visibility = Visibility.Collapsed; // Hide pause button
+            Debug.WriteLine("Pause button clicked");
+        }
+
+        private void ResumeButton_Click(object sender, RoutedEventArgs e)
+        {
+            gameTimer.Start(); // Resume the game
+            ResumeButton.Visibility = Visibility.Collapsed; // Hide resume button
+            PauseButton.Visibility = Visibility.Visible; // Show pause button
+            Debug.WriteLine("Resume button clicked");
+        }
 
         /// <summary>
         /// Shifts an array to the left
