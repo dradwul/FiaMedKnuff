@@ -426,7 +426,7 @@ namespace FiaMedKnuff
                 if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
                 {
                     //Moves the piece and checks if it has reached its goal
-                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1]); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
+                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1], GameGrid); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
                     playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
 
                     //Check if the player has won and enable victory screen
@@ -622,7 +622,7 @@ namespace FiaMedKnuff
         /// <param name="currentPlayer">Gets current player ID</param>
         private async void UpdatePlayerNestUI(int currentPlayer)
         {
-            await Task.Delay(400); // This should be synced with AnimateGamePiece in Player class
+            await Task.Delay(1000);
 
             string previousPlayerHighlight;
             string currentPlayerHighlight;
@@ -647,7 +647,6 @@ namespace FiaMedKnuff
             var newPlayerHighlightBorder = this.FindName(currentPlayerHighlight) as Border;
             newPlayerHighlightBorder.BorderThickness = new Thickness(10);
         }
-
 
         /// <summary>
         /// Hides the start menu when the start button is clicked
