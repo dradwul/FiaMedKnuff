@@ -101,10 +101,10 @@
             <StackPanel x:Name="piecesInGoalZonePlayer2"  Grid.Row="0" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
             </StackPanel>
 
-            <StackPanel x:Name="piecesInGoalZonePlayer3"  Grid.Row="7" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
+            <StackPanel x:Name="piecesInGoalZonePlayer3"  Grid.Row="7" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
             </StackPanel>
 
-            <StackPanel x:Name="piecesInGoalZonePlayer4"  Grid.Row="7" Grid.Column="11" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
+            <StackPanel x:Name="piecesInGoalZonePlayer4"  Grid.Row="7" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="-10">
             </StackPanel>
 
             <!-- Every game tile -->
@@ -216,11 +216,7 @@
         <!-- Start menu Buttons View -->
         <Grid x:Name="startMenuButtons" Background="Transparent" Grid.RowSpan="13" Grid.ColumnSpan="13">
             <StackPanel>
-                <Image Margin="310,180,0,0">
-                    <Image.Source>
-                        <SvgImageSource UriSource="ms-appx:///Assets/StartFrame.svg"/>
-                    </Image.Source>
-                </Image>
+                <Image HorizontalAlignment="Center" MaxWidth="500" Source="Assets/MegaCoolLogo.png" Margin="0,200,0,100"/>
                 <Button x:Name="startButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-150,0,10" Background="#506B76"  Click="StartButton_Click">Start Game</Button>
                 <Button x:Name="rulesButton" Style="{StaticResource CustomButtonStyle}" Margin="0,-45,0,0" Background="#506B76" Click="RulesButton_Click">Rules</Button>
                 <Button x:Name="exitButton" Style="{StaticResource CustomButtonStyle}" Margin="0,100,0,0" Background="#F86161" Click="ExitButton_Click">Exit Game</Button>
