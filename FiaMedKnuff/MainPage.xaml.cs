@@ -492,8 +492,10 @@ namespace FiaMedKnuff
         /// <param name="e"></param>
         private async void RollForAll_Click(object sender, RoutedEventArgs e)
         {
+            // Disables roll button to prevent double clicks
             decideWhoWillStartButton.IsEnabled = false;
 
+            // Will enter this statement if it's the first roll
             if (playersAndRolls.Count == 0)
             {
                 foreach (var player in playerList)
@@ -501,6 +503,7 @@ namespace FiaMedKnuff
                     int roll = Random.Next(1, 7);
                     playersAndRolls[player] = roll;
 
+                    // Gets element name for every player's roll area
                     string playerRollTextName = $"sPanelP{player.PlayerId}Roll";
                     TextBlock playerRollTextBlock = this.FindName(playerRollTextName) as TextBlock;
 
@@ -547,6 +550,7 @@ namespace FiaMedKnuff
                 }
             }
 
+            // Changes button text if more than 1 got highest roll
             if(playersWithHighestRolls.Count != 1)
             {
                 decideWhoWillStartButton.Content = "ReRoll!";
@@ -586,10 +590,14 @@ namespace FiaMedKnuff
             decideWhoWillStartButton.IsEnabled = true;
         }
 
-
+        /// <summary>
+        /// This method will update the border for player nests.
+        /// Current player gets a border and previous will get it's border removed.
+        /// </summary>
+        /// <param name="currentPlayer">Gets current player ID</param>
         private async void UpdatePlayerNestUI(int currentPlayer)
         {
-            await Task.Delay(1000);
+            await Task.Delay(400); // This should be synced with AnimateGamePiece in Player class
 
             string previousPlayerHighlight;
             string currentPlayerHighlight;

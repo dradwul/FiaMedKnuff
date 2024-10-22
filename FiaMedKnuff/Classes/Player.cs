@@ -141,52 +141,64 @@ namespace FiaMedKnuff
             }
         }
 
+        /// <summary>
+        /// Method for step animation for pieces
+        /// </summary>
+        /// <param name="piece">Current piece in use</param>
+        /// <param name="diceRoll">Value of the dice</param>
+        /// <param name="path">The current piece's path</param>
+        /// <param name="currentStep">Current step in piece/player's path</param>
+        /// <returns></returns>
         public async Task AnimateGamePiece(GamePiece piece,int diceRoll, Position[] path, int currentStep)
         {
-            // Använd TranslateTransform för att flytta spelpjäsen
+            // Use of TranslateTransform for game movement
             TranslateTransform translateTransform = new TranslateTransform();
             piece.GamePieceShape.RenderTransform = translateTransform;
 
-            // Sätt initialpositionen för spelpjäsen
+            // Initial position for the piece
             Grid.SetRow(piece.GamePieceShape, path[currentStep].RowIndex);
             Grid.SetColumn(piece.GamePieceShape, path[currentStep].ColumnIndex);
 
-            // Loopar genom positionerna i rutten
-            for (int i = currentStep; i < currentStep + diceRoll; i++) // Startar från 0 och går till näst sista positionen
+            // Looping through the positions in the path
+            for (int i = currentStep; i < currentStep + diceRoll; i++)
             {
-                Position startPosition = path[i]; // Nuvarande position
-                Position endPosition = path[i + 1]; // Nästa position
+                Position startPosition = path[i];
+                Position endPosition = path[i + 1];
 
-                // Beräkna hur mycket spelpjäsen ska flyttas
+                // Calculate movement for the piece
                 double deltaX = endPosition.ColumnIndex - startPosition.ColumnIndex;
                 double deltaY = endPosition.RowIndex - startPosition.RowIndex;
 
-                // Definiera animationens varaktighet och hastighet
-                double duration = 300; // Total tid för animationen i millisekunder - TODO: SYNKA DENNA MED NEST-CHANGE
-                double steps = 10; // Antal steg i animationen
-                double stepDuration = duration / steps; // Tid för varje steg
+                // Duration and speed of piece movement
+                double duration = 400; // This should be synced with PlayerNestUI update
+                double steps = 10; // Increase for a more smooth movement
+                double stepDuration = duration / steps;
 
-                // Animerar rörelsen
+                // Animation for the piece
                 for (int step = 0; step < steps; step++)
                 {
-                    // Beräkna nuvarande progress av animationen
+                    // Calculate current progress of the piece
                     double linearProgress = (double)step / steps;
                     double easedProgress = EaseInOutQuad(linearProgress); // Använd easing-funktionen
 
-                    // Uppdatera TranslateTransform baserat på eased progress
+                    // Update TranslateTransform
                     translateTransform.X = deltaX * easedProgress;
                     translateTransform.Y = deltaY * easedProgress;
 
-                    // Vänta en kort stund innan nästa steg
+                    // Delay for piece movement
                     await Task.Delay((int)stepDuration);
                 }
 
-                // Sätt spelpjäsen till den faktiska rutpositionen för att förhindra att den "hoppar"
                 Grid.SetRow(piece.GamePieceShape, endPosition.RowIndex);
                 Grid.SetColumn(piece.GamePieceShape, endPosition.ColumnIndex);
             }
         }
 
+        /// <summary>
+        /// Method for smooth piece animation
+        /// </summary>
+        /// <param name="progress"></param>
+        /// <returns></returns>
         public double EaseInOutQuad(double progress)
         {
             return progress < 0.5 ? 2 * progress * progress : 1 - Math.Pow(-2 * progress + 2, 2) / 2;
