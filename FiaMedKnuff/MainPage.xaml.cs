@@ -113,10 +113,10 @@ namespace FiaMedKnuff
 		/// </summary>
 		readonly SolidColorBrush[] colors = new SolidColorBrush[]
         {
-            new SolidColorBrush(Windows.UI.Colors.Blue),
-            new SolidColorBrush(Windows.UI.Colors.Yellow),
-            new SolidColorBrush(Windows.UI.Colors.Green),
-            new SolidColorBrush(Windows.UI.Colors.Red)
+            new SolidColorBrush(Windows.UI.ColorHelper.FromArgb(255, 79, 171, 238)),
+            new SolidColorBrush(Windows.UI.ColorHelper.FromArgb(255, 230, 234, 47)),
+            new SolidColorBrush(Windows.UI.ColorHelper.FromArgb(255, 114, 228, 126)),
+            new SolidColorBrush(Windows.UI.ColorHelper.FromArgb(255, 248, 97, 97))
         };
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace FiaMedKnuff
         /// </summary>
         private void InitializeStartTiles()
         {
-            for (int i = 0; i < 4; i++)
+			for (int i = 0; i < 4; i++)
             {
                 SolidColorBrush color = colors[i];
 
@@ -277,13 +277,13 @@ namespace FiaMedKnuff
                     Fill = new SolidColorBrush(Windows.UI.Colors.White),
                     Stroke = color,
                     StrokeThickness = 8
-                };
+				};
                 Grid.SetColumn(startCircle, startPositions[i].ColumnIndex);
                 Grid.SetRow(startCircle, startPositions[i].RowIndex);
 
                 GameGrid.Children.Add(startCircle);
             }
-        }
+		}
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {

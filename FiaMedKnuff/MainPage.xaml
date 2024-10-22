@@ -78,21 +78,21 @@
             </Grid.ColumnDefinitions>
 
             <!-- All the "nests" -->
-            <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
-                <Ellipse Fill="Blue" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
-            </Grid>
+            <Border x:Name="borderNest1" Background="#366477" BorderThickness="0" BorderBrush="Lime" CornerRadius="30" Margin="15" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="4">
+                <Ellipse Fill="#4FABEE" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
+            </Border>
 
-            <Grid Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
-                <Ellipse Fill="Yellow" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
-            </Grid>
+            <Border x:Name="borderNest2" Background="#366477" BorderThickness="0" BorderBrush="Lime" CornerRadius="30" Margin="15" Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="4" Grid.RowSpan="4">
+                <Ellipse Fill="#E6EA2F" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
+            </Border>
 
-            <Grid Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
-                <Ellipse Fill="Red" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
-            </Grid>
+            <Border x:Name="borderNest3" Background="#366477" BorderThickness="0" BorderBrush="Lime" CornerRadius="30" Margin="15" Grid.Row="7" Grid.Column="8" Grid.ColumnSpan="4" Grid.RowSpan="4">
+                <Ellipse Fill="#72E47E" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
+            </Border>
 
-            <Grid Grid.Row="7" Grid.Column="8" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="20" Background="#366477" CornerRadius="30">
-                <Ellipse Fill="Green" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
-            </Grid>
+            <Border x:Name="borderNest4" Background="#366477" BorderThickness="0" BorderBrush="Lime" CornerRadius="30" Margin="15" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="4">
+                <Ellipse Fill="#F86161" Grid.ColumnSpan="4" Grid.RowSpan="4" Margin="35"/>
+            </Border>
 
             <!-- Zones where pieces will land after completing -->
             <StackPanel x:Name="piecesInGoalZonePlayer1"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-10">
@@ -149,22 +149,22 @@
             <Ellipse Grid.Row="6" Grid.Column="1" Fill="white" Margin="5"/>
             <Ellipse Grid.Row="5" Grid.Column="1" Fill="white" Margin="5"/>
 
-            <Ellipse Grid.Row="5" Grid.Column="2" Fill="Blue" Margin="5"/>
-            <Ellipse Grid.Row="5" Grid.Column="3" Fill="Blue" Margin="5"/>
-            <Ellipse Grid.Row="5" Grid.Column="4" Fill="Blue" Margin="5"/>
-            <Ellipse Grid.Row="5" Grid.Column="5" Fill="Blue" Margin="5"/>
-            <Ellipse Grid.Row="1" Grid.Column="6" Fill="Yellow" Margin="5"/>
-            <Ellipse Grid.Row="2" Grid.Column="6" Fill="Yellow" Margin="5"/>
-            <Ellipse Grid.Row="3" Grid.Column="6" Fill="Yellow" Margin="5"/>
-            <Ellipse Grid.Row="4" Grid.Column="6" Fill="Yellow" Margin="5"/>
-            <Ellipse Grid.Row="5" Grid.Column="10" Fill="Green" Margin="5"/>
-            <Ellipse Grid.Row="5" Grid.Column="9" Fill="Green" Margin="5"/>
-            <Ellipse Grid.Row="5" Grid.Column="8" Fill="Green" Margin="5"/>
-            <Ellipse Grid.Row="5" Grid.Column="7" Fill="Green" Margin="5"/>
-            <Ellipse Grid.Row="9" Grid.Column="6" Fill="Red" Margin="5"/>
-            <Ellipse Grid.Row="8" Grid.Column="6" Fill="Red" Margin="5"/>
-            <Ellipse Grid.Row="7" Grid.Column="6" Fill="Red" Margin="5"/>
-            <Ellipse Grid.Row="6" Grid.Column="6" Fill="Red" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="2" Fill="#4FABEE" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="3" Fill="#4FABEE" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="4" Fill="#4FABEE" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="5" Fill="#4FABEE" Margin="5"/>
+            <Ellipse Grid.Row="1" Grid.Column="6" Fill="#E6EA2F" Margin="5"/>
+            <Ellipse Grid.Row="2" Grid.Column="6" Fill="#E6EA2F" Margin="5"/>
+            <Ellipse Grid.Row="3" Grid.Column="6" Fill="#E6EA2F" Margin="5"/>
+            <Ellipse Grid.Row="4" Grid.Column="6" Fill="#E6EA2F" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="10" Fill="#72E47E" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="9" Fill="#72E47E" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="8" Fill="#72E47E" Margin="5"/>
+            <Ellipse Grid.Row="5" Grid.Column="7" Fill="#72E47E" Margin="5"/>
+            <Ellipse Grid.Row="9" Grid.Column="6" Fill="#F86161" Margin="5"/>
+            <Ellipse Grid.Row="8" Grid.Column="6" Fill="#F86161" Margin="5"/>
+            <Ellipse Grid.Row="7" Grid.Column="6" Fill="#F86161" Margin="5"/>
+            <Ellipse Grid.Row="6" Grid.Column="6" Fill="#F86161" Margin="5"/>
 
             <Ellipse Grid.Row="5" Grid.Column="6" Fill="BurlyWood" Margin="2"/>
 
