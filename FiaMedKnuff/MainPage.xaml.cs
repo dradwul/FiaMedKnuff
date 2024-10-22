@@ -90,18 +90,21 @@ namespace FiaMedKnuff
 		}
         private void PlayMenuMusic()
         {
+            mediaPlayer.IsLoopingEnabled = true;  // Enable looping for gameplay music
             mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Menu.mp3"));
             mediaPlayer.Play();
         }
 
         private void PlayGameplayMusic()
         {
+            mediaPlayer.IsLoopingEnabled = true;
             mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Play.mp3"));
             mediaPlayer.Play();
         }
 
         private void PlayWinMusic()
         {
+            mediaPlayer.IsLoopingEnabled = false; 
             mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Win.mp3"));
             mediaPlayer.Play();
         }
