@@ -307,31 +307,6 @@ namespace FiaMedKnuff
             }
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            AdjustGridSize();
-        }
-
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            AdjustGridSize();
-        }
-
-
-        /// <summary>
-        /// This method changes grid sizes when the window size is being adjusted
-        /// </summary>
-        private void AdjustGridSize()
-        {
-            double availableWidth = this.ActualWidth;
-            double availableHeight = this.ActualHeight;
-
-            double gridSize = Math.Min(availableWidth, availableHeight);
-
-            GameGrid.Width = gridSize;
-            GameGrid.Height = gridSize;
-        }
-
         /// <summary>
         /// Handles the Tapped event of the DiceImage control.
         /// Generates a random dice value, animates the correct dice image and creates a random movement animation.
