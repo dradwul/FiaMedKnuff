@@ -88,33 +88,21 @@ namespace FiaMedKnuff
 			playerColors[2] = "green";
 			playerColors[3] = "red";
 		}
-        private async void PlayMenuMusic()
+        private void PlayMenuMusic()
         {
-            mediaPlayer.IsLoopingEnabled = true;
-            mediaPlayer.Pause(); // Stop current playback
-            mediaPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset playback position
             mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Menu.mp3"));
-            await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
             mediaPlayer.Play();
         }
 
-        private async void PlayGameplayMusic()
+        private void PlayGameplayMusic()
         {
-            mediaPlayer.IsLoopingEnabled= true;
-            mediaPlayer.Pause(); // Stop current playback
-            mediaPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset playback position
             mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Play.mp3"));
-            await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
             mediaPlayer.Play();
         }
 
-        private async void PlayWinMusic()
+        private void PlayWinMusic()
         {
-            mediaPlayer.Pause(); // Stop current playback
-            mediaPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset playback position
-            mediaPlayer.IsLoopingEnabled = false; // Disable looping for win music
             mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Win.mp3"));
-            await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
             mediaPlayer.Play();
         }
 
@@ -153,6 +141,7 @@ namespace FiaMedKnuff
         /// </summary>
         private void ClearGame()
         {
+            mediaPlayer.Pause();
 			foreach (Player player in playerList)
 			{
 				for (int i = 1; i <= 4; i++)
@@ -480,7 +469,9 @@ namespace FiaMedKnuff
 
                     //Check if the player has won and enable victory screen
                     if(playerList[currentPlayersTurn - 1].VictoryCheck())
-					{ 
+					{
+                        mediaPlayer.Pause(); // Stop any current music
+                        PlayWinMusic(); // Play the win music
                         victoryScreen.Visibility = Visibility.Visible;
                         winnerTextBlock.Text = "Player " + playerList[currentPlayersTurn - 1].PlayerId + " Wins!";
 				    }
