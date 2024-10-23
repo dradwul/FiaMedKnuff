@@ -55,8 +55,9 @@ namespace FiaMedKnuff
         //Temporary colors for the players
         string[] playerColors = new string[4];
 
-        //MediaPlayer instance for background music
+        //MediaPlayer instance for background music and dice
         private MediaPlayer mediaPlayer;
+        private MediaPlayer diceSoundPlayer;
         public MainPage()
         {
             this.InitializeComponent();
@@ -75,7 +76,12 @@ namespace FiaMedKnuff
             mediaPlayer.Volume = 0.2; // Set volume
             mediaPlayer.AudioCategory = MediaPlayerAudioCategory.Media; // Ensure it's treated as game media
             PlayMenuMusic();
-           
+
+            // Initialize Dice Sound Player
+            diceSoundPlayer = new MediaPlayer();
+            diceSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Dice.mp3"));
+            diceSoundPlayer.Volume = 0.5; // Adjust volume as needed
+
             //Creates the routes for all players
             playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
             playerRoutes[1] = ShiftArray(allOuterPositions, 10).Concat(endPositions[1]).ToArray();
@@ -124,7 +130,16 @@ namespace FiaMedKnuff
             await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
             mediaPlayer.Play();
         }
-
+        private void PlayDiceSound()
+        {
+            if (diceSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
+            {
+                diceSoundPlayer.Pause(); // Stop any ongoing dice sound playback
+                diceSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
+            }
+            diceSoundPlayer.Volume = 0.04; // Set volume
+            diceSoundPlayer.Play(); // Play the dice sound
+        }
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             // Hide start menu and show player select
@@ -385,6 +400,9 @@ namespace FiaMedKnuff
         /// </summary>
         private void DiceImage_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            // Play dice sound
+            PlayDiceSound();
+            
             int diceValue = Random.Next(1, 7);
             string diceImager = diceImages[diceValue - 1];
 
