@@ -89,22 +89,34 @@ namespace FiaMedKnuff
         {
             moveSoundPlayer = new MediaPlayer();
             moveSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Move.mp3"));
-            moveSoundPlayer.Volume = 0.07; //Volume
+            moveSoundPlayer.Volume = 0.04; //Volume
 
             knockOffSoundPlayer = new MediaPlayer();
             knockOffSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Knock.mp3"));
-            knockOffSoundPlayer.Volume = 0.07; //Volume
+            knockOffSoundPlayer.Volume = 0.04; //Volume
         }
 
         // Method to play the move sound effect
-        private async void PlayMoveSound()
+        private void PlayMoveSound()
         {
+            if (moveSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
+            {
+                moveSoundPlayer.Pause(); // Stop the move sound if it's already playing
+                moveSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
+            }
+
             moveSoundPlayer.Play();
         }
 
         // Method to play the knock-off sound effect
         private void PlayKnockOffSound()
         {
+            if (knockOffSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
+            {
+                knockOffSoundPlayer.Pause(); // Stop the knock-off sound if it's already playing
+                knockOffSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
+            }
+
             knockOffSoundPlayer.Play();
         }
 

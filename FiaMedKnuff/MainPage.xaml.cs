@@ -71,9 +71,9 @@ namespace FiaMedKnuff
         private void InitializeGame()
         {
             //Initialize MediaPlayer
-             mediaPlayer = new MediaPlayer();
+            mediaPlayer = new MediaPlayer();
             mediaPlayer.Volume = 0.2; // Set volume
-            mediaPlayer.AudioCategory = MediaPlayerAudioCategory.GameMedia; // Ensure it's treated as game media
+            mediaPlayer.AudioCategory = MediaPlayerAudioCategory.Media; // Ensure it's treated as game media
             PlayMenuMusic();
            
             //Creates the routes for all players
@@ -94,6 +94,7 @@ namespace FiaMedKnuff
 			playerColors[2] = "green";
 			playerColors[3] = "red";
 		}
+
         private async void PlayMenuMusic()
         {
             mediaPlayer.IsLoopingEnabled = true;
@@ -145,8 +146,6 @@ namespace FiaMedKnuff
             // Start gameplay music after player selection is done and gameboard is visible
             PlayGameplayMusic();
         }
-        private MediaPlayer moveSoundPlayer;
-        private MediaPlayer knockOffSoundPlayer;
 
         private void OnPlayerWin()
         {
