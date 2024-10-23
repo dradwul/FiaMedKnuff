@@ -22,6 +22,7 @@ using System.Threading;
 
 
 
+
 namespace FiaMedKnuff
 {
     public sealed partial class MainPage : Page
@@ -56,7 +57,7 @@ namespace FiaMedKnuff
             this.InitializeComponent();
 
             InitializeStartTiles();
-            InitializeGameTimer();
+           
 
 
             //Creates the routes for all players
@@ -77,35 +78,65 @@ namespace FiaMedKnuff
 			playerColors[2] = "green";
 			playerColors[3] = "red";
 		}
-
-        private void InitializeGameTimer()
-        {
-            gameTimer = new DispatcherTimer();
-            gameTimer.Interval = TimeSpan.FromSeconds(1); // Adjust as needed
-            gameTimer.Tick += GameTimer_Tick;
-            gameTimer.Start();
-        }
-
-        private void GameTimer_Tick(object sender, object e)
-        {
-            // Your logic for each tick of the game timer
-        }
-
+        // Pause the game and show the pause menu
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-            gameTimer.Stop(); // Assuming gameTimer is your timer for the game
-            ResumeButton.Visibility = Visibility.Visible; // Show resume button
-            PauseButton.Visibility = Visibility.Collapsed; // Hide pause button
-            Debug.WriteLine("Pause button clicked");
+            // Hide the pause button and show the resume button
+            PauseButton.Visibility = Visibility.Collapsed;
+            ResumeButton.Visibility = Visibility.Visible;
+
+            // Show the pause menu
+            PauseMenu.Visibility = Visibility.Visible;
+
+            // Pause any game logic (e.g., timers, animations, etc.)
+            if (gameTimer != null)
+            {
+                gameTimer.Stop();
+            }
         }
 
+        // Resume the game and hide the pause menu
         private void ResumeButton_Click(object sender, RoutedEventArgs e)
         {
-            gameTimer.Start(); // Resume the game
-            ResumeButton.Visibility = Visibility.Collapsed; // Hide resume button
-            PauseButton.Visibility = Visibility.Visible; // Show pause button
-            Debug.WriteLine("Resume button clicked");
+            // Hide the resume button and show the pause button
+            ResumeButton.Visibility = Visibility.Collapsed;
+            PauseButton.Visibility = Visibility.Visible;
+
+            // Hide the pause menu
+            PauseMenu.Visibility = Visibility.Collapsed;
+
+            // Resume any game logic (e.g., timers, animations, etc.)
+            if (gameTimer != null)
+            {
+                gameTimer.Start();
+            }
         }
+
+        private void IngamerulesButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Show the rules panel when the Rules button is clicked
+            RulesPanel.Visibility = Visibility.Visible; // Display the rules
+        }
+
+        private void ingameexitRules_Click(object sender, RoutedEventArgs e)
+        {
+            // Hide the rules panel when the exit button is clicked
+            RulesPanel.Visibility = Visibility.Collapsed; // Hide the rules
+        }
+
+
+
+        private void Exitgamebutton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate back to the main page or home page
+            Frame.Navigate(typeof(MainPage)); // Replace MainPage with your actual main page type
+        }
+
+
+
+
+
+
 
         /// <summary>
         /// Shifts an array to the left
@@ -114,7 +145,7 @@ namespace FiaMedKnuff
         /// <param name="array"> Input array to shift </param>
         /// <param name="steps"> Amount of steps to shift </param>
         /// <returns> Returns the array that has been shifted </returns>
-		private Position[] ShiftArray(Position[] array, int steps)
+        private Position[] ShiftArray(Position[] array, int steps)
 		{
 			return array.Skip(steps).Concat(array.Take(steps)).ToArray();
 		}
