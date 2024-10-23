@@ -133,6 +133,8 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\FIA - Knock.mp3" />
+    <Content Include="Assets\FIA - Move.mp3" />
     <Content Include="Assets\MegaCoolLogo.png" />
     <Content Include="Assets\dice1.png" />
     <Content Include="Assets\dice2.png" />

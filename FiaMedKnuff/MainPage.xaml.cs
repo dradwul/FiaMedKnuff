@@ -130,6 +130,8 @@ namespace FiaMedKnuff
             // Start gameplay music after player selection is done and gameboard is visible
             PlayGameplayMusic();
         }
+        private MediaPlayer moveSoundPlayer;
+        private MediaPlayer knockOffSoundPlayer;
 
         private void OnPlayerWin()
         {
