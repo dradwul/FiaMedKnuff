@@ -345,55 +345,6 @@ namespace FiaMedKnuff
         };
 
         /// <summary>
-        /// Initializing the pieces in the nests. 
-        /// PlaceholderPiece is for development. Will get changed to a gamepiece object.
-        /// </summary>
-        /// <param name="numberOfPlayers"></param>
-        private void InitializePieces(int numberOfPlayers)
-        {
-            for (int i = 0; i < numberOfPlayers; i++)
-            {
-                SolidColorBrush color = colors[i];
-
-                for (int j = 0; j < 4; j++)
-                {
-                    Ellipse placeholderPiece = new Ellipse
-                    {
-                        //Fill = color,
-                        Fill = new SolidColorBrush(Windows.UI.Colors.Black),
-                        Stroke = new SolidColorBrush(Windows.UI.Colors.White),
-                        StrokeThickness = 3,
-                        Width = 40,
-                        Height = 40
-                    };
-                    Grid.SetColumn(placeholderPiece, nestPositions[i][j].ColumnIndex);
-                    Grid.SetRow(placeholderPiece, nestPositions[i][j].RowIndex);
-
-
-                    if (nestPositions[i][j].ColumnIndex == 2 || nestPositions[i][j].ColumnIndex == 9)
-                    {
-                        placeholderPiece.HorizontalAlignment = HorizontalAlignment.Right;
-                    }
-                    else if (nestPositions[i][j].ColumnIndex == 3 || nestPositions[i][j].ColumnIndex == 10)
-                    {
-                        placeholderPiece.HorizontalAlignment = HorizontalAlignment.Left;
-                    }
-
-                    if (nestPositions[i][j].RowIndex == 1 || nestPositions[i][j].RowIndex == 8)
-                    {
-                        placeholderPiece.VerticalAlignment = VerticalAlignment.Bottom;
-                    }
-                    else if (nestPositions[i][j].RowIndex == 2 || nestPositions[i][j].RowIndex == 9)
-                    {
-                        placeholderPiece.VerticalAlignment = VerticalAlignment.Top;
-                    }
-
-                    GameGrid.Children.Add(placeholderPiece);
-                }
-            }
-        }
-
-        /// <summary>
         /// This method will initialize a start tiles for each player
         /// It will appear with the same border color as the players nest/pieces
         /// </summary>
@@ -535,7 +486,7 @@ namespace FiaMedKnuff
                 if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
                 {
                     //Moves the piece and checks if it has reached its goal
-                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1]); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
+                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1], GameGrid); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
                     playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
 
                     //Check if the player has won and enable victory screen
@@ -626,8 +577,10 @@ namespace FiaMedKnuff
         /// <param name="e"></param>
         private async void RollForAll_Click(object sender, RoutedEventArgs e)
         {
+            // Disables roll button to prevent double clicks
             decideWhoWillStartButton.IsEnabled = false;
 
+            // Will enter this statement if it's the first roll
             if (playersAndRolls.Count == 0)
             {
                 foreach (var player in playerList)
@@ -635,6 +588,7 @@ namespace FiaMedKnuff
                     int roll = Random.Next(1, 7);
                     playersAndRolls[player] = roll;
 
+                    // Gets element name for every player's roll area
                     string playerRollTextName = $"sPanelP{player.PlayerId}Roll";
                     TextBlock playerRollTextBlock = this.FindName(playerRollTextName) as TextBlock;
 
@@ -681,6 +635,7 @@ namespace FiaMedKnuff
                 }
             }
 
+            // Changes button text if more than 1 got highest roll
             if(playersWithHighestRolls.Count != 1)
             {
                 decideWhoWillStartButton.Content = "ReRoll!";
@@ -720,7 +675,11 @@ namespace FiaMedKnuff
             decideWhoWillStartButton.IsEnabled = true;
         }
 
-
+        /// <summary>
+        /// This method will update the border for player nests.
+        /// Current player gets a border and previous will get it's border removed.
+        /// </summary>
+        /// <param name="currentPlayer">Gets current player ID</param>
         private async void UpdatePlayerNestUI(int currentPlayer)
         {
             await Task.Delay(1000);
@@ -748,7 +707,6 @@ namespace FiaMedKnuff
             var newPlayerHighlightBorder = this.FindName(currentPlayerHighlight) as Border;
             newPlayerHighlightBorder.BorderThickness = new Thickness(10);
         }
-
 
         /// <summary>
         /// Hides the start menu when the start button is clicked
