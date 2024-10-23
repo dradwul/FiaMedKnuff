@@ -199,9 +199,9 @@
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="150">
                             <!-- Increased size -->
                             <!-- Two rectangles for pause symbol -->
-                            <Rectangle Width="25" Height="150" Fill="LightGray" HorizontalAlignment="Left" Margin="0,0,20,0" />
+                            <Rectangle Width="80" Height="120" Fill="LightGray" HorizontalAlignment="Left" Margin="0,0,70,0" />
                             <!-- Increased width and height -->
-                            <Rectangle Width="25" Height="150" Fill="LightGray" HorizontalAlignment="Right" Margin="20,0,0,0" />
+                            <Rectangle Width="80" Height="120" Fill="LightGray" HorizontalAlignment="Right" Margin="70,0,0,0" />
                         </Grid>
 
                         <!-- "Game Paused" Text in front of Pause Symbol -->
