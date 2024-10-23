@@ -177,65 +177,11 @@
                 </Image>
             </StackPanel>
         </Grid>
-
-        <Grid>
-            <!-- Your existing game elements go here -->
-
-            <!-- Pause and Resume Buttons -->
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
-                <Button x:Name="PauseButton" Content="Pause" Width="100" Height="50" Click="PauseButton_Click" />
-                <Button x:Name="ResumeButton" Content="Resume" Width="100" Height="50" Click="ResumeButton_Click" Visibility="Collapsed"/>
-            </StackPanel>
-
-            <!-- Pause Menu (Hidden initially) -->
-            <Grid x:Name="PauseMenu" Background="#264653B3" Visibility="Collapsed">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-                    <!-- Added spacing for better layout -->
-
-                    <!-- Overlay Grid for Pause Symbol and Text -->
-                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                        <!-- Pause Symbol (Behind the Text) -->
-                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="150">
-                            <!-- Increased size -->
-                            <!-- Two rectangles for pause symbol -->
-                            <Rectangle Width="80" Height="120" Fill="LightGray" HorizontalAlignment="Left" Margin="0,0,70,0" />
-                            <!-- Increased width and height -->
-                            <Rectangle Width="80" Height="120" Fill="LightGray" HorizontalAlignment="Right" Margin="70,0,0,0" />
-                        </Grid>
-
-                        <!-- "Game Paused" Text in front of Pause Symbol -->
-                        <TextBlock Text="GAME PAUSED" FontSize="80" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
-                    </Grid>
-
-                    <!-- Resume, Rules, and Abort Game Buttons -->
-                    <Button x:Name="ResumeMenuButton" Content="Resume" Width="200" Height="50" Background="#506B76" Foreground="White" Click="ResumeButton_Click" HorizontalAlignment="Center" />
-                    <Button x:Name="RulesButton" Content="Rules" Width="200" Height="50" Background="#506B76" Foreground="White" Click="IngamerulesButton_Click" HorizontalAlignment="Center" />
-                    <!-- Rules Panel (initially hidden) -->
-                    <StackPanel x:Name="RulesPanel" Height="485" Width="415" Background="#506B76" Visibility="Collapsed">
-                        <Button x:Name="ingameexitRules" Height="40" Width="40" Background="#F86161" Foreground="#FFFFFF" HorizontalAlignment="Right" Margin="0,5,15,0" Click="ingameexitRules_Click">X</Button>
-                        <Rectangle Height="15" Width="120" Fill="#658795" HorizontalAlignment="Left" Margin="0,0,0,0"></Rectangle>
-                        <TextBlock Foreground="#ECECEC" FontSize="32" FontWeight="Bold" FontStyle="Italic" Margin="40,-35,0,0">Rules</TextBlock>
-                        <StackPanel Height="355" Width="345" Background="#658795" Margin="0,30,0,0">
-                            <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">
-                Before the game starts, all players have to roll the dice. This will decide which players will start the game, and then it'll go in clockwise order.
-                To leave your nest, you need to roll the dice and get either 1 or 6. If you roll 1, you are allowed to move one game piece out of the nest to the start position. And if you roll a 6, you can choose between moving 2 pieces to start position.
-                Or you can move one game piece 6 steps forward.
-                            </TextBlock>
-                            <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">
-                During the game you continue to roll the dice and move your game piece around the outer line. When you arrive at the position just before your own starting position, the piece will turn in towards the middle. Here you have to roll the exact amount or less to move forward, and eventually, you will enter the goal. First player to move all four game pieces into the goal wins the game.
-                            </TextBlock>
-                            <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">
-                You are able and allowed to knock your opponent off the board. To do this, you have to roll the dice and land on the exact same position as your opponent; they will get knocked off, and their game piece is being placed in their own nest.
-                            </TextBlock>
-                        </StackPanel>
-                    </StackPanel>
-                    <Button x:Name="AbortButton" Content="Abort Game" Width="200" Height="50" Margin="0,100,0,0" Background="#F86161" Foreground="White" Click="Exitgamebutton_Click" HorizontalAlignment="Center" />
-
-                </StackPanel>
-            </Grid>
+        <!-- Menu View and Menu button -->
+        <Grid x:Name="MenuButtonControl" Visibility="Visible">
+            <Button x:Name="menuButton" Height="26" Width="52" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,140,0" CornerRadius="5"
+             FontSize="11" FontWeight="SemiBold" Background="#D9D9D9" Foreground="#264653" Click="MenuButton_Click">Menu</Button>
         </Grid>
-
 
         <!-- Decide who will start view -->
         <Grid Name="decideStartingPlayerView" Visibility="Collapsed">
@@ -282,6 +228,26 @@
             </StackPanel>
         </Grid>
 
+        <!-- Pause Menu View-->
+        <Grid x:Name="PauseMenu" Visibility="Collapsed" Background="#333333" Opacity="0.8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Grid.RowSpan="13" Grid.ColumnSpan="13">
+        </Grid>
+
+        <!-- Pause Menu Buttons View -->
+        <Grid x:Name="pauseMenuButtons" Visibility="Collapsed" Background="Transparent" Grid.RowSpan="13" Grid.ColumnSpan="13">
+            <StackPanel>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="150" Opacity="0.55" Margin="0,280,0,0">
+                    <Rectangle Width="70" Height="110" Fill="LightGray" HorizontalAlignment="Left" Margin="0,0,70,0" />
+                    <Rectangle Width="70" Height="110" Fill="LightGray" HorizontalAlignment="Right" Margin="70,0,0,0" />
+                </Grid>
+                <TextBlock Text="GAME PAUSED" FontSize="80" Margin="0,-160,0,0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold" />
+
+                <Button x:Name="resumeButton" Style="{StaticResource CustomButtonStyle}" Margin="0,30,0,10" Background="#506B76"  Click="ResumeButton_Click">Resume Game</Button>
+                <Button x:Name="inGameRulesButton" Style="{StaticResource CustomButtonStyle}" Margin="0,0,0,0" Background="#506B76" Click="InGameRulesButton_Click">Rules</Button>
+                <Button x:Name="abortButton" Style="{StaticResource CustomButtonStyle}" Margin="0,50,0,0" Background="#F86161" Click="AbortButton_Click">Abort Game</Button>
+            </StackPanel>
+        </Grid>
+
         <!-- Rules Menu View -->
         <Grid x:Name="rulesMenu" Visibility="Collapsed" Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
               Grid.Row="2" Grid.Column="3" Grid.RowSpan="8" Grid.ColumnSpan="7" CornerRadius="10">
@@ -290,14 +256,42 @@
                 <Rectangle Height="15" Width="120" Fill="#658795" HorizontalAlignment="Left" Margin="0,0,0,0"></Rectangle>
                 <TextBlock Foreground="#ECECEC" FontSize="32" FontWeight="Bold" FontStyle="Italic" Margin="40,-35,0,0">Rules</TextBlock>
                 <StackPanel Height="355" Width="345" Background="#658795" CornerRadius="5" Margin="0,30,0,0">
-                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">Before the game starts, all players have to roll the dice. This will decide which players will start the game, and then it'll go in clockwise order.
-                    To leave your nest, you need to roll the dice and get either 1 or 6. If you roll 1, you are allowed to move one game piece out of the nest to the start position. And if you roll a 6, you can choose between moving 2 pieces to start position.
-                    Or you can move one game piece 6 steps forward.</TextBlock>
-                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">During the game you continue to roll the dice and move your game piece around the
-                    outer line. When you arrive to the position just before your own starting poisition. The piece will turn in towards the middle. Here you have to roll the exact amout or
-                    less to move forward, and evenutally you will enter the goal. First player to move all four game pieces into the goal, wins the game.</TextBlock>
-                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">You are able and allowed to knock your opponent of the board. To do this, you have to 
-                    roll the dice and land on the exact same position as your opponent, they will get knocked of, and their game piece is being placed in their own nest.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">
+                        Before the game starts, all players have to roll the dice. This will decide which players will start the game, and then it'll go in clockwise order.
+                        To leave your nest, you need to roll the dice and get either 1 or 6. If you roll 1, you are allowed to move one game piece out of the nest to the start position. 
+                        And if you roll a 6, you can choose between moving 2 pieces to start position.
+                        Or you can move one game piece 6 steps forward.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">
+                        During the game you continue to roll the dice and move your game piece around the
+                        outer line. When you arrive to the position just before your own starting poisition. The piece will turn in towards the middle. Here you have to roll the exact amout or
+                        less to move forward, and evenutally you will enter the goal. First player to move all four game pieces into the goal, wins the game.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">
+                        You are able and allowed to knock your opponent of the board. To do this, you have to 
+                        roll the dice and land on the exact same position as your opponent, they will get knocked of, and their game piece is being placed in their own nest.</TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- In Game Rules Menu View -->
+        <Grid x:Name="inGameRulesMenu" Visibility="Collapsed" Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Grid.Row="2" Grid.Column="3" Grid.RowSpan="8" Grid.ColumnSpan="7" CornerRadius="10">
+            <StackPanel Height="485" Width="415" Background="#506B76">
+                <Button x:Name="exitInGameRules" Height="40" Width="40" Background="#F86161" Foreground="#FFFFFF" HorizontalAlignment="Right" Margin="0,5,15,0" CornerRadius="10" Click="ExitInGameRules_Click">X</Button>
+                <Rectangle Height="15" Width="120" Fill="#658795" HorizontalAlignment="Left" Margin="0,0,0,0"></Rectangle>
+                <TextBlock Foreground="#ECECEC" FontSize="32" FontWeight="Bold" FontStyle="Italic" Margin="40,-35,0,0">Rules</TextBlock>
+                <StackPanel Height="355" Width="345" Background="#658795" CornerRadius="5" Margin="0,30,0,0">
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">
+                        Before the game starts, all players have to roll the dice. This will decide which players will start the game, and then it'll go in clockwise order.
+                        To leave your nest, you need to roll the dice and get either 1 or 6. If you roll 1, you are allowed to move one game piece out of the nest to the start position. 
+                        And if you roll a 6, you can choose between moving 2 pieces to start position.
+                        Or you can move one game piece 6 steps forward.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">
+                        During the game you continue to roll the dice and move your game piece around the
+                        outer line. When you arrive to the position just before your own starting poisition. The piece will turn in towards the middle. Here you have to roll the exact amout or
+                        less to move forward, and evenutally you will enter the goal. First player to move all four game pieces into the goal, wins the game.</TextBlock>
+                    <TextBlock Margin="5,5,0,0" TextWrapping="Wrap" FontSize="12" FontWeight="Medium">
+                        You are able and allowed to knock your opponent of the board. To do this, you have to 
+                        roll the dice and land on the exact same position as your opponent, they will get knocked of, and their game piece is being placed in their own nest.</TextBlock>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -353,7 +347,7 @@
         <!-- Victory Screen -->
         <Grid x:Name="victoryScreen" Visibility="Collapsed">
             <Rectangle Fill="#333333" Opacity="0.8"/>
-            
+
             <Grid Width="500" Height="260">
                 <Rectangle Width="500" Height="260" Fill="#506B76" RadiusX="15" RadiusY="15"/>
                 <Rectangle Width="400" Height="120" Fill="#658795" Margin="0,30,0,0"/>

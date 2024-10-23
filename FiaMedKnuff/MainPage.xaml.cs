@@ -174,57 +174,45 @@ namespace FiaMedKnuff
             }
 			playerList.Clear();
 		}
-        // Pause the game and show the pause menu
-        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        
+        /// <summary>
+        /// For accessing the menu when playing the game
+        /// </summary>
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
-            // Hide the pause button and show the resume button
-            PauseButton.Visibility = Visibility.Collapsed;
-            ResumeButton.Visibility = Visibility.Visible;
-
-            // Show the pause menu
             PauseMenu.Visibility = Visibility.Visible;
-
-            // Pause any game logic (e.g., timers, animations, etc.)
-            if (gameTimer != null)
-            {
-                gameTimer.Stop();
-            }
+            pauseMenuButtons.Visibility = Visibility.Visible;
         }
-
-        // Resume the game and hide the pause menu
+        /// <summary>
+        /// To resume the game after accessing the menu
+        /// </summary>
         private void ResumeButton_Click(object sender, RoutedEventArgs e)
         {
-            // Hide the resume button and show the pause button
-            ResumeButton.Visibility = Visibility.Collapsed;
-            PauseButton.Visibility = Visibility.Visible;
-
-            // Hide the pause menu
             PauseMenu.Visibility = Visibility.Collapsed;
-
-            // Resume any game logic (e.g., timers, animations, etc.)
-            if (gameTimer != null)
-            {
-                gameTimer.Start();
-            }
+            pauseMenuButtons.Visibility = Visibility.Collapsed;
         }
-
-        private void IngamerulesButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// To open up the rules tab
+        /// </summary>
+        private void InGameRulesButton_Click(object sender, RoutedEventArgs e)
         {
-            // Show the rules panel when the Rules button is clicked
-            RulesPanel.Visibility = Visibility.Visible; // Display the rules
+            inGameRulesMenu.Visibility = Visibility.Visible;
+
         }
-
-        private void ingameexitRules_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Closes the rules tab once opened
+        /// </summary>
+        private void ExitInGameRules_Click(object sender, RoutedEventArgs e)
         {
-            // Hide the rules panel when the exit button is clicked
-            RulesPanel.Visibility = Visibility.Collapsed; // Hide the rules
+            inGameRulesMenu.Visibility = Visibility.Collapsed;
         }
-
-        private void Exitgamebutton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Returns back to start menu
+        /// </summary>
+        private void AbortButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate back to the main page or home page
             mediaPlayer.Pause();
-            Frame.Navigate(typeof(MainPage)); // Replace MainPage with your actual main page type
+            Frame.Navigate(typeof(MainPage));
         }
 
         /// <summary>
@@ -519,6 +507,7 @@ namespace FiaMedKnuff
             int numberOfPlayers = int.Parse(clickedButton.Content.ToString());
 
             GeneratePlayers(numberOfPlayers);
+            MenuButtonControl.Visibility = Visibility.Visible;
             startMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Collapsed;
             playerSelectButtons.Visibility = Visibility.Collapsed;
@@ -718,6 +707,7 @@ namespace FiaMedKnuff
             //startMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Collapsed;
             playerSelectButtons.Visibility = Visibility.Visible;
+            MenuButtonControl.Visibility = Visibility.Visible;
         }
         /// <summary>
         /// Shows the rules, when rules button is clicked
@@ -774,5 +764,7 @@ namespace FiaMedKnuff
             startMenuButtons.Visibility = Visibility.Visible;
             victoryScreen.Visibility = Visibility.Collapsed;
 		}
-	}
+
+
+    }
 }
