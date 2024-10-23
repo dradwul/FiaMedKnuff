@@ -1,73 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Gaming.UI;
+using System.Threading.Tasks;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
-using Windows.UI.Xaml.Input;
-using System.Threading.Tasks;
-using System.Threading;
-using Windows.Media.Core;
-using Windows.Media.Playback;
-
-
-
-
 
 namespace FiaMedKnuff
 {
     public sealed partial class MainPage : Page
     {
-        private DispatcherTimer gameTimer;
-        //Routes for all players
-        private Position[][] playerRoutes = new Position[4][];
-
-
-        //This is where the pieces move when they reach their goal
-        private StackPanel[] goalReachedContainer = new StackPanel[4];
-
-        //Fields for deciding starting player
-        private Dictionary<Player, int> playersAndRolls = new Dictionary<Player, int>();
-        private Dictionary<Player, int> playersWithHighestRolls = new Dictionary<Player, int>();
-        private int startingPlayerId;
-
         //List of players in current game
         public List<Player> playerList = new List<Player>();
         private Player startingPlayer;
 
-        //Variable for the dice value (1-6)
+        // Initialize instances of starting player rolls
+        private Dictionary<Player, int> playersAndRolls = new Dictionary<Player, int>();
+        private readonly Dictionary<Player, int> playersWithHighestRolls = new Dictionary<Player, int>();
+
+        // Dice value(1-6)
         private int currentDiceValue;
 
-        //Variable to store curreny players turn (1-4)
+        // Current player(1-4)
         private int currentPlayersTurn;
 
         //Temporary colors for the players
-        string[] playerColors = new string[4];
+        private readonly string[] playerColors = new string[4];
+
+        //Routes for all players
+        private Position[][] playerRoutes = new Position[4][];
+
+        //This is where the pieces move when they reach their goal
+        private StackPanel[] goalReachedContainer = new StackPanel[4];
 
         //MediaPlayer instance for background music and dice
         private MediaPlayer mediaPlayer;
         private MediaPlayer diceSoundPlayer;
+
         public MainPage()
         {
-            this.InitializeComponent();
-
-            InitializeStartTiles();
+            InitializeComponent();
             InitializeGame();
         }
 
         /// <summary>
-        /// Function to initilize the game
+        /// Function to initilize the game with music, elements, routes, players and colors
         /// </summary>
         private void InitializeGame()
         {
@@ -99,8 +84,11 @@ namespace FiaMedKnuff
 			playerColors[1] = "yellow";
 			playerColors[2] = "green";
 			playerColors[3] = "red";
-		}
+        }
 
+        /// <summary>
+        /// Method for settings for the menu music
+        /// </summary>
         private async void PlayMenuMusic()
         {
             mediaPlayer.IsLoopingEnabled = true;
@@ -111,6 +99,9 @@ namespace FiaMedKnuff
             mediaPlayer.Play();
         }
 
+        /// <summary>
+        /// Method for settings for the music during gameplay
+        /// </summary>
         private async void PlayGameplayMusic()
         {
             mediaPlayer.IsLoopingEnabled= true;
@@ -121,6 +112,9 @@ namespace FiaMedKnuff
             mediaPlayer.Play();
         }
 
+        /// <summary>
+        /// Method for settings for the music when player has won
+        /// </summary>
         private async void PlayWinMusic()
         {
             mediaPlayer.Pause(); // Stop current playback
@@ -130,6 +124,10 @@ namespace FiaMedKnuff
             await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
             mediaPlayer.Play();
         }
+
+        /// <summary>
+        /// Method for playing the die sound
+        /// </summary>
         private void PlayDiceSound()
         {
             if (diceSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
@@ -140,6 +138,12 @@ namespace FiaMedKnuff
             diceSoundPlayer.Volume = 0.04; // Set volume
             diceSoundPlayer.Play(); // Play the dice sound
         }
+
+        /// <summary>
+        /// Button for starting a new game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             // Hide start menu and show player select
@@ -147,9 +151,13 @@ namespace FiaMedKnuff
             playerSelectButtons.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Method to generate players based on number of players chosen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PlayersSelected(object sender, RoutedEventArgs e)
         {
-            // Cast sender to a button to access its content (number between 2-4)
             Button clickedButton = sender as Button;
             int numberOfPlayers = int.Parse(clickedButton.Content.ToString());
 
@@ -162,6 +170,9 @@ namespace FiaMedKnuff
             PlayGameplayMusic();
         }
 
+        /// <summary>
+        /// Method for playing music when a player has won
+        /// </summary>
         private void OnPlayerWin()
         {
             // Stop gameplay music and play win music
@@ -327,6 +338,9 @@ namespace FiaMedKnuff
             new Position[] { new Position(8,2), new Position(8,3), new Position(9,2), new Position(9,3) }
         };
 
+        /// <summary>
+        /// Array with each of the starting positions
+        /// </summary>
         public Position[] startPositions = new Position[]
         {
             new Position(4,1),
@@ -352,7 +366,7 @@ namespace FiaMedKnuff
         /// </summary>
         private void InitializeStartTiles()
         {
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < playerList.Count; i++)
             {
                 SolidColorBrush color = colors[i];
 
@@ -360,7 +374,8 @@ namespace FiaMedKnuff
                 {
                     Fill = new SolidColorBrush(Windows.UI.Colors.White),
                     Stroke = color,
-                    StrokeThickness = 8
+                    Opacity = 0.8,
+                    StrokeThickness = 7
 				};
                 Grid.SetColumn(startCircle, startPositions[i].ColumnIndex);
                 Grid.SetRow(startCircle, startPositions[i].RowIndex);
@@ -369,11 +384,21 @@ namespace FiaMedKnuff
             }
 		}
 
+        /// <summary>
+        /// This will call the method AdjustGridSize() when loading the page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             AdjustGridSize();
         }
 
+        /// <summary>
+        /// This will call the method AdjustGridSize() when resizing the page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             AdjustGridSize();
@@ -520,19 +545,6 @@ namespace FiaMedKnuff
             UpdatePlayerNestUI(currentPlayersTurn);
         }
 
-		private void PlayersSelectedHandler(object sender, RoutedEventArgs e)
-		{
-			//Casts sender to a button to access its content (number between 2-4)
-			Button clickedButton = sender as Button;
-            int numberOfPlayers = int.Parse(clickedButton.Content.ToString());
-
-            GeneratePlayers(numberOfPlayers);
-            MenuButtonControl.Visibility = Visibility.Visible;
-            startMenu.Visibility = Visibility.Collapsed;
-            startMenuButtons.Visibility = Visibility.Collapsed;
-            playerSelectButtons.Visibility = Visibility.Collapsed;
-        }
-
         /// <summary>
         /// Generates players depending on input (2-4 players)
         /// </summary>
@@ -545,6 +557,8 @@ namespace FiaMedKnuff
                 playerList.Add(new Player(i+1, playerColors[i], nestPositions[i], GamePieceClicked));
             }
 
+            InitializeStartTiles();
+
             foreach (Player player in playerList)
             {
 				//Placing game pieces on the board (ID 1-4, not 0-3)
@@ -554,7 +568,7 @@ namespace FiaMedKnuff
 				}
 			}
 
-			playerSelectView.Visibility = Visibility.Collapsed;
+            playerSelectView.Visibility = Visibility.Collapsed;
             GameGrid.Visibility = Visibility.Visible;
             
             decideStartingPlayerView.Visibility = Visibility.Visible;
@@ -718,18 +732,6 @@ namespace FiaMedKnuff
         }
 
         /// <summary>
-        /// Hides the start menu when the start button is clicked
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void StartGameButton_Click(object sender, RoutedEventArgs e)
-        {
-            //startMenu.Visibility = Visibility.Collapsed;
-            startMenuButtons.Visibility = Visibility.Collapsed;
-            playerSelectButtons.Visibility = Visibility.Visible;
-            MenuButtonControl.Visibility = Visibility.Visible;
-        }
-        /// <summary>
         /// Shows the rules, when rules button is clicked
         /// </summary>
         /// <param name="sender"></param>
@@ -739,6 +741,7 @@ namespace FiaMedKnuff
             rulesMenu.Visibility = Visibility.Visible;
             startMenuButtons.Visibility = Visibility.Collapsed;
         }
+
         /// <summary>
         /// Exits the program when the exit button is clicked
         /// </summary>
@@ -748,6 +751,7 @@ namespace FiaMedKnuff
         {
             Application.Current.Exit();
         }
+
         /// <summary>
         /// Exits the rules menu when the exit button is clicked. Brings the user back to the start menu
         /// </summary>
@@ -784,7 +788,5 @@ namespace FiaMedKnuff
             startMenuButtons.Visibility = Visibility.Visible;
             victoryScreen.Visibility = Visibility.Collapsed;
 		}
-
-
     }
 }
