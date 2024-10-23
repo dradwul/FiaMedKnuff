@@ -220,11 +220,10 @@ namespace FiaMedKnuff
             RulesPanel.Visibility = Visibility.Collapsed; // Hide the rules
         }
 
-
-
         private void Exitgamebutton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate back to the main page or home page
+            mediaPlayer.Pause();
             Frame.Navigate(typeof(MainPage)); // Replace MainPage with your actual main page type
         }
 
