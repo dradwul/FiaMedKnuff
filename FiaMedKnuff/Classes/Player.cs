@@ -120,6 +120,9 @@ namespace FiaMedKnuff
             knockOffSoundPlayer.Play();
         }
 
+        /// <summary>
+        /// Toggles the game piece sound when moving
+        /// </summary>
         public void ToggleMoveSound()
         {
             if (moveSoundPlayer.Volume == 0)
@@ -145,13 +148,15 @@ namespace FiaMedKnuff
             throw new ArgumentException("Game piece shape not found");
         }
 
-        /// <summary>
-        /// Moves the specified game pieces
-        /// </summary>
-        /// <param name="id"> ID for specified game piece </param>
-        /// <param name="diceRoll"> Dice roll from 1-6 </param>
-        /// <param name="position"> Position array of possible "tiles" </param>
-        public async void MoveGamePiece(int id, int diceRoll, Position[] positions, Grid gameGrid, Image diceImage)
+		/// <summary>
+		/// Moves the specified game pieces
+		/// </summary>
+		/// <param name="id"> ID for specified game piece </param>
+		/// <param name="diceRoll"> Dice roll from 1-6 </param>
+		/// <param name="position"> Position array of possible "tiles" </param>
+		/// <param name="gameGrid"> Used for animations and knocking a piece off </param>
+		/// <param name="diceImage"> This is the clickable part of the dice. Gets sent to AnimateGamePiece </param>
+		public async void MoveGamePiece(int id, int diceRoll, Position[] positions, Grid gameGrid, Image diceImage)
         {
             foreach (GamePiece piece in pieces)
             {
@@ -322,15 +327,16 @@ namespace FiaMedKnuff
 		}
 
 
-        /// <summary>
-        /// Method for step animation for pieces
-        /// </summary>
-        /// <param name="piece">Current piece in use</param>
-        /// <param name="diceRoll">Value of the dice</param>
-        /// <param name="path">The current piece's path</param>
-        /// <param name="currentStep">Current step in piece/player's path</param>
-        /// <returns></returns>
-        public async Task AnimateGamePiece(GamePiece piece, int diceRoll, Position[] path, int currentStep, Image diceImage)
+		/// <summary>
+		/// Method for step animation for pieces
+		/// </summary>
+		/// <param name="piece">Current piece in use</param>
+		/// <param name="diceRoll">Value of the dice</param>
+		/// <param name="path">The current piece's path</param>
+		/// <param name="currentStep">Current step in piece/player's path</param>
+		/// <param name="diceImage">Image of the dice so it can be enabled after animation</param>
+
+		public async Task AnimateGamePiece(GamePiece piece, int diceRoll, Position[] path, int currentStep, Image diceImage)
         {
             // Use of TranslateTransform for game movement
             TranslateTransform translateTransform = new TranslateTransform();
@@ -374,6 +380,7 @@ namespace FiaMedKnuff
                 Grid.SetRow(piece.GamePieceShape, endPosition.RowIndex);
                 Grid.SetColumn(piece.GamePieceShape, endPosition.ColumnIndex);
             }
+            //Enables dice when animation is over
 			diceImage.IsTapEnabled = true;
 		}
 

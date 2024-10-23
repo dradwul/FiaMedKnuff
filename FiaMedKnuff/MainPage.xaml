@@ -172,7 +172,7 @@
             <Button x:Name="muteMusicButton" Grid.Column="12"
                     HorizontalAlignment="Right" Margin="10"
                     Background="Transparent" BorderThickness="0"
-                    Click="MuteMusicClicked"> 
+                    Click="ToggleSoundClicked"> 
                 <Image x:Name="musicIcon" Width="20" Height="20" Source="Assets/MusicIcon.png"/>
             </Button>
             

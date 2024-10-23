@@ -773,7 +773,10 @@ namespace FiaMedKnuff
             victoryScreen.Visibility = Visibility.Collapsed;
 		}
 
-		private void MuteMusicClicked(object sender, RoutedEventArgs e)
+		/// <summary>
+        /// Toggles the game sound. This includes music and sound when the game pieces move
+        /// </summary>
+        private void ToggleSoundClicked(object sender, RoutedEventArgs e)
 		{
             foreach (Player player in playerList) 
             {
