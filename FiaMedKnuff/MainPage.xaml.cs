@@ -21,10 +21,15 @@ using System.Threading;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 
+
+
+
+
 namespace FiaMedKnuff
 {
     public sealed partial class MainPage : Page
     {
+        private DispatcherTimer gameTimer;
         //Routes for all players
         private Position[][] playerRoutes = new Position[4][];
 
@@ -55,6 +60,7 @@ namespace FiaMedKnuff
         public MainPage()
         {
             this.InitializeComponent();
+
             InitializeStartTiles();
             InitializeGame();
 		}
@@ -166,6 +172,59 @@ namespace FiaMedKnuff
             }
 			playerList.Clear();
 		}
+        // Pause the game and show the pause menu
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Hide the pause button and show the resume button
+            PauseButton.Visibility = Visibility.Collapsed;
+            ResumeButton.Visibility = Visibility.Visible;
+
+            // Show the pause menu
+            PauseMenu.Visibility = Visibility.Visible;
+
+            // Pause any game logic (e.g., timers, animations, etc.)
+            if (gameTimer != null)
+            {
+                gameTimer.Stop();
+            }
+        }
+
+        // Resume the game and hide the pause menu
+        private void ResumeButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Hide the resume button and show the pause button
+            ResumeButton.Visibility = Visibility.Collapsed;
+            PauseButton.Visibility = Visibility.Visible;
+
+            // Hide the pause menu
+            PauseMenu.Visibility = Visibility.Collapsed;
+
+            // Resume any game logic (e.g., timers, animations, etc.)
+            if (gameTimer != null)
+            {
+                gameTimer.Start();
+            }
+        }
+
+        private void IngamerulesButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Show the rules panel when the Rules button is clicked
+            RulesPanel.Visibility = Visibility.Visible; // Display the rules
+        }
+
+        private void ingameexitRules_Click(object sender, RoutedEventArgs e)
+        {
+            // Hide the rules panel when the exit button is clicked
+            RulesPanel.Visibility = Visibility.Collapsed; // Hide the rules
+        }
+
+
+
+        private void Exitgamebutton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate back to the main page or home page
+            Frame.Navigate(typeof(MainPage)); // Replace MainPage with your actual main page type
+        }
 
         /// <summary>
         /// Shifts an array to the left
@@ -174,7 +233,7 @@ namespace FiaMedKnuff
         /// <param name="array"> Input array to shift </param>
         /// <param name="steps"> Amount of steps to shift </param>
         /// <returns> Returns the array that has been shifted </returns>
-		private Position[] ShiftArray(Position[] array, int steps)
+        private Position[] ShiftArray(Position[] array, int steps)
 		{
 			return array.Skip(steps).Concat(array.Take(steps)).ToArray();
 		}
