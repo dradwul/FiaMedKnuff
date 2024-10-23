@@ -41,7 +41,7 @@ namespace FiaMedKnuff
         /// <summary>
         /// Array for the player pieces, this is created when the constructor is used
         /// </summary>
-        private readonly GamePiece[] pieces = new GamePiece[4];
+        public readonly GamePiece[] pieces = new GamePiece[4];
 
 
         /// <summary>
@@ -143,18 +143,25 @@ namespace FiaMedKnuff
         /// <param name="id"> ID for specified game piece </param>
         /// <param name="diceRoll"> Dice roll from 1-6 </param>
         /// <param name="position"> Position array of possible "tiles" </param>
-        public async void MoveGamePiece(int id, int diceRoll, Position[] positions, Grid gameGrid)
+        public async void MoveGamePiece(int id, int diceRoll, Position[] positions, Grid gameGrid, StackPanel goalZone)
         {
             foreach (GamePiece piece in pieces)
             {
-                // Find the correct game piece and check that it does not move more than 45 steps
-                if (piece.Id == id && piece.StepsTaken + diceRoll <= 45)
-                {
-                   
-                    // Determine the target position based on dice roll
-                    Position targetPosition = positions[piece.StepsTaken + diceRoll - 1];
+                int targetSteps = piece.StepsTaken + diceRoll;
 
-                    await AnimateGamePiece(piece, diceRoll, positions, piece.StepsTaken);
+                // Cap the steps to 45 if the dice roll overshoots the goal
+                if (targetSteps > 45)
+                {
+                    targetSteps = 45;
+                }
+
+                // Find the correct game piece and check that it does not move more than 45 steps
+                if (piece.Id == id && targetSteps <= 45)
+                {
+                    // Determine the target position based on dice roll
+                    Position targetPosition = positions[targetSteps - 1];
+
+                    await AnimateGamePiece(piece, diceRoll, positions, piece.StepsTaken, goalZone);
 
                     // Check if the target position is occupied
                     if (targetPosition.IsOccupied)
@@ -169,22 +176,23 @@ namespace FiaMedKnuff
                     piece.Position.OccupyingPiece = null;
 
                     // Move the current piece to the target position
-                    piece.StepsTaken += diceRoll;
+                    piece.StepsTaken = targetSteps;  // Use the calculated target steps
                     piece.Position = targetPosition;
 
-                    //Makes sure the piece doesn't occupy the middle position
-                    if(piece.StepsTaken != 45)
-                    { 
+                    // Make sure the piece doesn't occupy the middle position
+                    if (piece.StepsTaken != 45)
+                    {
                         targetPosition.IsOccupied = true;
                         targetPosition.OccupyingPiece = piece;
-					}
+                    }
 
-					// Update UI to reflect the new position of the game piece
-					Grid.SetRow(piece.GamePieceShape, piece.Position.RowIndex);
+                    // Update UI to reflect the new position of the game piece
+                    Grid.SetRow(piece.GamePieceShape, piece.Position.RowIndex);
                     Grid.SetColumn(piece.GamePieceShape, piece.Position.ColumnIndex);
                 }
             }
         }
+
 
         /// <summary>
         /// Used after moving a piece to check if it has reached its goal so that it can be moved to the goal zone
@@ -192,23 +200,23 @@ namespace FiaMedKnuff
         /// <param name="id"> ID for the specified game piece</param>
         /// <param name="goalZone"> The zone to move the game piece from </param>
         /// <param name="gameGrid"> Current location of the game piece </param>
-        public void CheckGoalReached(int id, StackPanel goalZone, Grid gameGrid) 
+        /*public void CheckGoalReached(int id, StackPanel goalZone, Grid gameGrid)
         {
             foreach (GamePiece piece in pieces)
             {
-				//Find the correct game piece and make sure it is not in the goal zone already
-				if (piece.Id == id && piece.StepsTaken == 45 && !goalZone.Children.Contains(piece.GamePieceShape))
+                //Find the correct game piece and make sure it is not in the goal zone already
+                if (piece.Id == id && piece.StepsTaken == 45 && !goalZone.Children.Contains(piece.GamePieceShape))
                 {
-					//Remove piece from gameGrid and add to goalZone
-					gameGrid.Children.Remove(piece.GamePieceShape);
-					goalZone.Children.Add(piece.GamePieceShape);
+                    //Remove piece from gameGrid and add to goalZone
+                    gameGrid.Children.Remove(piece.GamePieceShape);
+                    goalZone.Children.Add(piece.GamePieceShape);
 
-					piece.GamePieceShape.Width = 30;
-					piece.GamePieceShape.Height = 30;
-					piece.GamePieceShape.Margin = new Thickness(5);
-				}
+                    piece.GamePieceShape.Width = 30;
+                    piece.GamePieceShape.Height = 30;
+                    piece.GamePieceShape.Margin = new Thickness(5);
+                }
             }
-        }
+        }*/
 
         /// <summary>
         /// Checks if the player has achieved victory
@@ -321,8 +329,9 @@ namespace FiaMedKnuff
         /// <param name="diceRoll">Value of the dice</param>
         /// <param name="path">The current piece's path</param>
         /// <param name="currentStep">Current step in piece/player's path</param>
+        /// <param name="goalZone">Goal zone StackPanel for the player</param>
         /// <returns></returns>
-        public async Task AnimateGamePiece(GamePiece piece, int diceRoll, Position[] path, int currentStep)
+        public async Task AnimateGamePiece(GamePiece piece, int diceRoll, Position[] path, int currentStep, StackPanel goalZone)
         {
             // Use of TranslateTransform for game movement
             TranslateTransform translateTransform = new TranslateTransform();
@@ -335,6 +344,28 @@ namespace FiaMedKnuff
             // Looping through the positions in the path
             for (int i = currentStep; i < currentStep + diceRoll; i++)
             {
+                // Check if the piece is about to enter the goal zone
+                if (i + 1 == path.Length) // Assuming the path length is 45 (0-indexed)
+                {
+                    // Move piece to goal zone and exit the loop
+                    PlayMoveSound();
+
+                    // Remove piece from the grid (so it doesn't stay in its old position)
+                    var parent = piece.GamePieceShape.Parent as Grid;
+                    if (parent != null)
+                    {
+                        parent.Children.Remove(piece.GamePieceShape);
+                    }
+
+                    // Add piece to the player's goal zone (StackPanel)
+                    goalZone.Children.Add(piece.GamePieceShape);
+
+                    piece.StepsTaken = 45;
+
+                    return; // Exit the method since the piece is now in the goal zone
+                }
+
+                // Normal movement animation for the piece
                 PlayMoveSound();
                 Position startPosition = path[i];
                 Position endPosition = path[i + 1];
@@ -363,10 +394,12 @@ namespace FiaMedKnuff
                     await Task.Delay((int)stepDuration);
                 }
 
+                // Update the final position in the grid after the animation step is complete
                 Grid.SetRow(piece.GamePieceShape, endPosition.RowIndex);
                 Grid.SetColumn(piece.GamePieceShape, endPosition.ColumnIndex);
             }
         }
+
 
         /// <summary>
         /// Method for smooth piece animation

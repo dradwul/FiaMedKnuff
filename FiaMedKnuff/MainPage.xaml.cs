@@ -63,7 +63,7 @@ namespace FiaMedKnuff
 
             InitializeStartTiles();
             InitializeGame();
-		}
+        }
 
         /// <summary>
         /// Function to initilize the game
@@ -472,9 +472,12 @@ namespace FiaMedKnuff
             {
                 if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
                 {
+                    //string goalZoneName = $"piecesInGoalZonePlayer{currentPlayersTurn-1}";
+                    //StackPanel goalZone = this.FindName(goalZoneName) as StackPanel;
+
                     //Moves the piece and checks if it has reached its goal
-                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1], GameGrid); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
-                    playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
+                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn - 1], GameGrid, goalReachedContainer[currentPlayersTurn - 1]); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
+                    //playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
 
                     //Check if the player has won and enable victory screen
                     if(playerList[currentPlayersTurn - 1].VictoryCheck())
