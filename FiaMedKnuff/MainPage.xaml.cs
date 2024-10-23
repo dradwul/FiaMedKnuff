@@ -485,7 +485,7 @@ namespace FiaMedKnuff
                 if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
                 {
                     //Moves the piece and checks if it has reached its goal
-                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1], GameGrid);
+                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1], GameGrid, diceImage);
                     playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
 
                     //Check if the player has won and enable victory screen
@@ -495,9 +495,8 @@ namespace FiaMedKnuff
                         winnerTextBlock.Text = "Player " + playerList[currentPlayersTurn - 1].PlayerId + " Wins!";
 				    }
 
-				    //Disables the pieces from being clicked and enables the dice
+				    //Disables the pieces from being clicked
 				    playerList[currentPlayersTurn-1].DisableGamePieces();
-                    diceImage.IsTapEnabled = true;
                 }
 			}
             //Checks if player can go again if a 6 was rolled

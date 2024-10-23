@@ -151,7 +151,7 @@ namespace FiaMedKnuff
         /// <param name="id"> ID for specified game piece </param>
         /// <param name="diceRoll"> Dice roll from 1-6 </param>
         /// <param name="position"> Position array of possible "tiles" </param>
-        public async void MoveGamePiece(int id, int diceRoll, Position[] positions, Grid gameGrid)
+        public async void MoveGamePiece(int id, int diceRoll, Position[] positions, Grid gameGrid, Image diceImage)
         {
             foreach (GamePiece piece in pieces)
             {
@@ -162,7 +162,7 @@ namespace FiaMedKnuff
                     // Determine the target position based on dice roll
                     Position targetPosition = positions[piece.StepsTaken + diceRoll - 1];
 
-                    await AnimateGamePiece(piece, diceRoll, positions, piece.StepsTaken);
+                    await AnimateGamePiece(piece, diceRoll, positions, piece.StepsTaken, diceImage);
 
                     // Check if the target position is occupied
                     if (targetPosition.IsOccupied)
@@ -330,7 +330,7 @@ namespace FiaMedKnuff
         /// <param name="path">The current piece's path</param>
         /// <param name="currentStep">Current step in piece/player's path</param>
         /// <returns></returns>
-        public async Task AnimateGamePiece(GamePiece piece, int diceRoll, Position[] path, int currentStep)
+        public async Task AnimateGamePiece(GamePiece piece, int diceRoll, Position[] path, int currentStep, Image diceImage)
         {
             // Use of TranslateTransform for game movement
             TranslateTransform translateTransform = new TranslateTransform();
@@ -374,14 +374,15 @@ namespace FiaMedKnuff
                 Grid.SetRow(piece.GamePieceShape, endPosition.RowIndex);
                 Grid.SetColumn(piece.GamePieceShape, endPosition.ColumnIndex);
             }
-        }
+			diceImage.IsTapEnabled = true;
+		}
 
-        /// <summary>
-        /// Method for smooth piece animation
-        /// </summary>
-        /// <param name="progress"></param>
-        /// <returns></returns>
-        public double EaseInOutQuad(double progress)
+		/// <summary>
+		/// Method for smooth piece animation
+		/// </summary>
+		/// <param name="progress"></param>
+		/// <returns></returns>
+		public double EaseInOutQuad(double progress)
         {
             return progress < 0.5 ? 2 * progress * progress : 1 - Math.Pow(-2 * progress + 2, 2) / 2;
         }
