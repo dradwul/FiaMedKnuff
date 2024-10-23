@@ -167,7 +167,15 @@
             <Ellipse Grid.Row="6" Grid.Column="6" Fill="#F86161" Margin="5"/>
 
             <Ellipse Grid.Row="5" Grid.Column="6" Fill="BurlyWood" Margin="2"/>
-
+            
+            <!-- Button to mute/unmute music -->
+            <Button x:Name="muteMusicButton" Grid.Column="12"
+                    HorizontalAlignment="Right" Margin="10"
+                    Background="Transparent" BorderThickness="0"
+                    Click="MuteMusicClicked"> 
+                <Image x:Name="musicIcon" Width="20" Height="20" Source="Assets/MusicIcon.png"/>
+            </Button>
+            
             <!-- Dice zone -->
             <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Grid.Column="6" Grid.Row="11">
                 <Image x:Name="diceImage" Height="60" Width="60" Tapped="DiceImage_Tapped" Source="ms-appx:///Assets/dice1.png">

@@ -120,6 +120,14 @@ namespace FiaMedKnuff
             knockOffSoundPlayer.Play();
         }
 
+        public void ToggleMoveSound()
+        {
+            if (moveSoundPlayer.Volume == 0)
+                moveSoundPlayer.Volume = 0.04;
+            else
+                moveSoundPlayer.Volume = 0;
+        }
+
         /// <summary>
         /// This function returns the game piece shape that belongs to the specified game piece
         /// It is used for the purpose the initial placing of the game pieces

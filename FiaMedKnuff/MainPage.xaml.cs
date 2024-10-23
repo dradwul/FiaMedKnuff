@@ -485,7 +485,7 @@ namespace FiaMedKnuff
                 if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
                 {
                     //Moves the piece and checks if it has reached its goal
-                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1], GameGrid); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
+                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1], GameGrid);
                     playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
 
                     //Check if the player has won and enable victory screen
@@ -772,6 +772,25 @@ namespace FiaMedKnuff
 			startMenu.Visibility = Visibility.Visible;
             startMenuButtons.Visibility = Visibility.Visible;
             victoryScreen.Visibility = Visibility.Collapsed;
+		}
+
+		private void MuteMusicClicked(object sender, RoutedEventArgs e)
+		{
+            foreach (Player player in playerList) 
+            {
+                player.ToggleMoveSound();
+            }
+
+            if (mediaPlayer.Volume == 0)
+            {
+                mediaPlayer.Volume = 0.2;
+                musicIcon.Opacity = 1;
+            }
+            else 
+            {
+                mediaPlayer.Volume = 0;
+                musicIcon.Opacity = 0.5;
+            }
 		}
 	}
 }
