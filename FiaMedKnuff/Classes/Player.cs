@@ -174,6 +174,7 @@ namespace FiaMedKnuff
                 if(piece.StepsTaken == 45)
                     gamePiecesInSafeZone++;
             }
+
             return gamePiecesInSafeZone == 4;
         }
 
