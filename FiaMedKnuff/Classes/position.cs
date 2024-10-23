@@ -42,12 +42,12 @@ namespace FiaMedKnuff
             {
                 GamePiece knockedPiece = OccupyingPiece;
 
-                // Flytta pjäsen med animation till dess nest-position
+                // Move piece with animation to it's nest position
                 Position nestPosition = knockedPiece.StartPosition;
 
                 await AnimateStraightLine(knockedPiece, nestPosition, gameGrid);
 
-                // Efter animationen, uppdatera dess logiska position
+                // Update position after animation
                 knockedPiece.Position = nestPosition;
                 knockedPiece.StepsTaken = 0;
 
