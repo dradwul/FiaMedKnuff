@@ -11,11 +11,16 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 
 namespace FiaMedKnuff
 {
     public class Player
     {
+        //MediaPlayer instances
+        private MediaPlayer moveSoundPlayer;
+        private MediaPlayer knockOffSoundPlayer;
         /// <summary>
         /// Gets or sets the player ID which must be a number between 1 and 4
         /// </summary>
@@ -74,16 +79,55 @@ namespace FiaMedKnuff
                 //Adds the event to the game piece shape (ellipse)
 				pieces[i].GamePieceShape.Tapped += gamePieceClicked;
 			}
+            //Initialize sound effects
+            InitializeSounds();
+            
         }
 
-		/// <summary>
-		/// This function returns the game piece shape that belongs to the specified game piece
-		/// It is used for the purpose the initial placing of the game pieces
-		/// </summary>
-		/// <param name="id"> The ID determines which game piece is being referred to (1-4) </param>
-		/// <returns> Returns the specified game piece shape (Ellipse) </returns>
-		/// <exception cref="ArgumentException"> Throws an exepction if no game piece has the specified ID </exception>
-		public Ellipse ReturnGamePieceShape(int id)
+        // Method to initialize the sound effects
+        private void InitializeSounds()
+        {
+            moveSoundPlayer = new MediaPlayer();
+            moveSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Move.mp3"));
+            moveSoundPlayer.Volume = 0.04; //Volume
+
+            knockOffSoundPlayer = new MediaPlayer();
+            knockOffSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Knock.mp3"));
+            knockOffSoundPlayer.Volume = 0.04; //Volume
+        }
+
+        // Method to play the move sound effect
+        private void PlayMoveSound()
+        {
+            if (moveSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
+            {
+                moveSoundPlayer.Pause(); // Stop the move sound if it's already playing
+                moveSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
+            }
+
+            moveSoundPlayer.Play();
+        }
+
+        // Method to play the knock-off sound effect
+        private void PlayKnockOffSound()
+        {
+            if (knockOffSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
+            {
+                knockOffSoundPlayer.Pause(); // Stop the knock-off sound if it's already playing
+                knockOffSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
+            }
+
+            knockOffSoundPlayer.Play();
+        }
+
+        /// <summary>
+        /// This function returns the game piece shape that belongs to the specified game piece
+        /// It is used for the purpose the initial placing of the game pieces
+        /// </summary>
+        /// <param name="id"> The ID determines which game piece is being referred to (1-4) </param>
+        /// <returns> Returns the specified game piece shape (Ellipse) </returns>
+        /// <exception cref="ArgumentException"> Throws an exepction if no game piece has the specified ID </exception>
+        public Ellipse ReturnGamePieceShape(int id)
         {
             foreach (GamePiece piece in pieces)
             {
@@ -106,6 +150,7 @@ namespace FiaMedKnuff
                 // Find the correct game piece and check that it does not move more than 45 steps
                 if (piece.Id == id && piece.StepsTaken + diceRoll <= 45)
                 {
+                   
                     // Determine the target position based on dice roll
                     Position targetPosition = positions[piece.StepsTaken + diceRoll - 1];
 
@@ -114,6 +159,7 @@ namespace FiaMedKnuff
                     // Check if the target position is occupied
                     if (targetPosition.IsOccupied)
                     {
+                        PlayKnockOffSound();
                         // Knock off the occupying piece
                         await targetPosition.KnockOffPiece(gameGrid);
                     }
@@ -289,6 +335,7 @@ namespace FiaMedKnuff
             // Looping through the positions in the path
             for (int i = currentStep; i < currentStep + diceRoll; i++)
             {
+                PlayMoveSound();
                 Position startPosition = path[i];
                 Position endPosition = path[i + 1];
 
