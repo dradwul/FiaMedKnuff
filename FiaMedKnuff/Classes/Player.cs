@@ -51,7 +51,7 @@ namespace FiaMedKnuff
             PlayerId = playerId;
             Windows.UI.Color pieceColor = GeneratePieceColor(color);
 
-            if (startingPositions.Length != 4)
+			if (startingPositions.Length != 4)
                 throw new ArgumentException("A player needs 4 starting positions for his game pieces");
 
             for (int i = 0; i < startingPositions.Length; i++)
@@ -59,10 +59,9 @@ namespace FiaMedKnuff
                 //This determines the shape of the game pieces
                 Ellipse placeholderPiece01 = new Ellipse
                 {
-                    //Fill = color,
                     Fill = new SolidColorBrush(pieceColor),
                     Stroke = new SolidColorBrush(Windows.UI.Colors.Black),
-                    StrokeThickness = 3,
+                    StrokeThickness = 2,
                     Width = 40,
                     Height = 40,
                     IsTapEnabled = false
@@ -190,13 +189,13 @@ namespace FiaMedKnuff
                 if ((diceRoll == 1 || diceRoll == 6) && piece.StepsTaken == 0)
                 {
                     piece.GamePieceShape.IsTapEnabled = true;
-                    piece.GamePieceShape.Stroke = new SolidColorBrush(Windows.UI.Colors.Lime);
+                    piece.GamePieceShape.StrokeThickness = 4;
 				}
                 //Enable piece if it has a legal move
                 else if(piece.StepsTaken + diceRoll <= 45 && piece.StepsTaken != 0 && piece.StepsTaken != 45)
                 {
                     piece.GamePieceShape.IsTapEnabled = true;
-					piece.GamePieceShape.Stroke = new SolidColorBrush(Windows.UI.Colors.Lime);
+					piece.GamePieceShape.StrokeThickness = 4;
 				}
 			}
         }
@@ -209,8 +208,7 @@ namespace FiaMedKnuff
 			foreach (GamePiece piece in pieces)
 			{
 				piece.GamePieceShape.IsTapEnabled = false;
-                piece.GamePieceShape.Stroke = new SolidColorBrush(Windows.UI.Colors.Black);
-
+				piece.GamePieceShape.StrokeThickness = 2;
 			}
 		}
 
@@ -249,16 +247,16 @@ namespace FiaMedKnuff
 			switch (color.ToLower())
 			{
 				case "red":
-					pieceColor = Windows.UI.Colors.Red;
+                    pieceColor = Windows.UI.ColorHelper.FromArgb(255, 248, 97, 97);
 					break;
 				case "blue":
-					pieceColor = Windows.UI.Colors.Blue;
+                    pieceColor = Windows.UI.ColorHelper.FromArgb(255, 79, 171, 238);
 					break;
 				case "green":
-					pieceColor = Windows.UI.Colors.Green;
+					pieceColor = Windows.UI.ColorHelper.FromArgb(255, 114, 228, 126);
 					break;
 				case "yellow":
-					pieceColor = Windows.UI.Colors.Yellow;
+					pieceColor = Windows.UI.ColorHelper.FromArgb(255, 230, 234, 47);
 					break;
 				default:
 					pieceColor = Windows.UI.Colors.Black;
