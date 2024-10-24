@@ -491,7 +491,7 @@ namespace FiaMedKnuff
                 if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
                 {
                     //Moves the piece and checks if it has reached its goal
-                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1], GameGrid); // TODO: Check if the piece is allowed to move so the player doesn't waste a turn by clicking a piece that can't move
+                    playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn-1], GameGrid, diceImage);
                     playerList[currentPlayersTurn - 1].CheckGoalReached(i, goalReachedContainer[currentPlayersTurn-1], GameGrid);
 
                     //Check if the player has won and enable victory screen
@@ -501,9 +501,8 @@ namespace FiaMedKnuff
                         winnerTextBlock.Text = "Player " + playerList[currentPlayersTurn - 1].PlayerId + " Wins!";
 				    }
 
-				    //Disables the pieces from being clicked and enables the dice
+				    //Disables the pieces from being clicked
 				    playerList[currentPlayersTurn-1].DisableGamePieces();
-                    diceImage.IsTapEnabled = true;
                 }
 			}
             //Checks if player can go again if a 6 was rolled
@@ -782,6 +781,26 @@ namespace FiaMedKnuff
             victoryScreen.Visibility = Visibility.Collapsed;
 		}
 
+		/// <summary>
+        /// Toggles the game sound. This includes music and sound when the game pieces move
+        /// </summary>
+        private void ToggleSoundClicked(object sender, RoutedEventArgs e)
+		{
+            foreach (Player player in playerList) 
+            {
+                player.ToggleMoveSound();
+            }
 
-    }
+            if (mediaPlayer.Volume == 0)
+            {
+                mediaPlayer.Volume = 0.2;
+                musicIcon.Opacity = 1;
+            }
+            else 
+            {
+                mediaPlayer.Volume = 0;
+                musicIcon.Opacity = 0.5;
+            }
+		}
+	}
 }
