@@ -199,31 +199,6 @@ namespace FiaMedKnuff
             }
         }
 
-
-        /// <summary>
-        /// Used after moving a piece to check if it has reached its goal so that it can be moved to the goal zone
-        /// </summary>
-        /// <param name="id"> ID for the specified game piece</param>
-        /// <param name="goalZone"> The zone to move the game piece from </param>
-        /// <param name="gameGrid"> Current location of the game piece </param>
-        /*public void CheckGoalReached(int id, StackPanel goalZone, Grid gameGrid)
-        {
-            foreach (GamePiece piece in pieces)
-            {
-                //Find the correct game piece and make sure it is not in the goal zone already
-                if (piece.Id == id && piece.StepsTaken == 45 && !goalZone.Children.Contains(piece.GamePieceShape))
-                {
-                    //Remove piece from gameGrid and add to goalZone
-                    gameGrid.Children.Remove(piece.GamePieceShape);
-                    goalZone.Children.Add(piece.GamePieceShape);
-
-                    piece.GamePieceShape.Width = 30;
-                    piece.GamePieceShape.Height = 30;
-                    piece.GamePieceShape.Margin = new Thickness(5);
-                }
-            }
-        }*/
-
         /// <summary>
         /// Checks if the player has achieved victory
         /// </summary>
