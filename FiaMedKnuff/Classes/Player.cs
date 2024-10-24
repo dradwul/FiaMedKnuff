@@ -149,7 +149,7 @@ namespace FiaMedKnuff
 		/// <param name="position"> Position array of possible "tiles" </param>
 		/// <param name="gameGrid"> Used for animations and knocking a piece off </param>
 		/// <param name="diceImage"> This is the clickable part of the dice. Gets sent to AnimateGamePiece </param>
-		public async void MoveGamePiece(int id, int diceRoll, Position[] positions, Grid gameGrid, Image diceImage)
+		public async void MoveGamePiece(int id, int diceRoll, Position[] positions, Grid gameGrid, StackPanel goalZone, Image diceImage)
         {
             foreach (GamePiece piece in pieces)
             {
@@ -368,6 +368,8 @@ namespace FiaMedKnuff
                     goalZone.Children.Add(piece.GamePieceShape);
 
                     piece.StepsTaken = 45;
+
+                    diceImage.IsTapEnabled = true;
 
                     return; // Exit the method since the piece is now in the goal zone
                 }
