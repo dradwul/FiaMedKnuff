@@ -76,8 +76,8 @@ namespace FiaMedKnuff
 			//Initilizes the zone for each player where the pieces go when they reach the goal
 			goalReachedContainer[0] = piecesInGoalZonePlayer1;
 			goalReachedContainer[1] = piecesInGoalZonePlayer2;
-			goalReachedContainer[2] = piecesInGoalZonePlayer4;
-			goalReachedContainer[3] = piecesInGoalZonePlayer3;
+			goalReachedContainer[2] = piecesInGoalZonePlayer3;
+			goalReachedContainer[3] = piecesInGoalZonePlayer4;
 
 			//Temporary colors
 			playerColors[0] = "blue";

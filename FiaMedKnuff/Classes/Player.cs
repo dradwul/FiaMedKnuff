@@ -155,12 +155,6 @@ namespace FiaMedKnuff
             {
                 int targetSteps = piece.StepsTaken + diceRoll;
 
-                // Cap the steps to 45 if the dice roll overshoots the goal
-                if (targetSteps > 45)
-                {
-                    targetSteps = 45;
-                }
-
                 // Find the correct game piece and check that it does not move more than 45 steps
                 if (piece.Id == id && targetSteps <= 45)
                 {
