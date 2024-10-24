@@ -404,7 +404,6 @@ namespace FiaMedKnuff
             AdjustGridSize();
         }
 
-
         /// <summary>
         /// This method changes grid sizes when the window size is being adjusted
         /// </summary>
@@ -523,7 +522,9 @@ namespace FiaMedKnuff
 
                     //Check if the player has won and enable victory screen
                     if(playerList[currentPlayersTurn - 1].VictoryCheck())
-					{ 
+					{
+                        mediaPlayer.Pause(); // Stop any current music
+                        PlayWinMusic(); // Play the win music
                         victoryScreen.Visibility = Visibility.Visible;
                         winnerTextBlock.Text = "Player " + playerList[currentPlayersTurn - 1].PlayerId + " Wins!";
 				    }

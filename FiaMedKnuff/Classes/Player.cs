@@ -82,11 +82,11 @@ namespace FiaMedKnuff
         {
             moveSoundPlayer = new MediaPlayer();
             moveSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Move.mp3"));
-            moveSoundPlayer.Volume = 0.04; //Volume
+            moveSoundPlayer.Volume = 0.07; //Volume
 
             knockOffSoundPlayer = new MediaPlayer();
             knockOffSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Knock.mp3"));
-            knockOffSoundPlayer.Volume = 0.04; //Volume
+            knockOffSoundPlayer.Volume = 0.07; //Volume
         }
 
         // Method to play the move sound effect
@@ -119,7 +119,7 @@ namespace FiaMedKnuff
         public void ToggleMoveSound()
         {
             if (moveSoundPlayer.Volume == 0)
-                moveSoundPlayer.Volume = 0.04;
+                moveSoundPlayer.Volume = 0.07;
             else
                 moveSoundPlayer.Volume = 0;
         }
