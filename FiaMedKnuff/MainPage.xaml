@@ -167,15 +167,25 @@
             <Ellipse Grid.Row="6" Grid.Column="6" Fill="#F86161" Margin="5"/>
 
             <Ellipse Grid.Row="5" Grid.Column="6" Fill="BurlyWood" Margin="2"/>
-            
-            <!-- Button to mute/unmute music -->
-            <Button x:Name="muteMusicButton" Grid.Column="12"
-                    HorizontalAlignment="Right" Margin="10"
-                    Background="Transparent" BorderThickness="0"
-                    Click="ToggleSoundClicked"> 
-                <Image x:Name="musicIcon" Width="20" Height="20" Source="Assets/MusicIcon.png"/>
-            </Button>
-            
+
+
+            <StackPanel Grid.Row="0" Grid.Column="11" Grid.RowSpan="2" Grid.ColumnSpan="2" Orientation="Vertical" Margin="10" HorizontalAlignment="Right">
+                <!-- Menu View and Menu button -->
+                <Grid x:Name="MenuButtonControl" Visibility="Visible">
+                    <Button x:Name="menuButton" Height="26" Width="52" CornerRadius="5" HorizontalAlignment="Right"
+                            FontSize="11" FontWeight="SemiBold" Background="#D9D9D9" Foreground="#264653" Click="MenuButton_Click">Menu</Button>
+                </Grid>
+
+                <!-- Button to mute/unmute music -->
+                <Button x:Name="muteMusicButton"
+                        HorizontalAlignment="Right" Margin="10"
+                        Background="Transparent" BorderThickness="0"
+                        Click="ToggleSoundClicked">
+                    <Image x:Name="musicIcon" Width="20" Height="20" Source="Assets/MusicIcon.png"/>
+                </Button>
+            </StackPanel>
+
+
             <!-- Dice zone -->
             <StackPanel x:Name="diceController" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Grid.Column="6" Grid.Row="11">
                 <Image x:Name="diceImage" Height="60" Width="60" Tapped="DiceImage_Tapped" Source="ms-appx:///Assets/dice1.png">
@@ -184,11 +194,6 @@
                     </Image.RenderTransform>
                 </Image>
             </StackPanel>
-        </Grid>
-        <!-- Menu View and Menu button -->
-        <Grid x:Name="MenuButtonControl" Visibility="Visible">
-            <Button x:Name="menuButton" Height="26" Width="52" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,140,0" CornerRadius="5"
-             FontSize="11" FontWeight="SemiBold" Background="#D9D9D9" Foreground="#264653" Click="MenuButton_Click">Menu</Button>
         </Grid>
 
         <!-- Decide who will start view -->
@@ -252,7 +257,7 @@
 
                 <Button x:Name="resumeButton" Style="{StaticResource CustomButtonStyle}" Margin="0,30,0,10" Background="#506B76"  Click="ResumeButton_Click">Resume Game</Button>
                 <Button x:Name="inGameRulesButton" Style="{StaticResource CustomButtonStyle}" Margin="0,0,0,0" Background="#506B76" Click="InGameRulesButton_Click">Rules</Button>
-                <Button x:Name="abortButton" Style="{StaticResource CustomButtonStyle}" Margin="0,50,0,0" Background="#F86161" Click="AbortButton_Click">Abort Game</Button>
+                <Button x:Name="abortButton" Style="{StaticResource CustomButtonStyle}" Margin="0,50,0,0" Background="#F86161" Click="ReturnToMenu">Abort Game</Button>
             </StackPanel>
         </Grid>
 

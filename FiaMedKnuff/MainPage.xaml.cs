@@ -795,6 +795,10 @@ namespace FiaMedKnuff
 		{
             ClearGame();
             InitializeGame();
+
+            PauseMenu.Visibility = Visibility.Collapsed;
+            pauseMenuButtons.Visibility = Visibility.Collapsed;
+
 			startMenu.Visibility = Visibility.Visible;
             startMenuButtons.Visibility = Visibility.Visible;
             victoryScreen.Visibility = Visibility.Collapsed;
