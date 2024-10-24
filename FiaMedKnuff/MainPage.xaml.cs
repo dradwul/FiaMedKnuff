@@ -45,27 +45,31 @@ namespace FiaMedKnuff
         private MediaPlayer mediaPlayer;
         private MediaPlayer diceSoundPlayer;
 
+        //State of sound
+        private bool soundMuted = false;
+
         public MainPage()
         {
             InitializeComponent();
             InitializeGame();
-        }
+
+			//Initialize MediaPlayer
+			mediaPlayer = new MediaPlayer();
+			mediaPlayer.Volume = 0.2; // Set volume
+			mediaPlayer.AudioCategory = MediaPlayerAudioCategory.Media; // Ensure it's treated as game media
+			PlayMenuMusic();
+
+			// Initialize Dice Sound Player
+			diceSoundPlayer = new MediaPlayer();
+			diceSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Dice.mp3"));
+			diceSoundPlayer.Volume = 0.04; // Adjust volume as needed
+		}
 
         /// <summary>
         /// Function to initilize the game with music, elements, routes, players and colors
         /// </summary>
         private void InitializeGame()
         {
-            //Initialize MediaPlayer
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.Volume = 0.2; // Set volume
-            mediaPlayer.AudioCategory = MediaPlayerAudioCategory.Media; // Ensure it's treated as game media
-            PlayMenuMusic();
-
-            // Initialize Dice Sound Player
-            diceSoundPlayer = new MediaPlayer();
-            diceSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Dice.mp3"));
-            diceSoundPlayer.Volume = 0.5; // Adjust volume as needed
 
             //Creates the routes for all players
             playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
@@ -135,7 +139,6 @@ namespace FiaMedKnuff
                 diceSoundPlayer.Pause(); // Stop any ongoing dice sound playback
                 diceSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
             }
-            diceSoundPlayer.Volume = 0.04; // Set volume
             diceSoundPlayer.Play(); // Play the dice sound
         }
 
@@ -521,8 +524,8 @@ namespace FiaMedKnuff
                     //Moves the piece and checks if it has reached its goal
                     playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn - 1], GameGrid, goalReachedContainer[currentPlayersTurn - 1], diceImage);
 
-                    //Check if the player has won and enable victory screen
-                    if(playerList[currentPlayersTurn - 1].VictoryCheck())
+					//Check if the player has won and enable victory screen
+					if (playerList[currentPlayersTurn - 1].VictoryCheck())
 					{ 
                         victoryScreen.Visibility = Visibility.Visible;
                         winnerTextBlock.Text = "Player " + playerList[currentPlayersTurn - 1].PlayerId + " Wins!";
@@ -565,6 +568,13 @@ namespace FiaMedKnuff
 					GameGrid.Children.Add(player.ReturnGamePieceShape(i));
 				}
 			}
+
+            //Sets game piece sound to on/off depending on sound state
+            if(soundMuted)
+            {
+                foreach(Player player in playerList)
+                    player.ToggleMoveSound();
+            }
 
             playerSelectView.Visibility = Visibility.Collapsed;
             GameGrid.Visibility = Visibility.Visible;
@@ -799,12 +809,16 @@ namespace FiaMedKnuff
 
             if (mediaPlayer.Volume == 0)
             {
+                soundMuted = false;
                 mediaPlayer.Volume = 0.2;
+                diceSoundPlayer.Volume = 0.04;
                 musicIcon.Opacity = 1;
             }
             else 
             {
+                soundMuted = true;
                 mediaPlayer.Volume = 0;
+                diceSoundPlayer.Volume = 0;
                 musicIcon.Opacity = 0.5;
             }
 		}

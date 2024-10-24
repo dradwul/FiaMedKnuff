@@ -49,7 +49,7 @@ namespace FiaMedKnuff
             PlayerId = playerId;
             Windows.UI.Color pieceColor = GeneratePieceColor(color);
 
-			if (startingPositions.Length != 4)
+            if (startingPositions.Length != 4)
                 throw new ArgumentException("A player needs 4 starting positions for his game pieces");
 
             for (int i = 0; i < startingPositions.Length; i++)
@@ -66,15 +66,15 @@ namespace FiaMedKnuff
                 };
 
                 pieces[i] = new GamePiece(i + 1, placeholderPiece01, startingPositions[i]);
-				Grid.SetRow(pieces[i].GamePieceShape, pieces[i].Position.RowIndex);
+                Grid.SetRow(pieces[i].GamePieceShape, pieces[i].Position.RowIndex);
                 Grid.SetColumn(pieces[i].GamePieceShape, pieces[i].Position.ColumnIndex);
 
                 //Adds the event to the game piece shape (ellipse)
-				pieces[i].GamePieceShape.Tapped += gamePieceClicked;
-			}
+                pieces[i].GamePieceShape.Tapped += gamePieceClicked;
+            }
             //Initialize sound effects
             InitializeSounds();
-            
+
         }
 
         // Method to initialize the sound effects
@@ -119,9 +119,15 @@ namespace FiaMedKnuff
         public void ToggleMoveSound()
         {
             if (moveSoundPlayer.Volume == 0)
+            {
                 moveSoundPlayer.Volume = 0.04;
+                knockOffSoundPlayer.Volume = 0.04;
+            }
             else
+            { 
                 moveSoundPlayer.Volume = 0;
+                knockOffSoundPlayer.Volume = 0;
+            } 
         }
 
         /// <summary>
