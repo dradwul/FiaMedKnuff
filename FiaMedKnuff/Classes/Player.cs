@@ -2,9 +2,11 @@
 using System.Threading.Tasks;
 using Windows.Media.Core;
 using Windows.Media.Playback;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
 
 namespace FiaMedKnuff
@@ -14,28 +16,13 @@ namespace FiaMedKnuff
         //MediaPlayer instances
         private MediaPlayer moveSoundPlayer;
         private MediaPlayer knockOffSoundPlayer;
-        /// <summary>
-        /// Gets or sets the player ID which must be a number between 1 and 4
-        /// </summary>
-        private int playerId;
-        // PlayerId changed to public instead of private to get access in startingPlayer method
-        public int PlayerId
-        {
-            get { return playerId; }
-            set
-            {
-                if (1 <= value && value <= 4)
-                    playerId = value;
-                else
-                    throw new ArgumentOutOfRangeException("Player ID can only be a number between 1 and 4");
-            }
-        }
+
+        public int PlayerId { get; set; }
 
         /// <summary>
         /// Array for the player pieces, this is created when the constructor is used
         /// </summary>
         public readonly GamePiece[] pieces = new GamePiece[4];
-
 
         /// <summary>
         /// Constructor for player with 3 parameters
@@ -54,18 +41,11 @@ namespace FiaMedKnuff
 
             for (int i = 0; i < startingPositions.Length; i++)
             {
-                //This determines the shape of the game pieces
-                Ellipse placeholderPiece01 = new Ellipse
-                {
-                    Fill = new SolidColorBrush(pieceColor),
-                    Stroke = new SolidColorBrush(Windows.UI.Colors.Black),
-                    StrokeThickness = 2,
-                    Width = 40,
-                    Height = 40,
-                    IsTapEnabled = false
-                };
+                GamePiece pieceInstance = new GamePiece();
+                var newPieceShape = pieceInstance.CreateNew(pieceColor);
+                GamePiece newPiece = new GamePiece(i + 1, newPieceShape, startingPositions[i]);
 
-                pieces[i] = new GamePiece(i + 1, placeholderPiece01, startingPositions[i]);
+                pieces[i] = newPiece;
                 Grid.SetRow(pieces[i].GamePieceShape, pieces[i].Position.RowIndex);
                 Grid.SetColumn(pieces[i].GamePieceShape, pieces[i].Position.ColumnIndex);
 
@@ -74,7 +54,6 @@ namespace FiaMedKnuff
             }
             //Initialize sound effects
             InitializeSounds();
-
         }
 
         // Method to initialize the sound effects

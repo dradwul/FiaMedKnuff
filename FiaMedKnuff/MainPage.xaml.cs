@@ -1,7 +1,9 @@
-﻿using System;
+﻿using FiaMedKnuff.Classes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Media.Core;
@@ -18,6 +20,12 @@ namespace FiaMedKnuff
 {
     public sealed partial class MainPage : Page
     {
+        private readonly Dice dice = new Dice();
+        private readonly Sound sound = new Sound();
+
+        //State of sound
+        private bool soundMuted = false;
+
         //List of players in current game
         public List<Player> playerList = new List<Player>();
         private Player startingPlayer;
@@ -40,36 +48,20 @@ namespace FiaMedKnuff
 
         //This is where the pieces move when they reach their goal
         private StackPanel[] goalReachedContainer = new StackPanel[4];
-
-        //MediaPlayer instance for background music and dice
-        private MediaPlayer mediaPlayer;
-        private MediaPlayer diceSoundPlayer;
-
-        //State of sound
-        private bool soundMuted = false;
+        
 
         public MainPage()
         {
             InitializeComponent();
             InitializeGame();
-
-			//Initialize MediaPlayer
-			mediaPlayer = new MediaPlayer();
-			mediaPlayer.Volume = 0.2; // Set volume
-			mediaPlayer.AudioCategory = MediaPlayerAudioCategory.Media; // Ensure it's treated as game media
-			PlayMenuMusic();
-
-			// Initialize Dice Sound Player
-			diceSoundPlayer = new MediaPlayer();
-			diceSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Dice.mp3"));
-			diceSoundPlayer.Volume = 0.04; // Adjust volume as needed
 		}
 
         /// <summary>
         /// Function to initilize the game with music, elements, routes, players and colors
         /// </summary>
-        private void InitializeGame()
+        private async void InitializeGame()
         {
+            await sound.InitializeSound();
 
             //Creates the routes for all players
             playerRoutes[0] = allOuterPositions.Concat(endPositions[0]).ToArray();
@@ -90,63 +82,7 @@ namespace FiaMedKnuff
 			playerColors[3] = "red";
         }
 
-        /// <summary>
-        /// Method for settings for the menu music
-        /// </summary>
-        private async void PlayMenuMusic()
-        {
-            mediaPlayer.IsLoopingEnabled = true;
-            mediaPlayer.Pause(); // Stop current playback
-            mediaPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset playback position
-            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Menu.mp3"));
-            await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
-            mediaPlayer.Play();
-        }
-
-        /// <summary>
-        /// Method for settings for the music during gameplay
-        /// </summary>
-        private async void PlayGameplayMusic()
-        {
-            mediaPlayer.IsLoopingEnabled= true;
-            mediaPlayer.Pause(); // Stop current playback
-            mediaPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset playback position
-            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Play.mp3"));
-            await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
-            mediaPlayer.Play();
-        }
-
-        /// <summary>
-        /// Method for settings for the music when player has won
-        /// </summary>
-        private async void PlayWinMusic()
-        {
-            mediaPlayer.Pause(); // Stop current playback
-            mediaPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset playback position
-            mediaPlayer.IsLoopingEnabled = false; // Disable looping for win music
-            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Win.mp3"));
-            await Task.Delay(100); // Short delay to ensure MediaPlayer has time to load the new source
-            mediaPlayer.Play();
-        }
-
-        /// <summary>
-        /// Method for playing the die sound
-        /// </summary>
-        private void PlayDiceSound()
-        {
-            if (diceSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
-            {
-                diceSoundPlayer.Pause(); // Stop any ongoing dice sound playback
-                diceSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
-            }
-            diceSoundPlayer.Play(); // Play the dice sound
-        }
-
-        /// <summary>
-        /// Button for starting a new game
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        // Button for starting a new game
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             // Hide start menu and show player select
@@ -154,11 +90,16 @@ namespace FiaMedKnuff
             playerSelectButtons.Visibility = Visibility.Visible;
         }
 
-        /// <summary>
-        /// Method to generate players based on number of players chosen
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        // Method for playing music when a player has won
+        private async Task OnPlayerWin()
+        {
+            // Stop gameplay music and play win music
+            await sound.PlayWinMusic();
+            // Additional win logic goes here
+        }
+
+
+        // Method to generate players based on number of players chosen
         private void PlayersSelected(object sender, RoutedEventArgs e)
         {
             Button clickedButton = sender as Button;
@@ -170,26 +111,13 @@ namespace FiaMedKnuff
             playerSelectButtons.Visibility = Visibility.Collapsed;
 
             // Start gameplay music after player selection is done and gameboard is visible
-            PlayGameplayMusic();
+            sound.PlayGameplayMusic();
         }
 
-        /// <summary>
-        /// Method for playing music when a player has won
-        /// </summary>
-        private void OnPlayerWin()
-        {
-            // Stop gameplay music and play win music
-            PlayWinMusic();
-            // Additional win logic goes here
-        }
-
-
-        /// <summary>
-        /// Function to clear the game to be able to restart
-        /// </summary>
+        // Function to clear the game to be able to restart
         private void ClearGame()
         {
-            mediaPlayer.Pause();
+            sound.Pause();
 
 			foreach (Player player in playerList)
 			{
@@ -241,7 +169,7 @@ namespace FiaMedKnuff
         /// </summary>
         private void AbortButton_Click(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Pause();
+            sound.Pause();
             Frame.Navigate(typeof(MainPage));
         }
 
@@ -268,11 +196,7 @@ namespace FiaMedKnuff
             new SolidColorBrush(Windows.UI.ColorHelper.FromArgb(255, 248, 97, 97))
         };
 
-        /// <summary>
-        /// Creates a random number generator.
-        /// Creates an array of dice images.
-        /// </summary>
-        private static readonly Random Random = new Random();
+        // Creates an array of dice images.
         private static readonly string[] diceImages =
         {
             "ms-appx:///Assets/dice1.png",
@@ -430,9 +354,9 @@ namespace FiaMedKnuff
         private void DiceImage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             // Play dice sound
-            PlayDiceSound();
-            
-            int diceValue = Random.Next(1, 7);
+            sound.PlayDiceSound();
+
+            int diceValue = dice.ThrowDie(6);
             string diceImager = diceImages[diceValue - 1];
 
             // Create a random movement animation for X-axis and Y-axis.
@@ -447,10 +371,11 @@ namespace FiaMedKnuff
             };
 
             // Define random movements with X and Y axis.
+            Random random = new Random();
             for (int i = 0; i <= 10; i++)
             {
-                double x = Random.Next(-20, 20); // Random X movement, change value to get bigger movements
-                double y = Random.Next(-20, 10); // Random Y movement, change value to get bigger movements
+                double x = random.Next(-20, 20); // Random X movement, change value to get bigger movements
+                double y = random.Next(-20, 10); // Random Y movement, change value to get bigger movements
                 TimeSpan keyTime = TimeSpan.FromMilliseconds(i * 40); //Increase value to get slower movement
 
                 translateXAnimation.KeyFrames.Add(new EasingDoubleKeyFrame
@@ -519,17 +444,14 @@ namespace FiaMedKnuff
             {
                 if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
                 {
-                    //string goalZoneName = $"piecesInGoalZonePlayer{currentPlayersTurn-1}";
-                    //StackPanel goalZone = this.FindName(goalZoneName) as StackPanel;
-
                     //Moves the piece and checks if it has reached its goal
                     playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn - 1], GameGrid, goalReachedContainer[currentPlayersTurn - 1], diceImage);
 
                     //Check if the player has won and enable victory screen
                     if(playerList[currentPlayersTurn - 1].VictoryCheck())
 					{
-                        mediaPlayer.Pause(); // Stop any current music
-                        PlayWinMusic(); // Play the win music
+                        sound.Pause(); // Stop any current music
+                        sound.PlayWinMusic(); // Play the win music
                         victoryScreen.Visibility = Visibility.Visible;
                         winnerTextBlock.Text = "Player " + playerList[currentPlayersTurn - 1].PlayerId + " Wins!";
 				    }
@@ -619,7 +541,7 @@ namespace FiaMedKnuff
             {
                 foreach (var player in playerList)
                 {
-                    int roll = Random.Next(1, 7);
+                    int roll = dice.ThrowDie(6);
                     playersAndRolls[player] = roll;
 
                     // Gets element name for every player's roll area
@@ -640,7 +562,7 @@ namespace FiaMedKnuff
                 playersAndRolls.Clear();
                 foreach(var player in playersWithHighestRolls)
                 {
-                    int roll = Random.Next(1, 7);
+                    int roll = dice.ThrowDie(6);
                     playersAndRolls[player.Key] = roll;
 
                     string playerRollTextName = $"sPanelP{player.Key.PlayerId}Roll";
@@ -814,18 +736,14 @@ namespace FiaMedKnuff
                 player.ToggleMoveSound();
             }
 
-            if (mediaPlayer.Volume == 0)
+            if (!sound.ToggleSoundClicked())
             {
                 soundMuted = false;
-                mediaPlayer.Volume = 0.2;
-                diceSoundPlayer.Volume = 0.04;
                 musicIcon.Opacity = 1;
             }
             else 
             {
                 soundMuted = true;
-                mediaPlayer.Volume = 0;
-                diceSoundPlayer.Volume = 0;
                 musicIcon.Opacity = 0.5;
             }
 		}

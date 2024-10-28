@@ -10,9 +10,6 @@ namespace FiaMedKnuff
         public int RowIndex { get; set; }
         public int ColumnIndex { get; set; }
         public bool IsOccupied { get; set; }
-        /// <summary>
-        /// New property to store piece in occupying position
-        /// </summary>
         public GamePiece OccupyingPiece { get; set; }
     
 
