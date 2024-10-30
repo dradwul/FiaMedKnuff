@@ -25,7 +25,6 @@ namespace FiaMedKnuff
         private readonly GamePiece gamePiece = new GamePiece();
         private readonly GameLogic gameLogic = new GameLogic();
         private readonly ClickEvents clickEvents = new ClickEvents();
-        private readonly UserInterface userInterface = new UserInterface();
 
         //State of sound
         private bool soundMuted = false;
@@ -211,54 +210,7 @@ namespace FiaMedKnuff
             "ms-appx:///Assets/dice6.png"
         };
 
-        /// <summary>
-        /// All outer positions that are neutral and open for every player. 
-        /// Got the property IsOccupied to mark it as taken by a game piece. 
-        /// The first element in the array is the same as Player1 starting zone. Then it follow 2,3,4,5... clockwise.
-        /// </summary>
-        public Position[] allOuterPositions = new Position[]
-        {
-            new Position(4,1),
-            new Position(4,2),
-            new Position(4,3),
-            new Position(4,4),
-            new Position(4,5),
-            new Position(3,5),
-            new Position(2,5),
-            new Position(1,5),
-            new Position(0,5),
-            new Position(0,6),
-            new Position(0,7),
-            new Position(1,7),
-            new Position(2,7),
-            new Position(3,7),
-            new Position(4,7),
-            new Position(4,8),
-            new Position(4,9),
-            new Position(4,10),
-            new Position(4,11),
-            new Position(5,11),
-            new Position(6,11),
-            new Position(6,10),
-            new Position(6,9),
-            new Position(6,8),
-            new Position(6,7),
-            new Position(7,7),
-            new Position(8,7),
-            new Position(9,7),
-            new Position(10,7),
-            new Position(10,6),
-            new Position(10,5),
-            new Position(9,5),
-            new Position(8,5),
-            new Position(7,5),
-            new Position(6,5),
-            new Position(6,4),
-            new Position(6,3),
-            new Position(6,2),
-            new Position(6,1),
-            new Position(5,1)
-        };
+        private Position[] allOuterPositions = Position.GetAllOuterPositions();
 
         /// <summary>
         /// Array with 4 arrays with the 4 nest squares for each color

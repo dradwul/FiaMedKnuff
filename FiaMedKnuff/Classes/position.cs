@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -11,19 +12,69 @@ namespace FiaMedKnuff
         public int ColumnIndex { get; set; }
         public bool IsOccupied { get; set; }
         public GamePiece OccupyingPiece { get; set; }
-    
 
-        /// <summary>
-        /// Constructor for Position with 3 parameters to set the row index, column index and if the position is occupied
-        /// </summary>
-        /// <param name="rowIndex"></param>
-        /// <param name="columnIndex"></param>
         public Position(int rowIndex, int columnIndex)
         {
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
             IsOccupied = false;
             OccupyingPiece = null;
+        }
+
+        public Position() { }
+
+        /// <summary>
+        /// All outer positions that are neutral and open for every player. 
+        /// Got the property IsOccupied to mark it as taken by a game piece. 
+        /// The first element in the array is the same as Player1 starting zone. Then it follow 2,3,4,5... clockwise.
+        /// </summary>
+        private static Position[] allOuterPositions = new Position[]
+        {
+            new Position(4,1),
+            new Position(4,2),
+            new Position(4,3),
+            new Position(4,4),
+            new Position(4,5),
+            new Position(3,5),
+            new Position(2,5),
+            new Position(1,5),
+            new Position(0,5),
+            new Position(0,6),
+            new Position(0,7),
+            new Position(1,7),
+            new Position(2,7),
+            new Position(3,7),
+            new Position(4,7),
+            new Position(4,8),
+            new Position(4,9),
+            new Position(4,10),
+            new Position(4,11),
+            new Position(5,11),
+            new Position(6,11),
+            new Position(6,10),
+            new Position(6,9),
+            new Position(6,8),
+            new Position(6,7),
+            new Position(7,7),
+            new Position(8,7),
+            new Position(9,7),
+            new Position(10,7),
+            new Position(10,6),
+            new Position(10,5),
+            new Position(9,5),
+            new Position(8,5),
+            new Position(7,5),
+            new Position(6,5),
+            new Position(6,4),
+            new Position(6,3),
+            new Position(6,2),
+            new Position(6,1),
+            new Position(5,1)
+        };
+
+        public static Position[] GetAllOuterPositions()
+        {
+            return allOuterPositions.ToArray();
         }
 
         /// <summary>
