@@ -22,6 +22,10 @@ namespace FiaMedKnuff
     {
         private readonly Dice dice = new Dice();
         private readonly Sound sound = new Sound();
+        private readonly GamePiece gamePiece = new GamePiece();
+        private readonly GameLogic gameLogic = new GameLogic();
+        private readonly ClickEvents clickEvents = new ClickEvents();
+        private readonly UserInterface userInterface = new UserInterface();
 
         //State of sound
         private bool soundMuted = false;
@@ -123,7 +127,7 @@ namespace FiaMedKnuff
 			{
 				for (int i = 1; i <= 4; i++)
 				{
-					GameGrid.Children.Remove(player.ReturnGamePieceShape(i));
+					GameGrid.Children.Remove(gamePiece.ReturnGamePieceShape(i, player.pieces));
 				}
 			}
             for (int i = 0; i < 4; i++)
@@ -197,7 +201,7 @@ namespace FiaMedKnuff
         };
 
         // Creates an array of dice images.
-        private static readonly string[] diceImages =
+        public static readonly string[] diceImages =
         {
             "ms-appx:///Assets/dice1.png",
             "ms-appx:///Assets/dice2.png",
@@ -416,7 +420,7 @@ namespace FiaMedKnuff
             if (playerList[currentPlayersTurn - 1].CheckIfPlayerHasLegalMoves(currentDiceValue))
             {
 				diceImage.IsTapEnabled = false;
-				playerList[currentPlayersTurn - 1].EnableGamePieces(currentDiceValue);
+				gamePiece.EnableGamePieces(currentDiceValue, playerList[currentPlayersTurn - 1].pieces);
             }
             //If player has no legal moves go to next player
             else
@@ -442,13 +446,13 @@ namespace FiaMedKnuff
 			//Finds the clicked ellipse in the class instance and moves it
 			for (int i = 1; i <= 4; i++)
             {
-                if (clickedEllipse == playerList[currentPlayersTurn-1].ReturnGamePieceShape(i))
+                if (clickedEllipse == gamePiece.ReturnGamePieceShape(i, playerList[currentPlayersTurn-1].pieces))
                 {
                     //Moves the piece and checks if it has reached its goal
                     playerList[currentPlayersTurn - 1].MoveGamePiece(i, currentDiceValue, playerRoutes[currentPlayersTurn - 1], GameGrid, goalReachedContainer[currentPlayersTurn - 1], diceImage);
 
                     //Check if the player has won and enable victory screen
-                    if(playerList[currentPlayersTurn - 1].VictoryCheck())
+                    if(gameLogic.VictoryCheck(playerList[currentPlayersTurn - 1].pieces))
 					{
                         sound.Pause(); // Stop any current music
                         sound.PlayWinMusic(); // Play the win music
@@ -457,7 +461,7 @@ namespace FiaMedKnuff
 				    }
 
 				    //Disables the pieces from being clicked
-				    playerList[currentPlayersTurn-1].DisableGamePieces();
+				    gamePiece.DisableGamePieces(playerList[currentPlayersTurn - 1].pieces);
                 }
 			}
             //Checks if player can go again if a 6 was rolled
@@ -490,7 +494,7 @@ namespace FiaMedKnuff
 				//Placing game pieces on the board (ID 1-4, not 0-3)
 				for (int i = 1; i <= 4; i++)
 				{
-					GameGrid.Children.Add(player.ReturnGamePieceShape(i));
+					GameGrid.Children.Add(gamePiece.ReturnGamePieceShape(i, player.pieces));
 				}
 			}
 
@@ -664,43 +668,23 @@ namespace FiaMedKnuff
             newPlayerHighlightBorder.BorderThickness = new Thickness(10);
         }
 
-        /// <summary>
-        /// Shows the rules, when rules button is clicked
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void RulesButton_Click(object sender, RoutedEventArgs e)
         {
             rulesMenu.Visibility = Visibility.Visible;
             startMenuButtons.Visibility = Visibility.Collapsed;
         }
 
-        /// <summary>
-        /// Exits the program when the exit button is clicked
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Exit();
         }
 
-        /// <summary>
-        /// Exits the rules menu when the exit button is clicked. Brings the user back to the start menu
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ExitRules_Click(object sender, RoutedEventArgs e)
         {
             rulesMenu.Visibility = Visibility.Collapsed;
             startMenuButtons.Visibility = Visibility.Visible;
         }
 
-        /// <summary>
-        /// Play again button takes the player through the player select process
-        /// and turn order to start a new game. 
-        /// It also resets the board (button only available when a player has won)
-        /// </summary>
 		private void PlayAgain(object sender, RoutedEventArgs e)
 		{
             ClearGame();
@@ -710,9 +694,6 @@ namespace FiaMedKnuff
 			victoryScreen.Visibility = Visibility.Collapsed;
 		}
 
-        /// <summary>
-        /// Resets the board and returns to menu (button only available when a player has won)
-        /// </summary>
 		private void ReturnToMenu(object sender, RoutedEventArgs e)
 		{
             ClearGame();
@@ -726,26 +707,9 @@ namespace FiaMedKnuff
             victoryScreen.Visibility = Visibility.Collapsed;
 		}
 
-		/// <summary>
-        /// Toggles the game sound. This includes music and sound when the game pieces move
-        /// </summary>
         private void ToggleSoundClicked(object sender, RoutedEventArgs e)
-		{
-            foreach (Player player in playerList) 
-            {
-                player.ToggleMoveSound();
-            }
-
-            if (!sound.ToggleSoundClicked())
-            {
-                soundMuted = false;
-                musicIcon.Opacity = 1;
-            }
-            else 
-            {
-                soundMuted = true;
-                musicIcon.Opacity = 0.5;
-            }
-		}
-	}
+        {
+            clickEvents.ToggleSoundClicked(playerList, sound, soundMuted, musicIcon);
+        }
+    }
 }

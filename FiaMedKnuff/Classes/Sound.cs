@@ -9,6 +9,8 @@ namespace FiaMedKnuff.Classes
     {
         private MediaPlayer MediaPlayer { get; set; }
         private MediaPlayer DiceSoundPlayer { get; set; }
+        private MediaPlayer MoveSoundPlayer { get; set; }
+        private MediaPlayer KnockOffSoundPlayer { get; set; }
 
         public async Task InitializeSound()
         {
@@ -87,6 +89,53 @@ namespace FiaMedKnuff.Classes
                 MediaPlayer.Volume = 0;
                 DiceSoundPlayer.Volume = 0;
                 return true;
+            }
+        }
+
+        public void InitializeSounds()
+        {
+            MoveSoundPlayer = new MediaPlayer();
+            MoveSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Move.mp3"));
+            MoveSoundPlayer.Volume = 0.07; //Volume
+
+            KnockOffSoundPlayer = new MediaPlayer();
+            KnockOffSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Knock.mp3"));
+            KnockOffSoundPlayer.Volume = 0.07; //Volume
+        }
+
+        public void PlayMoveSound()
+        {
+            if (MoveSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
+            {
+                MoveSoundPlayer.Pause(); // Stop the move sound if it's already playing
+                MoveSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
+            }
+
+            MoveSoundPlayer.Play();
+        }
+
+        public void PlayKnockOffSound()
+        {
+            if (KnockOffSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
+            {
+                KnockOffSoundPlayer.Pause(); // Stop the knock-off sound if it's already playing
+                KnockOffSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
+            }
+
+            KnockOffSoundPlayer.Play();
+        }
+
+        public void ToggleMoveSound()
+        {
+            if (MoveSoundPlayer.Volume == 0)
+            {
+                MoveSoundPlayer.Volume = 0.07;
+                KnockOffSoundPlayer.Volume = 0.07;
+            }
+            else
+            {
+                MoveSoundPlayer.Volume = 0;
+                KnockOffSoundPlayer.Volume = 0;
             }
         }
     }

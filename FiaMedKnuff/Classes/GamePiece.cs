@@ -1,5 +1,4 @@
 ﻿using System;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 
@@ -38,6 +37,44 @@ namespace FiaMedKnuff
             };
 
             return newPiece;
+        }
+
+        public Ellipse ReturnGamePieceShape(int id, GamePiece[] pieces)
+        {
+            foreach (GamePiece piece in pieces)
+            {
+                if (piece.Id == id)
+                    return piece.GamePieceShape;
+            }
+            throw new ArgumentException("Game piece shape not found");
+        }
+
+        public void EnableGamePieces(int diceRoll, GamePiece[] pieces)
+        {
+            foreach (GamePiece piece in pieces)
+            {
+                //Enable piece in nest if dice roll is 1 or 6
+                if ((diceRoll == 1 || diceRoll == 6) && piece.StepsTaken == 0)
+                {
+                    piece.GamePieceShape.IsTapEnabled = true;
+                    piece.GamePieceShape.StrokeThickness = 4;
+                }
+                //Enable piece if it has a legal move
+                else if (piece.StepsTaken + diceRoll <= 45 && piece.StepsTaken != 0 && piece.StepsTaken != 45)
+                {
+                    piece.GamePieceShape.IsTapEnabled = true;
+                    piece.GamePieceShape.StrokeThickness = 4;
+                }
+            }
+        }
+
+        public void DisableGamePieces(GamePiece[] pieces)
+        {
+            foreach (GamePiece piece in pieces)
+            {
+                piece.GamePieceShape.IsTapEnabled = false;
+                piece.GamePieceShape.StrokeThickness = 2;
+            }
         }
     }
 }

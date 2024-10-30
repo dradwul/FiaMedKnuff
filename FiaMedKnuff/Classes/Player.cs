@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FiaMedKnuff.Classes;
+using System;
 using System.Threading.Tasks;
 using Windows.Media.Core;
 using Windows.Media.Playback;
@@ -13,16 +14,14 @@ namespace FiaMedKnuff
 {
     public class Player
     {
-        //MediaPlayer instances
-        private MediaPlayer moveSoundPlayer;
-        private MediaPlayer knockOffSoundPlayer;
+        private readonly Sound sound;
 
         public int PlayerId { get; set; }
 
         /// <summary>
         /// Array for the player pieces, this is created when the constructor is used
         /// </summary>
-        public readonly GamePiece[] pieces = new GamePiece[4];
+        public GamePiece[] pieces = new GamePiece[4];
 
         /// <summary>
         /// Constructor for player with 3 parameters
@@ -53,87 +52,19 @@ namespace FiaMedKnuff
                 pieces[i].GamePieceShape.Tapped += gamePieceClicked;
             }
             //Initialize sound effects
+            sound = new Sound();
             InitializeSounds();
         }
 
-        // Method to initialize the sound effects
-        private void InitializeSounds()
-        {
-            moveSoundPlayer = new MediaPlayer();
-            moveSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Move.mp3"));
-            moveSoundPlayer.Volume = 0.07; //Volume
 
-            knockOffSoundPlayer = new MediaPlayer();
-            knockOffSoundPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/FIA - Knock.mp3"));
-            knockOffSoundPlayer.Volume = 0.07; //Volume
-        }
+        private void InitializeSounds() => sound.InitializeSounds();
+        private void PlayMoveSound() => sound.PlayMoveSound();
+        private void PlayKnockOffSound() => sound.PlayKnockOffSound();
+        public void ToggleMoveSound() => sound.ToggleMoveSound();
 
-        // Method to play the move sound effect
-        private void PlayMoveSound()
-        {
-            if (moveSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
-            {
-                moveSoundPlayer.Pause(); // Stop the move sound if it's already playing
-                moveSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
-            }
 
-            moveSoundPlayer.Play();
-        }
+        
 
-        // Method to play the knock-off sound effect
-        private void PlayKnockOffSound()
-        {
-            if (knockOffSoundPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing)
-            {
-                knockOffSoundPlayer.Pause(); // Stop the knock-off sound if it's already playing
-                knockOffSoundPlayer.PlaybackSession.Position = TimeSpan.Zero; // Reset position
-            }
-
-            knockOffSoundPlayer.Play();
-        }
-
-        /// <summary>
-        /// Toggles the game piece sound when moving
-        /// </summary>
-        public void ToggleMoveSound()
-        {
-            if (moveSoundPlayer.Volume == 0)
-            {
-                moveSoundPlayer.Volume = 0.07;
-                knockOffSoundPlayer.Volume = 0.07;
-            }
-            else
-            { 
-                moveSoundPlayer.Volume = 0;
-                knockOffSoundPlayer.Volume = 0;
-            } 
-        }
-
-        /// <summary>
-        /// This function returns the game piece shape that belongs to the specified game piece
-        /// It is used for the purpose the initial placing of the game pieces
-        /// </summary>
-        /// <param name="id"> The ID determines which game piece is being referred to (1-4) </param>
-        /// <returns> Returns the specified game piece shape (Ellipse) </returns>
-        /// <exception cref="ArgumentException"> Throws an exepction if no game piece has the specified ID </exception>
-        public Ellipse ReturnGamePieceShape(int id)
-        {
-            foreach (GamePiece piece in pieces)
-            {
-                if (piece.Id == id)
-                    return piece.GamePieceShape;
-            }
-            throw new ArgumentException("Game piece shape not found");
-        }
-
-		/// <summary>
-		/// Moves the specified game pieces
-		/// </summary>
-		/// <param name="id"> ID for specified game piece </param>
-		/// <param name="diceRoll"> Dice roll from 1-6 </param>
-		/// <param name="position"> Position array of possible "tiles" </param>
-		/// <param name="gameGrid"> Used for animations and knocking a piece off </param>
-		/// <param name="diceImage"> This is the clickable part of the dice. Gets sent to AnimateGamePiece </param>
 		public async void MoveGamePiece(int id, int diceRoll, Position[] positions, Grid gameGrid, StackPanel goalZone, Image diceImage)
         {
             foreach (GamePiece piece in pieces)
@@ -178,61 +109,6 @@ namespace FiaMedKnuff
             }
         }
 
-        /// <summary>
-        /// Checks if the player has achieved victory
-        /// </summary>
-        /// <returns> True if player has won and false if not </returns>
-        public bool VictoryCheck()
-        {
-            int gamePiecesInSafeZone = 0;
-            foreach (GamePiece piece in pieces)
-            {
-                if(piece.StepsTaken == 45)
-                    gamePiecesInSafeZone++;
-            }
-
-            return gamePiecesInSafeZone == 4;
-        }
-
-        /// <summary>
-        /// Enables the game pieces that have legal moves and highlights them
-        /// </summary>
-        public void EnableGamePieces(int diceRoll)
-        {
-            foreach (GamePiece piece in pieces)
-            {
-                //Enable piece in nest if dice roll is 1 or 6
-                if ((diceRoll == 1 || diceRoll == 6) && piece.StepsTaken == 0)
-                {
-                    piece.GamePieceShape.IsTapEnabled = true;
-                    piece.GamePieceShape.StrokeThickness = 4;
-				}
-                //Enable piece if it has a legal move
-                else if(piece.StepsTaken + diceRoll <= 45 && piece.StepsTaken != 0 && piece.StepsTaken != 45)
-                {
-                    piece.GamePieceShape.IsTapEnabled = true;
-					piece.GamePieceShape.StrokeThickness = 4;
-				}
-			}
-        }
-
-        /// <summary>
-        /// Disables the game pieces and removes any highlights
-        /// </summary>
-		public void DisableGamePieces()
-		{
-			foreach (GamePiece piece in pieces)
-			{
-				piece.GamePieceShape.IsTapEnabled = false;
-				piece.GamePieceShape.StrokeThickness = 2;
-			}
-		}
-
-        /// <summary>
-        /// Checks if the player has any legal moves
-        /// </summary>
-        /// <param name="diceRoll"> Has value of the current dice roll </param>
-        /// <returns> Returns a boolean, true if there are legal moves and false if there are no legal moves </returns>
         public bool CheckIfPlayerHasLegalMoves(int diceRoll)
         {
 			foreach (GamePiece piece in pieces)
